@@ -1,0 +1,42 @@
+{
+  "name": "@traced-fabric/core",
+  "type": "module",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/traced-fabric/core.git"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    }
+  },
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint --cache .",
+    "build": "bunx --bun vite build",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.24.0",
+    "eslint": "^9.8.0",
+    "eslint-plugin-unused-imports": "^4.0.1",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.7",
+    "typescript": "5.4.2",
+    "vite": "^5.3.5",
+    "vite-plugin-dts": "^4.0.0-beta.2"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --cache --fix"
+    ]
+  }
+}
