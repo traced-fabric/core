@@ -21,11 +21,14 @@
   ],
   "scripts": {
     "lint": "eslint --cache .",
+    "test": "bun test",
+    "coverage": "bun test --coverage",
     "build": "bunx --bun vite build",
     "prepare": "husky"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.24.0",
+    "@types/bun": "^1.1.6",
     "eslint": "^9.8.0",
     "eslint-plugin-unused-imports": "^4.0.1",
     "husky": "^9.1.4",
