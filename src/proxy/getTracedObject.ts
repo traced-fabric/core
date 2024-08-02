@@ -2,7 +2,6 @@ import type { JSONObject } from '../types/json';
 import { EMutated, EObjectMutation, type TRequiredApplyProxyParams } from '../types/mutation';
 import { tracedSubscribers, tracedValues } from '../utils/references';
 import { getTracedProxyValue } from './getTracedValue';
-import { removeProxy } from './removeProxy';
 
 export function getTracedProxyObject<T extends JSONObject>(data: TRequiredApplyProxyParams<T>): T {
   const mutatedType = EMutated.object;
@@ -20,7 +19,7 @@ export function getTracedProxyObject<T extends JSONObject>(data: TRequiredApplyP
 
       data.mutationCallback({
         mutated: mutatedType,
-        value: removeProxy(value),
+        value: structuredClone(value),
         targetChain,
         type: EObjectMutation.set,
       });
