@@ -19,11 +19,10 @@ export function getTracedProxyObject<T extends JSONObject>(data: TRequiredApplyP
       }
 
       data.mutationCallback({
-        mutatedType,
-        key,
+        mutated: mutatedType,
         value: removeProxy(value),
-        targetChain: data.targetChain?.length ? data.targetChain : undefined,
-        mutationType: EObjectMutation.set,
+        targetChain,
+        type: EObjectMutation.set,
       });
 
       if (tracedValues.has(value)) {
@@ -44,10 +43,9 @@ export function getTracedProxyObject<T extends JSONObject>(data: TRequiredApplyP
       }
 
       data.mutationCallback({
-        mutatedType,
-        key,
-        targetChain: data.targetChain?.length ? data.targetChain : undefined,
-        mutationType: EObjectMutation.delete,
+        mutated: mutatedType,
+        targetChain: [...data.targetChain, key],
+        type: EObjectMutation.delete,
       });
 
       return Reflect.deleteProperty(target, key);

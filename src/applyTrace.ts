@@ -10,29 +10,35 @@ import {
 } from './types/mutation';
 
 export function applyObjectMutation(value: JSONObject, mutation: TObjectMutation): void {
-  if (mutation.mutationType === EObjectMutation.set) {
-    value[mutation.key] = mutation.value;
+  const lastKey = mutation.targetChain.at(-1);
+  if (lastKey === undefined) throw new Error('Invalid target chain');
+
+  if (mutation.type === EObjectMutation.set) {
+    value[lastKey] = mutation.value;
   }
-  else if (mutation.mutationType === EObjectMutation.delete) {
-    delete value[mutation.key.toString()];
+  else if (mutation.type === EObjectMutation.delete) {
+    delete value[lastKey.toString()];
   }
 }
 
 export function applyArrayMutation(value: JSONArray, mutation: TArrayMutation): void {
-  if (mutation.mutationType === EArrayMutation.set) value[mutation.key] = mutation.value;
-  else if (mutation.mutationType === EArrayMutation.delete) value.splice(mutation.key, 1);
-  else if (mutation.mutationType === EArrayMutation.reverse) value.reverse();
+  const lastKey = mutation.targetChain.at(-1);
+  if (lastKey === undefined) throw new Error('Invalid target chain');
+
+  if (mutation.type === EArrayMutation.set) value[lastKey as number] = mutation.value;
+  else if (mutation.type === EArrayMutation.delete) value.splice(lastKey as number, 1);
+  else if (mutation.type === EArrayMutation.reverse) value.reverse();
 }
 
-export function getMutationTarget(
+export function getMutationTargetWithoutLastKey(
   value: JSONStructure,
   targetChain: TTarget[],
 ): JSONStructure {
   let target = value;
 
-  for (const trace of targetChain) {
-    if (trace in target) target = (target as any)[trace];
-    else throw new Error('Invalid trace chain');
+  for (let i = 0; i < targetChain.length - 1; i++) {
+    if (targetChain[i] in target) target = (target as any)[targetChain[i]];
+    else throw new Error('Invalid target chain');
   }
 
   return target;
@@ -43,21 +49,9 @@ export function applyTrace<T extends JSONStructure>(
   traceChain: TTraceChange[],
 ): void {
   for (const mutation of traceChain) {
-    const mutationTarget = mutation.targetChain
-      ? getMutationTarget(value, mutation.targetChain)
-      : value;
+    const mutationTarget = getMutationTargetWithoutLastKey(value, mutation.targetChain);
 
-    switch (mutation.mutatedType) {
-      case EMutated.object:
-        applyObjectMutation(mutationTarget as JSONObject, mutation as TObjectMutation);
-        break;
-
-      case EMutated.array:
-        applyArrayMutation(mutationTarget as JSONArray, mutation as TArrayMutation);
-        break;
-
-      default:
-        break;
-    }
+    if (mutation.mutated === EMutated.object) applyObjectMutation(mutationTarget as JSONObject, mutation);
+    else if (mutation.mutated === EMutated.array) applyArrayMutation(mutationTarget as JSONArray, mutation);
   }
 }
