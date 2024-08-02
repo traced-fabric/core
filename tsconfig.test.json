@@ -2,7 +2,7 @@
   "extends": "./tsconfig",
   "compilerOptions": {
     "types": [
-      "bun-types",
+      "bun-types"
     ]
   },
   "include": [
