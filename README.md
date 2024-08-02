@@ -1,6 +1,6 @@
 # Traced Fabric / core
 
-Allows any given JS json-like objects to be tracked. The changes of the tracked object can then be applied to other objects with the same initial state.
+This feature allows any given JavaScript JSON-like objects to be tracked. The changes of the tracked object can then be applied to other objects with the same initial state.
 
 ## 📦 Installation
 
