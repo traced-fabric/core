@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "types": ["bun-types"],
-    
     "target": "ESNext",
     "jsx": "react-jsx",
     // Enable latest features
