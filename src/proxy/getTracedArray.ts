@@ -11,9 +11,9 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
     get(target, key) {
       if (key === EArrayMutation.reverse) {
         data.mutationCallback({
-          mutatedType,
-          targetChain: data.targetChain?.length ? data.targetChain : undefined,
-          mutationType: EArrayMutation.reverse,
+          mutated: mutatedType,
+          targetChain: data.targetChain,
+          type: EArrayMutation.reverse,
         });
 
         return () => Reflect.apply(target.reverse, target, []);
@@ -24,9 +24,9 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
     set(target, key, value) {
       if (typeof key === 'symbol') return Reflect.set(target, key, value);
 
-      const targetChain = [...data.targetChain, key];
-
       const index = +key;
+      const targetChain = [...data.targetChain, index];
+
       if (Number.isInteger(index)) {
         if (target[index] && tracedValues.has(target[index] as any)) {
           const subscribers = tracedSubscribers.get(target[index] as any)![data.originId];
@@ -34,11 +34,10 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
         }
 
         data.mutationCallback({
-          mutatedType,
-          key: index,
+          mutated: mutatedType,
           value: removeProxy(value),
-          targetChain: data.targetChain?.length ? data.targetChain : undefined,
-          mutationType: EArrayMutation.set,
+          targetChain,
+          type: EArrayMutation.set,
         });
 
         if (tracedValues.has(value)) {
@@ -58,6 +57,8 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
       if (typeof key === 'symbol') return Reflect.deleteProperty(target, key);
 
       const index = +key;
+      const targetChain = [...data.targetChain, index];
+
       if (Number.isInteger(index)) {
         if (tracedValues.has(target[index] as any)) {
           const subscribers = tracedSubscribers.get(target[index] as any)![data.originId];
@@ -65,10 +66,9 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
         }
 
         data.mutationCallback({
-          mutatedType,
-          key: index,
-          targetChain: data.targetChain?.length ? data.targetChain : undefined,
-          mutationType: EArrayMutation.delete,
+          mutated: mutatedType,
+          targetChain,
+          type: EArrayMutation.delete,
         });
       }
 
