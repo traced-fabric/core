@@ -21,29 +21,25 @@ export enum EMutated {
 export type TTarget = string | number;
 
 export type TObjectMutation = {
-  mutatedType: EMutated.object;
-  targetChain?: TTarget[];
+  mutated: EMutated.object;
+  targetChain: TTarget[];
 } & ({
-  mutationType: EObjectMutation.set;
-  key: string;
+  type: EObjectMutation.set;
   value: JSONValue;
 } | {
-  mutationType: EObjectMutation.delete;
-  key: string;
+  type: EObjectMutation.delete;
 });
 
 export type TArrayMutation = {
-  mutatedType: EMutated.array;
-  targetChain?: TTarget[];
+  mutated: EMutated.array;
+  targetChain: TTarget[];
 } & ({
-  mutationType: EArrayMutation.set;
-  key: number;
+  type: EArrayMutation.set;
   value: JSONValue;
 } | {
-  mutationType: EArrayMutation.delete;
-  key: number;
+  type: EArrayMutation.delete;
 } | {
-  mutationType: EArrayMutation.reverse;
+  type: EArrayMutation.reverse;
 });
 
 export type TMutationCallback = (mutation: TObjectMutation | TArrayMutation) => void;
