@@ -2,7 +2,6 @@ import type { JSONArray } from '../types/json';
 import { EArrayMutation, EMutated, type TRequiredApplyProxyParams } from '../types/mutation';
 import { tracedSubscribers, tracedValues } from '../utils/references';
 import { getTracedProxyValue } from './getTracedValue';
-import { removeProxy } from './removeProxy';
 
 export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyProxyParams<T>): T {
   const mutatedType = EMutated.array;
@@ -35,7 +34,7 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
 
         data.mutationCallback({
           mutated: mutatedType,
-          value: removeProxy(value),
+          value: structuredClone(value),
           targetChain,
           type: EArrayMutation.set,
         });
