@@ -9,29 +9,6 @@ export function deepTrace<T extends JSONObject | JSONArray>(data: TRequiredApply
 } {
   const caughtReferences = [] as TCaughtReference[];
 
-  if (typeof data.value === 'object' && data.value !== null) {
-    const objectKeys = Object.keys(data.value);
-
-    for (const k of objectKeys) {
-      const key = k as keyof typeof data.value;
-
-      if (
-        data.value[key] === null
-        || typeof data.value[key] !== 'object'
-        || typeof key === 'symbol'
-      ) { continue; }
-
-      const tracedValue = deepTrace({
-        ...data,
-        value: data.value[key] as T,
-        targetChain: [...data.targetChain, key],
-      });
-
-      (data.value[key] as T) = tracedValue.proxy;
-      caughtReferences.push(...tracedValue.caughtReferences);
-    }
-  }
-
   if (tracedValues.has(data.value)) {
     caughtReferences.push({
       subscriber: data.value,
@@ -42,6 +19,29 @@ export function deepTrace<T extends JSONObject | JSONArray>(data: TRequiredApply
       proxy: data.value,
       caughtReferences,
     };
+  }
+  else if (typeof data.value === 'object' && data.value !== null) {
+    for (const key in data.value) {
+      if (
+        data.value[key] === null
+        || typeof data.value[key] !== 'object'
+        || typeof key === 'symbol'
+      ) { continue; }
+
+      const maybeNumber = +key;
+      const targetChain = data.targetChain.concat(Number.isInteger(maybeNumber) ? maybeNumber : key);
+
+      const tracedValue = deepTrace({
+        originId: data.originId,
+        value: data.value[key] as T,
+        targetChain,
+        mutationCallback: data.mutationCallback,
+        onCaughtTrace: data.onCaughtTrace,
+      });
+
+      (data.value[key] as T) = tracedValue.proxy;
+      caughtReferences.push(...tracedValue.caughtReferences);
+    }
   }
 
   return {
