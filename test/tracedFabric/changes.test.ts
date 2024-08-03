@@ -14,6 +14,7 @@ describe('tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: 'string 2',
     }]);
+    expect(tracing.getTraceLength()).toBe(1);
   });
 
   test('should match if number changes', () => {
@@ -27,6 +28,7 @@ describe('tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: 2,
     }]);
+    expect(tracing.getTraceLength()).toBe(1);
   });
 
   test('should match if nullOrNumber changes', () => {
@@ -40,6 +42,7 @@ describe('tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: 1,
     }]);
+    expect(tracing.getTraceLength()).toBe(1);
   });
 
   test('should match if boolean changes', () => {
@@ -53,6 +56,7 @@ describe('tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: false,
     }]);
+    expect(tracing.getTraceLength()).toBe(1);
   });
 
   test('should match if array changes', () => {
@@ -73,6 +77,7 @@ describe('tracedFabric changes', () => {
       targetChain: ['array', 2, 1],
       type: EArrayMutation.delete,
     });
+    expect(tracing.getTraceLength()).toBe(2);
   });
 
   test('should match if object changes', () => {
@@ -107,6 +112,7 @@ describe('tracedFabric changes', () => {
       targetChain: ['object', 'anotherKey'],
       type: EObjectMutation.delete,
     });
+    expect(tracing.getTraceLength()).toBe(4);
   });
 });
 
@@ -148,6 +154,7 @@ describe('tracedFabric with nested tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: 'changed 2',
     });
+    expect(tracingParent.getTraceLength()).toBe(4);
   });
 
   test('parent should match if child number changes', () => {
@@ -187,6 +194,7 @@ describe('tracedFabric with nested tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: 4,
     });
+    expect(tracingParent.getTraceLength()).toBe(4);
   });
 
   test('parent should match if child nullOrNumber changes', () => {
@@ -226,6 +234,7 @@ describe('tracedFabric with nested tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: null,
     });
+    expect(tracingParent.getTraceLength()).toBe(4);
   });
 
   test('parent should match if child boolean changes', () => {
@@ -265,6 +274,7 @@ describe('tracedFabric with nested tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: true,
     });
+    expect(tracingParent.getTraceLength()).toBe(4);
   });
 
   test('parent should match if child array changes', () => {
@@ -315,6 +325,7 @@ describe('tracedFabric with nested tracedFabric changes', () => {
       targetChain: ['children', 0, 'array', 2],
       type: EArrayMutation.delete,
     });
+    expect(tracingParent.getTraceLength()).toBe(6);
   });
 
   test('parent should match if child object changes', () => {
@@ -365,5 +376,6 @@ describe('tracedFabric with nested tracedFabric changes', () => {
       targetChain: ['children', 0, 'object', 'key'],
       type: EObjectMutation.delete,
     });
+    expect(tracingParent.getTraceLength()).toBe(6);
   });
 });
