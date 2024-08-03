@@ -61,7 +61,7 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
       if (Number.isInteger(index)) {
         if (tracedValues.has(target[index] as any)) {
           const subscribers = tracedSubscribers.get(target[index] as any)![data.originId];
-          if (subscribers) delete subscribers[data.targetChain.join('')];
+          if (subscribers) delete subscribers[data.targetChain.concat(key).join('')];
         }
 
         data.mutationCallback({
