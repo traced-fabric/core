@@ -9,7 +9,6 @@ import type { JSONStructure } from './types/json';
 import type {
   TCaughtReference,
   TMutationCallback,
-  TTarget,
   TTraceChange,
 } from './types/mutation';
 import { deepTrace } from './proxy/deepTrace';
@@ -49,13 +48,9 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
 
         if (!subscriberTraceLog) return;
 
-        const joinedTargetChain = [] as TTarget[];
-        if (targetChain) joinedTargetChain.push(...targetChain);
-        if (mutation.targetChain) joinedTargetChain.push(...mutation.targetChain);
-
         subscriberTraceLog.push({
           ...mutation,
-          targetChain: joinedTargetChain,
+          targetChain: targetChain.concat(mutation.targetChain),
         });
       }
     }
