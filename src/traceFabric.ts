@@ -4,7 +4,7 @@ import {
   tracedSubscribers,
   tracedValues,
 } from './utils/references';
-import { symbolTracedDataId, symbolTracedDataIndication, symbolTracedFabric } from './utils/tracedDataSymbol';
+import { symbolTracedFabric, symbolTracedFabricRootId } from './utils/symbols';
 import type { JSONStructure } from './types/json';
 import type {
   TCaughtReference,
@@ -75,8 +75,7 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
   });
 
   proxyRef = proxy;
-  (proxyRef as any)[symbolTracedDataIndication] = true;
-  (proxyRef as any)[symbolTracedDataId] = id;
+  (proxyRef as any)[symbolTracedFabricRootId] = id;
 
   tracedValues.add(proxyRef);
   clearTrace();
