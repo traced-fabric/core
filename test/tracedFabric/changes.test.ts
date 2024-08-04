@@ -2,8 +2,8 @@ import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../../src/traceFabric';
 import { EArrayMutation, EMutated, EObjectMutation } from '../../src/types/mutation';
 
-describe('tracedFabric changes', () => {
-  test('should match if string changes', () => {
+describe('tracedFabric stores trace on changed', () => {
+  test('string', () => {
     const tracing = traceFabric({ string: 'string 1' });
 
     tracing.value.string = 'string 2';
@@ -17,7 +17,7 @@ describe('tracedFabric changes', () => {
     expect(tracing.getTraceLength()).toBe(1);
   });
 
-  test('should match if number changes', () => {
+  test('number', () => {
     const tracing = traceFabric({ number: 1 });
 
     tracing.value.number = 2;
@@ -31,7 +31,7 @@ describe('tracedFabric changes', () => {
     expect(tracing.getTraceLength()).toBe(1);
   });
 
-  test('should match if nullOrNumber changes', () => {
+  test('null', () => {
     const tracing = traceFabric({ nullOrNumber: null });
 
     tracing.value.nullOrNumber = 1;
@@ -45,7 +45,21 @@ describe('tracedFabric changes', () => {
     expect(tracing.getTraceLength()).toBe(1);
   });
 
-  test('should match if boolean changes', () => {
+  test('undefined', () => {
+    const tracing = traceFabric({ undefinedOfNumber: undefined });
+
+    tracing.value.undefinedOfNumber = 1;
+
+    expect(tracing.getTrace()).toEqual([{
+      mutated: EMutated.object,
+      targetChain: ['undefinedOfNumber'],
+      type: EObjectMutation.set,
+      value: 1,
+    }]);
+    expect(tracing.getTraceLength()).toBe(1);
+  });
+
+  test('boolean', () => {
     const tracing = traceFabric({ boolean: (true) as boolean });
 
     tracing.value.boolean = false;
@@ -59,7 +73,7 @@ describe('tracedFabric changes', () => {
     expect(tracing.getTraceLength()).toBe(1);
   });
 
-  test('should match if array changes', () => {
+  test('array', () => {
     const tracing = traceFabric<any>({ array: [1, 2] });
 
     tracing.value.array.push([4, 5]);
@@ -80,7 +94,7 @@ describe('tracedFabric changes', () => {
     expect(tracing.getTraceLength()).toBe(2);
   });
 
-  test('should match if object changes', () => {
+  test('object', () => {
     const tracing = traceFabric<any>({ object: { key: 'value' } });
 
     tracing.value.object.key = 'value 2';
