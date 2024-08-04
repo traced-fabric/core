@@ -27,7 +27,7 @@ export type TTracedFabric<T extends JSONStructure> = {
 export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T> {
   const id = getTracedValueId();
 
-  let proxyRef: object;
+  let proxyRef: T;
 
   const getTrace = (): TTraceChange[] => tracedLogs.get(proxyRef)!;
   const getTraceLength = (): number => getTrace().length;
@@ -78,15 +78,15 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
   (proxyRef as any)[symbolTracedDataIndication] = true;
   (proxyRef as any)[symbolTracedDataId] = id;
 
+  tracedValues.add(proxyRef);
   clearTrace();
-  tracedValues.add(proxy);
 
   caughtReferences.forEach(onCaughtTrace);
 
   return {
     [symbolTracedFabric]: true,
 
-    value: proxy,
+    value: proxyRef,
 
     getTrace,
     getTraceLength,
