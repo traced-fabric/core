@@ -379,3 +379,101 @@ describe('tracedFabric with nested tracedFabric changes', () => {
     expect(tracingParent.getTraceLength()).toBe(6);
   });
 });
+
+describe('tracedFabric not changes on nested tracedFabric removes', () => {
+  test('when child is in object', () => {
+    const tracingChild1 = traceFabric({ object: { key: 'value 1' } });
+    const tracingParent = traceFabric({ child: tracingChild1.value });
+
+    tracingChild1.value.object.key = 'value 2';
+    delete tracingParent.value.child;
+    tracingChild1.value.object.key = 'value 3';
+
+    const trace = tracingParent.getTrace();
+    expect(trace[0]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child', 'object', 'key'],
+      type: EObjectMutation.set,
+      value: 'value 2',
+    });
+    expect(trace[1]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child'],
+      type: EObjectMutation.delete,
+    });
+    expect(tracingParent.getTraceLength()).toBe(2);
+  });
+
+  test('when child is in array', () => {
+    const tracingChild1 = traceFabric({ object: { key: 'value 1' } });
+    const tracingParent = traceFabric({ child: [tracingChild1.value] });
+
+    tracingChild1.value.object.key = 'value 2';
+    tracingParent.value.child.pop();
+    tracingChild1.value.object.key = 'value 3';
+
+    const trace = tracingParent.getTrace();
+    expect(trace[0]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child', 0, 'object', 'key'],
+      type: EObjectMutation.set,
+      value: 'value 2',
+    });
+    expect(trace[1]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['child', 0],
+      type: EArrayMutation.delete,
+    });
+    expect(tracingParent.getTraceLength()).toBe(2);
+  });
+});
+
+describe('tracedFabric subscribes on tracedFabric added', () => {
+  test('when child is in object', () => {
+    const tracingChild1 = traceFabric({ object: { key: 'value 1' } });
+    const tracingParent = traceFabric<{ child: null | typeof tracingChild1.value }>({ child: null });
+
+    tracingChild1.value.object.key = 'value 2';
+    tracingParent.value.child = tracingChild1.value;
+    tracingChild1.value.object.key = 'value 3';
+
+    const trace = tracingParent.getTrace();
+    expect(trace[0]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child'],
+      type: EObjectMutation.set,
+      value: { object: { key: 'value 2' } },
+    });
+    expect(trace[1]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child', 'object', 'key'],
+      type: EObjectMutation.set,
+      value: 'value 3',
+    });
+    expect(tracingParent.getTraceLength()).toBe(2);
+  });
+
+  test('when child is in array', () => {
+    const tracingChild1 = traceFabric({ object: { key: 'value 1' } });
+    const tracingParent = traceFabric({ child: [] });
+
+    tracingChild1.value.object.key = 'value 2';
+    tracingParent.value.child.push(tracingChild1.value);
+    tracingChild1.value.object.key = 'value 3';
+
+    const trace = tracingParent.getTrace();
+    expect(trace[0]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['child', 0],
+      type: EArrayMutation.set,
+      value: { object: { key: 'value 2' } },
+    });
+    expect(trace[1]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child', 0, 'object', 'key'],
+      type: EObjectMutation.set,
+      value: 'value 3',
+    });
+    expect(tracingParent.getTraceLength()).toBe(2);
+  });
+});
