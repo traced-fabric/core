@@ -66,7 +66,7 @@ describe('tracedFabric reflects mutated', () => {
   });
 
   test('object', () => {
-    const tracing = traceFabric<any>({ object1: { key: 'value' }, object2: null });
+    const tracing = traceFabric({ object1: { key: 'value' }, object2: null });
 
     tracing.value.object1.key = 'new value';
     delete tracing.value.object2;
