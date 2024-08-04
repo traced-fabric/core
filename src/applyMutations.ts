@@ -44,7 +44,7 @@ export function getMutationTargetWithoutLastKey(
   return target;
 }
 
-export function applyTrace<T extends JSONStructure>(
+export function applyMutations<T extends JSONStructure>(
   value: T,
   traceChain: TTraceChange[],
 ): void {
