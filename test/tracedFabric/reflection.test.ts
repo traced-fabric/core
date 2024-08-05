@@ -154,3 +154,14 @@ describe('tracedFabric reflects deleted tracedFabric', () => {
     expect(deepClone(tracing.value)).toEqual({});
   });
 });
+
+describe('tracedFabric array reflects', () => {
+  test('reverse', () => {
+    const tracing = traceFabric([1, 2, 3, 4, 5, [99, 98, 97, 96]]);
+
+    tracing.value.reverse();
+    (tracing.value[0] as Array<number>).reverse();
+
+    expect(deepClone(tracing.value)).toEqual([[96, 97, 98, 99], 5, 4, 3, 2, 1]);
+  });
+});
