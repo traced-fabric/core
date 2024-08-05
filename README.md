@@ -1,6 +1,9 @@
 # Traced Fabric / core
 
-This feature allows any given JavaScript JSON-like objects to be tracked. The changes of the tracked object can then be applied to other objects with the same initial state.
+```traceFabric(...)``` allows any given JavaScript JSON-like objects to be tracked.
+The traceChanges *(mutations)*, that are produced by the tracedFabric on values mutation, can be used to apply them to other objects or arrays.
+
+This is needed primarily for sharing the same object state between different environments, where simple object references can't be used. (e.g. Workers, WebSockets, iframes, etc.)
 
 ## 📦 Installation
 
@@ -8,18 +11,46 @@ This feature allows any given JavaScript JSON-like objects to be tracked. The ch
 npm install @traced-fabric/core
 ```
 
-## 🦄 Usage
+## 🌌 Usage between environments
 
 ```javascript
-import { applyTrace, traceFabric } from '@traced-fabric/core';
+// environment A
+import { traceFabric } from '@traced-fabric/core';
 
-const origin = traceFabric({ count: 1 });
-const follower = { count: 1 };
+const stateOfTheApp = traceFabric({
+  season: 'winter',
+  bestDays: ['saturday', 'sunday'],
+  seasonEmotes: ['❄️', '🎄', '🎅'],
+});
 
-origin.value.count = 2;
+// set_state_of_environment_b - is your implementation of a function that sends state to environment B
+set_state_of_environment_b(
+  JSON.stringify(stateOfTheApp)
+);
 
-applyTrace(follower, origin.getTrace());
+stateOfTheApp.value.season = 'summer';
+stateOfTheApp.value.bestDays.push('friday');
+stateOfTheApp.value.seasonEmotes = ['🌞', '🌊', '🍦'];
 
-console.log(origin.value); // { count: 2 }
-console.log(follower); // { count: 2 }
+// update_state_of_environment_a - is your implementation of a function that sends state updates to environment B
+update_state_of_environment_b(
+  JSON.stringify(stateOfTheApp.getTrace())
+);
+```
+
+```javascript
+// environment B
+import { applyTrace } from '@traced-fabric/core';
+
+let stateOfTheApp;
+
+// on_state_set_from_environment_a - is your implementation of a function that receives state from environment A
+on_state_set_from_environment_a((state) => {
+  stateOfTheApp = state;
+});
+
+// on_state_update_from_environment_a - is your implementation of a function that receives state updates from environment A
+on_state_update_from_environment_a((trace) => {
+  applyTrace(stateOfTheApp, trace);
+});
 ```
