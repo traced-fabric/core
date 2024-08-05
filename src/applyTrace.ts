@@ -59,13 +59,13 @@ export function getMutationTargetWithoutLastKey(
  *
  * target.season = 'summer';
  *
- * applyMutations(target, fabric.getTrace());
+ * applyTrace(target, fabric.getTrace());
  *
  * console.log(target); // { season: 'winter' }
  *
  * @since 0.0.1
  */
-export function applyMutations<T extends JSONStructure>(
+export function applyTrace<T extends JSONStructure>(
   value: T,
   trace: TTraceChange[],
 ): void {
