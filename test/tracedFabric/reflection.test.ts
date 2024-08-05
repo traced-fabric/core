@@ -8,7 +8,7 @@ describe('tracedFabric reflects mutated', () => {
 
     tracing.value.string = 'new string';
 
-    expect(tracing.value).toMatchObject({
+    expect(deepClone(tracing.value)).toEqual({
       string: 'new string',
     });
   });
@@ -18,7 +18,7 @@ describe('tracedFabric reflects mutated', () => {
 
     tracing.value.number = 2;
 
-    expect(tracing.value).toMatchObject({
+    expect(deepClone(tracing.value)).toEqual({
       number: 2,
     });
   });
@@ -28,7 +28,7 @@ describe('tracedFabric reflects mutated', () => {
 
     tracing.value.boolean = false;
 
-    expect(tracing.value).toMatchObject({
+    expect(deepClone(tracing.value)).toEqual({
       boolean: false,
     });
   });
@@ -38,7 +38,7 @@ describe('tracedFabric reflects mutated', () => {
 
     tracing.value.null = null;
 
-    expect(tracing.value).toMatchObject({
+    expect(deepClone(tracing.value)).toEqual({
       null: null,
     });
   });
@@ -48,7 +48,7 @@ describe('tracedFabric reflects mutated', () => {
 
     tracing.value.undefined = undefined;
 
-    expect(tracing.value).toMatchObject({
+    expect(deepClone(tracing.value)).toEqual({
       undefined,
     });
   });
@@ -60,19 +60,97 @@ describe('tracedFabric reflects mutated', () => {
     tracing.value.array.push(3);
     tracing.value.array.pop();
 
-    expect(deepClone(tracing.value)).toMatchObject({
+    expect(deepClone(tracing.value)).toEqual({
       array: [1, 2],
     });
   });
 
   test('object', () => {
-    const tracing = traceFabric({ object1: { key: 'value' }, object2: null });
+    const tracing = traceFabric<{ object1: any; object2?: null }>({
+      object1: { key: 'value' },
+      object2: null,
+    });
 
     tracing.value.object1.key = 'new value';
     delete tracing.value.object2;
 
-    expect(tracing.value).toMatchObject({
+    expect(deepClone(tracing.value)).toEqual({
       object1: { key: 'new value' },
     });
+  });
+});
+
+describe('tracedFabric reflects mutated tracedFabric', () => {
+  test('object', () => {
+    const tracingChild = traceFabric<{ key: string; key2?: string }>({ key: 'value', key2: 'value2' });
+    const tracing = traceFabric({ object: tracingChild.value });
+
+    tracingChild.value.key = 'new value';
+    delete tracingChild.value.key2;
+
+    expect(deepClone(tracing.value)).toEqual({
+      object: { key: 'new value' },
+    });
+  });
+
+  test('array', () => {
+    const tracingChild = traceFabric([1, 2]);
+    const tracing = traceFabric({ array: tracingChild.value });
+
+    tracingChild.value.push(3);
+    tracingChild.value.pop();
+
+    expect(deepClone(tracing.value)).toEqual({
+      array: [1, 2],
+    });
+  });
+});
+
+describe('tracedFabric reflects added tracedFabric', () => {
+  test('object', () => {
+    const tracingChild = traceFabric<{ key: string; key2?: null }>({ key: 'value', key2: null });
+    const tracing = traceFabric<Record<string, any>>({ object: {} });
+
+    tracing.value.object.key = tracingChild.value;
+    delete tracingChild.value.key2;
+
+    expect(deepClone(tracing.value)).toEqual({
+      object: { key: { key: 'value' } },
+    });
+  });
+
+  test('array', () => {
+    const tracingChild = traceFabric([1]);
+    const tracing = traceFabric({ array: null });
+
+    tracing.value.array = tracingChild.value;
+    tracingChild.value.push(2, 3);
+    tracingChild.value.pop();
+
+    expect(deepClone(tracing.value)).toEqual({
+      array: [1, 2],
+    });
+  });
+});
+
+describe('tracedFabric reflects deleted tracedFabric', () => {
+  test('object', () => {
+    const tracingChild = traceFabric<{ key: string }>({ key: 'value' });
+    const tracing = traceFabric<{ object?: any }>({ object: tracingChild.value });
+
+    delete tracing.value.object;
+    tracingChild.value.key = 'new value';
+
+    expect(deepClone(tracing.value)).toEqual({});
+  });
+
+  test('array', () => {
+    const tracingChild = traceFabric([1]);
+    const tracing = traceFabric<{ array?: any }>({ array: tracingChild.value });
+
+    delete tracing.value.array;
+    tracingChild.value.push(2, 3);
+
+    expect(deepClone(tracing.value)).toEqual({});
   });
 });
