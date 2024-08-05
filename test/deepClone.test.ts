@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { deepClone } from '../src/proxy/deepClone';
+import { deepClone } from '../src/deepClone';
 
 describe('deepClone result should match the origin', () => {
   test('string', () => {

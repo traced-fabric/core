@@ -1,7 +1,7 @@
 import type { JSONObject } from '../types/json';
 import { EMutated, EObjectMutation, type TRequiredApplyProxyParams } from '../types/mutation';
 import { tracedSubscribers, tracedValues } from '../utils/references';
-import { deepClone } from './deepClone';
+import { deepClone } from '../deepClone';
 import { getTracedProxyValue } from './getTracedValue';
 
 export function getTracedProxyObject<T extends JSONObject>(data: TRequiredApplyProxyParams<T>): T {

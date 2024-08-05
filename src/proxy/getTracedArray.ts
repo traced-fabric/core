@@ -1,7 +1,7 @@
 import type { JSONArray } from '../types/json';
 import { EArrayMutation, EMutated, type TRequiredApplyProxyParams } from '../types/mutation';
 import { tracedSubscribers, tracedValues } from '../utils/references';
-import { deepClone } from './deepClone';
+import { deepClone } from '../deepClone';
 import { getTracedProxyValue } from './getTracedValue';
 
 export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyProxyParams<T>): T {
