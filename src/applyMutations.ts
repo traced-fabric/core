@@ -44,6 +44,26 @@ export function getMutationTargetWithoutLastKey(
   return target;
 }
 
+/**
+ * Applies tracedFabric mutations to the given value.
+ * The value should have the same state as the tracedFabric value before allied mutations.
+ * @WARN This function mutates the value directly.
+ *
+ * @param value - The value to apply the mutations to.
+ * @param traceChain - The trace chain from tracedFabric to apply.
+ *
+ * @example
+ * const tracedFabric = traceFabric({ season: 'winter' });
+ * const target = { season: 'winter' };
+ *
+ * target.season = 'summer';
+ *
+ * applyMutations(target, tracedFabric.getTrace());
+ *
+ * console.log(target); // { season: 'winter' }
+ *
+ * @since 0.0.1
+ */
 export function applyMutations<T extends JSONStructure>(
   value: T,
   traceChain: TTraceChange[],
