@@ -23,7 +23,8 @@ const stateOfTheApp = traceFabric({
   seasonEmotes: ['❄️', '🎄', '🎅'],
 });
 
-// set_state_of_environment_b - is your implementation of a function that sends state to environment B
+// set_state_of_environment_b - is your implementation
+// of a function that sends state to environment B
 set_state_of_environment_b(
   JSON.stringify(stateOfTheApp)
 );
@@ -32,7 +33,8 @@ stateOfTheApp.value.season = 'summer';
 stateOfTheApp.value.bestDays.push('friday');
 stateOfTheApp.value.seasonEmotes = ['🌞', '🌊', '🍦'];
 
-// update_state_of_environment_a - is your implementation of a function that sends state updates to environment B
+// update_state_of_environment_a - is your implementation
+// of a function that sends state updates to environment B
 update_state_of_environment_b(
   JSON.stringify(stateOfTheApp.getTrace())
 );
@@ -44,12 +46,14 @@ import { applyTrace } from '@traced-fabric/core';
 
 let stateOfTheApp;
 
-// on_state_set_from_environment_a - is your implementation of a function that receives state from environment A
+// on_state_set_from_environment_a - is your implementation
+// of a function that receives state from environment A
 on_state_set_from_environment_a((state) => {
   stateOfTheApp = state;
 });
 
-// on_state_update_from_environment_a - is your implementation of a function that receives state updates from environment A
+// on_state_update_from_environment_a - is your implementation
+// of a function that receives state updates from environment A
 on_state_update_from_environment_a((trace) => {
   applyTrace(stateOfTheApp, trace);
 });
