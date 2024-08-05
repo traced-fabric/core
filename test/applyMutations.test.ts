@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../src/traceFabric';
 import { applyMutations } from '../src/applyMutations';
-import { deepClone } from '../src/proxy/deepClone';
+import { deepClone } from '../src/deepClone';
 
 describe('applyMutation result matches tracedFabric on changed', () => {
   test('string', () => {
