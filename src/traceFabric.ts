@@ -25,11 +25,11 @@ export type TTracedFabric<T extends JSONStructure> = {
 };
 
 /**
- * Trace a JSON object or array to track mutations.
+ * Track the mutation of a given JSON-like object or array.
  * Other tracedFabric objects can be used as children.
  *
- * The traceChanges, that are produced by the tracedFabric when mutation values,
- * can be used to apply the same mutations to other objects or arrays.
+ * The traceChanges *(mutations)*, that are produced by the tracedFabric on values mutation,
+ * can be used to apply them to other objects or arrays.
  * This is needed primarily for sharing the same object state between different environments,
  * where simple object references can't be used. (e.g. Workers, WebSockets, iframes, etc.)
  *
