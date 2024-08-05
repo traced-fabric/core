@@ -1,9 +1,9 @@
-import type { JSONArray, JSONObject } from '../types/json';
+import type { JSONStructure } from '../types/json';
 import type { TCaughtReference, TRequiredApplyProxyParams } from '../types/mutation';
 import { tracedValues } from '../utils/references';
 import { getTracedProxyValue } from './getTracedValue';
 
-export function deepTrace<T extends JSONObject | JSONArray>(data: TRequiredApplyProxyParams<T>): {
+export function deepTrace<T extends JSONStructure>(data: TRequiredApplyProxyParams<T>): {
   proxy: T;
   caughtReferences: TCaughtReference[];
 } {
