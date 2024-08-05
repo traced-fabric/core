@@ -1,15 +1,15 @@
 import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../src/traceFabric';
-import { applyMutations } from '../src/applyMutations';
+import { applyTrace } from '../src/applyTrace';
 import { deepClone } from '../src/deepClone';
 
-describe('applyMutation result matches tracedFabric on changed', () => {
+describe('applyTrace result matches tracedFabric on changed', () => {
   test('string', () => {
     const tracing = traceFabric({ string: 'string' });
     const cloned = deepClone(tracing.value);
 
     tracing.value.string = 'new string';
-    applyMutations(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.getTrace());
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -19,7 +19,7 @@ describe('applyMutation result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.number = 2;
-    applyMutations(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.getTrace());
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -29,7 +29,7 @@ describe('applyMutation result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.boolean = false;
-    applyMutations(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.getTrace());
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -39,7 +39,7 @@ describe('applyMutation result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.null = null;
-    applyMutations(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.getTrace());
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -49,7 +49,7 @@ describe('applyMutation result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.undefined = undefined;
-    applyMutations(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.getTrace());
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -61,7 +61,7 @@ describe('applyMutation result matches tracedFabric on changed', () => {
     tracing.value.array.push(2);
     tracing.value.array.push(3);
     tracing.value.array.pop();
-    applyMutations(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.getTrace());
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -72,13 +72,13 @@ describe('applyMutation result matches tracedFabric on changed', () => {
 
     tracing.value.object1.key = 'new value';
     delete tracing.value.object2;
-    applyMutations(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.getTrace());
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
 });
 
-describe('applyMutation result matches tracedFabric on deleted tracedFabric', () => {
+describe('applyTrace result matches tracedFabric on deleted tracedFabric', () => {
   test('array', () => {
     const tracingChild = traceFabric({ array: [1, 2] });
     const tracingParent = traceFabric({ array: [tracingChild.value] });
@@ -86,7 +86,7 @@ describe('applyMutation result matches tracedFabric on deleted tracedFabric', ()
 
     tracingChild.value.array.pop();
     tracingParent.value.array.pop();
-    applyMutations(cloned, tracingParent.getTrace());
+    applyTrace(cloned, tracingParent.getTrace());
 
     expect(deepClone(tracingParent.value)).toEqual(cloned);
   });
@@ -98,13 +98,13 @@ describe('applyMutation result matches tracedFabric on deleted tracedFabric', ()
 
     delete tracingChild.value.key;
     delete tracingParent.value.object.key;
-    applyMutations(cloned, tracingParent.getTrace());
+    applyTrace(cloned, tracingParent.getTrace());
 
     expect(deepClone(tracingParent.value)).toEqual(cloned);
   });
 });
 
-describe('applyMutation result matches tracedFabric on added tracedFabric', () => {
+describe('applyTrace result matches tracedFabric on added tracedFabric', () => {
   test('array', () => {
     const tracingChild = traceFabric({ array: [1] });
     const tracingParent = traceFabric({ array: [] });
@@ -113,7 +113,7 @@ describe('applyMutation result matches tracedFabric on added tracedFabric', () =
     tracingChild.value.array.push(2);
     tracingParent.value.array.push(tracingChild.value);
     tracingChild.value.array.push(3);
-    applyMutations(cloned, tracingParent.getTrace());
+    applyTrace(cloned, tracingParent.getTrace());
 
     expect(deepClone(tracingParent.value)).toEqual(cloned);
   });
@@ -126,7 +126,7 @@ describe('applyMutation result matches tracedFabric on added tracedFabric', () =
     tracingChild.value.key = 'new value 1';
     tracingParent.value.object.key = tracingChild.value;
     tracingChild.value.key2 = 'value 2';
-    applyMutations(cloned, tracingParent.getTrace());
+    applyTrace(cloned, tracingParent.getTrace());
 
     expect(deepClone(tracingParent.value)).toEqual(cloned);
   });
