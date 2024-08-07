@@ -3,7 +3,11 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig({
-  plugins: [dts({ rollupTypes: true })],
+  plugins: [
+    dts({
+      tsconfigPath: './tsconfig.json',
+    }),
+  ],
 
   build: {
     lib: {
@@ -11,5 +15,8 @@ export default defineConfig({
       fileName: 'index',
       entry: resolve(__dirname, 'index.ts'),
     },
+
+    minify: false,
+    sourcemap: true,
   },
 });
