@@ -11,15 +11,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - uses: oven-sh/setup-bun@v2
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Lint code
+      - name: Lint
         run: bun lint
 
-      - name: Run tests
+      - name: Test
         run: bun test
+
+      - name: Build
+        run: bun build
