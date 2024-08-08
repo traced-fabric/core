@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/traced-fabric/core.git"
+    "url": "git+https://github.com/traced-fabric/core.git"
   },
   "exports": {
     ".": {
