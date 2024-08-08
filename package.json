@@ -1,17 +1,11 @@
 {
   "name": "@traced-fabric/core",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/traced-fabric/core.git"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
-    }
   },
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.js",
