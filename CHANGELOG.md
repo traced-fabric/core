@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.1.3
+
+### Patch Changes
+
+- 3444856: Fixed package exports
+
 ## 0.1.1
 
 ### Patch Changes
