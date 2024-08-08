@@ -26,7 +26,7 @@ const stateOfTheApp = traceFabric({
 // set_state_of_environment_b - is your implementation
 // of a function that sends state to environment B
 set_state_of_environment_b(
-  JSON.stringify(stateOfTheApp)
+  JSON.stringify(stateOfTheApp.value)
 );
 
 stateOfTheApp.value.season = 'summer';
