@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.1.4
+
+### Patch Changes
+
+- 5a85fa8: Exporting traceFabric unique symbols
+
 ## 0.1.3
 
 ### Patch Changes
