@@ -88,7 +88,7 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
     };
   };
 
-  const { proxy, caughtReferences } = deepTrace({
+  const tracing = deepTrace({
     originId: id,
     value,
     targetChain: [],
@@ -96,13 +96,13 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
     onCaughtTrace,
   });
 
-  proxyRef = proxy;
+  proxyRef = tracing.proxy;
   (proxyRef as any)[symbolTracedFabricRootId] = id;
 
   tracedValues.add(proxyRef);
   clearTrace();
 
-  caughtReferences.forEach(onCaughtTrace);
+  tracing.caughtReferences.forEach(onCaughtTrace);
 
   return {
     [symbolTracedFabric]: true,
