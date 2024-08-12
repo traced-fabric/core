@@ -1,22 +1,39 @@
-import type { JSONArray } from '../types/json';
+import type { JSONArray, JSONStructure } from '../types/json';
 import { EArrayMutation, EMutated, type TRequiredApplyProxyParams } from '../types/mutation';
 import { tracedSubscribers, tracedValues } from '../utils/references';
 import { deepClone } from '../deepClone';
+import { tracedValuesMetadata } from '../utils/metadata';
 import { deepTrace } from './deepTrace';
 
 export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyProxyParams<T>): T {
   const mutatedType = EMutated.array;
 
   return new Proxy(data.value, {
-    get(target, key) {
+    get(target, key, receiver) {
       if (key === EArrayMutation.reverse) {
         data.mutationCallback({
           mutated: mutatedType,
-          targetChain: data.targetChain,
+          targetChain: [...data.targetChain],
           type: EArrayMutation.reverse,
         });
 
-        return () => Reflect.apply(target.reverse, target, []);
+        // if the array is reversed, we should update all nested values target chain,
+        // so if in the future we will reference them, the reference chain will be correct
+        return () => {
+          const reflection = Reflect.apply(target.reverse, target, []);
+
+          const chainLength = tracedValuesMetadata.get(receiver)?.targetChain.length;
+          if (chainLength === undefined) return reflection;
+
+          for (let i = 0; i < target.length; i++) {
+            if (typeof target[i] === 'object' && target[i] !== null) {
+              const metadata = tracedValuesMetadata.get(target[i] as JSONStructure);
+              if (metadata) metadata.targetChain[chainLength] = i;
+            }
+          }
+
+          return reflection;
+        };
       }
 
       return Reflect.get(target, key);
