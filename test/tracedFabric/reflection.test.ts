@@ -67,15 +67,15 @@ describe('tracedFabric reflects mutated', () => {
 
   test('object', () => {
     const tracing = traceFabric<{ object1: any; object2?: null }>({
-      object1: { key: 'value' },
+      object1: { keys: { a: 'value' } },
       object2: null,
     });
 
-    tracing.value.object1.key = 'new value';
+    tracing.value.object1.keys.a = 'new value';
     delete tracing.value.object2;
 
     expect(deepClone(tracing.value)).toEqual({
-      object1: { key: 'new value' },
+      object1: { keys: { a: 'new value' } },
     });
   });
 });
