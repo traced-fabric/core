@@ -5,9 +5,11 @@ import { getTracedProxyObject } from './getTracedObject';
 
 export function getTracedProxyValue<T extends JSONValue>(data: TRequiredApplyProxyParams<T>): T {
   if (typeof data.value === 'object' && data.value !== null) {
-    if (Array.isArray(data.value)) return getTracedProxyArray(data as TRequiredApplyProxyParams<JSONArray>) as T;
+    const proxyValue = Array.isArray(data.value)
+      ? getTracedProxyArray(data as TRequiredApplyProxyParams<JSONArray>)
+      : getTracedProxyObject(data as TRequiredApplyProxyParams<JSONObject>);
 
-    return getTracedProxyObject(data as TRequiredApplyProxyParams<JSONObject>) as T;
+    return proxyValue as T;
   }
 
   return data.value;
