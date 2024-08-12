@@ -520,25 +520,36 @@ describe('tracedFabric subscribes on tracedFabric added', () => {
 });
 
 describe('tracedFabric array', () => {
-  // for this test to work, the proxy values should be refactored a bit.
-  // as a solutions, proxy metadata (TRequiredApplyProxyParams) can be stored in weakMap
   test('reverse uses one mutation', () => {
-    const tracing = traceFabric([1, 2, 3, 4, 5, [99, 98, 97, 96]]);
+    const tracing = traceFabric<any>([[1, 1.5], 2, 3, 4, 5]);
 
+    tracing.value[5] = [99, 98, 97, 96];
+    tracing.value[0].reverse();
     tracing.value.reverse();
-    (tracing.value[0] as Array<number>).reverse();
+    tracing.value[0].reverse();
 
     const trace = tracing.getTrace();
     expect(trace[0]).toEqual({
       mutated: EMutated.array,
-      targetChain: [],
-      type: EArrayMutation.reverse,
+      targetChain: [0],
+      type: EArrayMutation.set,
+      value: [99, 98, 97, 96],
     });
     expect(trace[1]).toEqual({
       mutated: EMutated.array,
       targetChain: [0],
       type: EArrayMutation.reverse,
     });
-    expect(tracing.getTraceLength()).toBe(1);
+    expect(trace[2]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [],
+      type: EArrayMutation.reverse,
+    });
+    expect(trace[3]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [0],
+      type: EArrayMutation.reverse,
+    });
+    expect(tracing.getTraceLength()).toBe(4);
   });
 });
