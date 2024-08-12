@@ -37,9 +37,13 @@ export function getTracedProxyObject<T extends JSONObject>(data: TRequiredApplyP
     deleteProperty(target, key) {
       if (typeof key === 'symbol') return Reflect.deleteProperty(target, key);
 
-      if (tracedValues.has(target[key] as any)) {
-        const subscribers = tracedSubscribers.get(target[key] as any)![data.originId];
-        if (subscribers) delete subscribers[data.targetChain.concat(key).join('')];
+      const subscribers = tracedSubscribers.get(target[key] as any)?.[data.originId];
+
+      if (
+        subscribers
+        && tracedValues.has(target[key] as any)
+      ) {
+        delete subscribers[data.targetChain.concat(key).join('')];
       }
 
       data.mutationCallback({
