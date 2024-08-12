@@ -2,7 +2,7 @@ import type { JSONArray } from '../types/json';
 import { EArrayMutation, EMutated, type TRequiredApplyProxyParams } from '../types/mutation';
 import { tracedSubscribers, tracedValues } from '../utils/references';
 import { deepClone } from '../deepClone';
-import { getTracedProxyValue } from './getTracedValue';
+import { deepTrace } from './deepTrace';
 
 export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyProxyParams<T>): T {
   const mutatedType = EMutated.array;
@@ -18,6 +18,7 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
 
         return () => Reflect.apply(target.reverse, target, []);
       }
+
       return Reflect.get(target, key);
     },
 
@@ -49,7 +50,7 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
           return Reflect.set(target, key, value);
         }
 
-        const proxyValue = getTracedProxyValue({ ...data, targetChain, value });
+        const proxyValue = deepTrace({ ...data, targetChain, value }).proxy;
 
         return Reflect.set(target, key, proxyValue);
       }

@@ -78,6 +78,8 @@ describe('tracedFabric stores trace on changed', () => {
 
     tracing.value.array.push([4, 5]);
     tracing.value.array[2].pop();
+    tracing.value.array.push([6, 7, [8, 9]]);
+    tracing.value.array[3][2].pop();
 
     const trace = tracing.getTrace();
     expect(trace[0]).toEqual({
@@ -91,7 +93,18 @@ describe('tracedFabric stores trace on changed', () => {
       targetChain: ['array', 2, 1],
       type: EArrayMutation.delete,
     });
-    expect(tracing.getTraceLength()).toBe(2);
+    expect(trace[2]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['array', 3],
+      type: EArrayMutation.set,
+      value: [6, 7, [8, 9]],
+    });
+    expect(trace[3]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['array', 3, 2, 1],
+      type: EArrayMutation.delete,
+    });
+    expect(tracing.getTraceLength()).toBe(4);
   });
 
   test('object', () => {
@@ -101,6 +114,8 @@ describe('tracedFabric stores trace on changed', () => {
     tracing.value.object.key2 = 'value 3';
     tracing.value.object.anotherKey = 'another';
     delete tracing.value.object.anotherKey;
+    tracing.value.object.nestedObjects = { obj1: { obj2: 'value' } };
+    tracing.value.object.nestedObjects.obj1.obj2 = 'value 2';
 
     const trace = tracing.getTrace();
     expect(trace[0]).toEqual({
@@ -126,7 +141,19 @@ describe('tracedFabric stores trace on changed', () => {
       targetChain: ['object', 'anotherKey'],
       type: EObjectMutation.delete,
     });
-    expect(tracing.getTraceLength()).toBe(4);
+    expect(trace[4]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['object', 'nestedObjects'],
+      type: EObjectMutation.set,
+      value: { obj1: { obj2: 'value' } },
+    });
+    expect(trace[5]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['object', 'nestedObjects', 'obj1', 'obj2'],
+      type: EObjectMutation.set,
+      value: 'value 2',
+    });
+    expect(tracing.getTraceLength()).toBe(6);
   });
 });
 
@@ -495,7 +522,7 @@ describe('tracedFabric subscribes on tracedFabric added', () => {
 describe('tracedFabric array', () => {
   // for this test to work, the proxy values should be refactored a bit.
   // as a solutions, proxy metadata (TRequiredApplyProxyParams) can be stored in weakMap
-  test.todo('reverse uses one mutation', () => {
+  test('reverse uses one mutation', () => {
     const tracing = traceFabric([1, 2, 3, 4, 5, [99, 98, 97, 96]]);
 
     tracing.value.reverse();
