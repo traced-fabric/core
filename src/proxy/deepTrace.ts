@@ -1,6 +1,6 @@
 import type { JSONArray, JSONObject, JSONStructure } from '../types/json';
 import type { TCaughtReference, TRequiredApplyProxyParams } from '../types/mutation';
-import { setValueMetadata } from '../utils/metadataTree';
+import { tracedValuesMetadata } from '../utils/metadata';
 import { tracedValues } from '../utils/references';
 import { getTracedProxyArray } from './getTracedArray';
 import { getTracedProxyObject } from './getTracedObject';
@@ -50,7 +50,7 @@ export function deepTrace<T extends JSONStructure>(data: TRequiredApplyProxyPara
       ? getTracedProxyArray(data as TRequiredApplyProxyParams<JSONArray>)
       : getTracedProxyObject(data as TRequiredApplyProxyParams<JSONObject>);
 
-    setValueMetadata(proxyValue, { originId: data.originId, targetChain: data.targetChain });
+    tracedValuesMetadata.set(proxyValue, { targetChain: data.targetChain });
 
     return {
       proxy: proxyValue as T,
