@@ -2,7 +2,8 @@ import type { JSONArray, JSONStructure } from '../types/json';
 import { EArrayMutation, EMutated, type TRequiredApplyProxyParams } from '../types/mutation';
 import { tracedSubscribers, tracedValues } from '../utils/references';
 import { deepClone } from '../deepClone';
-import { tracedValuesMetadata } from '../utils/metadata';
+import { getTargetChain, tracedValuesMetadata } from '../utils/metadata';
+import { isStructure } from '../utils/isStructure';
 import { deepTrace } from './deepTrace';
 
 export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyProxyParams<T>): T {
@@ -13,7 +14,7 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
       if (key === EArrayMutation.reverse) {
         data.mutationCallback({
           mutated: mutatedType,
-          targetChain: [...data.targetChain],
+          targetChain: getTargetChain(receiver),
           type: EArrayMutation.reverse,
         });
 
@@ -22,14 +23,11 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
         return () => {
           const reflection = Reflect.apply(target.reverse, target, []);
 
-          const chainLength = tracedValuesMetadata.get(receiver)?.targetChain.length;
-          if (chainLength === undefined) return reflection;
-
           for (let i = 0; i < target.length; i++) {
-            if (typeof target[i] === 'object' && target[i] !== null) {
-              const metadata = tracedValuesMetadata.get(target[i] as JSONStructure);
-              if (metadata) metadata.targetChain[chainLength] = i;
-            }
+            if (!isStructure(target[i])) continue;
+
+            const metadata = tracedValuesMetadata.get(target[i] as JSONStructure);
+            if (metadata) metadata.key = i;
           }
 
           return reflection;
@@ -39,7 +37,7 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
       return Reflect.get(target, key);
     },
 
-    set(target, key, value) {
+    set(target, key, value, receiver) {
       if (typeof key === 'symbol') return Reflect.set(target, key, value);
 
       const index = +key;
@@ -67,9 +65,11 @@ export function getTracedProxyArray<T extends JSONArray>(data: TRequiredApplyPro
           return Reflect.set(target, key, value);
         }
 
-        const proxyValue = deepTrace({ ...data, targetChain, value }).proxy;
+        const proxy = deepTrace({ ...data, targetChain, value }).proxy;
 
-        return Reflect.set(target, key, proxyValue);
+        if (isStructure(proxy)) tracedValuesMetadata.set(proxy, { parentRef: receiver, key: index });
+
+        return Reflect.set(target, key, proxy);
       }
 
       return Reflect.set(target, key, value);
