@@ -9,19 +9,15 @@ export function deepTrace<T extends JSONStructure>(data: TRequiredApplyProxyPara
   proxy: T;
   caughtReferences: TCaughtReference[];
 } {
-  const caughtReferences = [] as TCaughtReference[];
-
   // if the given value is already traced,
   // we should subscribe the current value to the caught references
   if (tracedValues.has(data.value)) {
-    caughtReferences.push({
-      subscriber: data.value,
-      targetChain: data.targetChain,
-    });
-
     return {
       proxy: data.value,
-      caughtReferences,
+      caughtReferences: [{
+        subscriber: data.value,
+        targetChain: data.targetChain,
+      }],
     };
   }
 
@@ -30,30 +26,40 @@ export function deepTrace<T extends JSONStructure>(data: TRequiredApplyProxyPara
   // are also objects-like structures and trace them recursively
   // finally apply the tracing behavior to the given object
   if (typeof data.value === 'object' && data.value !== null) {
-    for (const key in data.value) {
+    const caughtReferences = [] as TCaughtReference[];
+    const tracedInnerValues = [] as { key: number | string; proxy: JSONStructure }[];
+
+    for (const valueKey in data.value) {
       if (
-        data.value[key] === null
-        || typeof data.value[key] !== 'object'
-        || typeof key === 'symbol'
+        data.value[valueKey] === null
+        || typeof data.value[valueKey] !== 'object'
+        || typeof valueKey === 'symbol'
       ) { continue; }
 
-      const maybeNumber = +key;
-      const targetChain = data.targetChain.concat(Number.isInteger(maybeNumber) ? maybeNumber : key);
+      const maybeNumber = +valueKey;
+      const key = Number.isInteger(maybeNumber) ? maybeNumber : valueKey;
+      const targetChain = data.targetChain.concat(key);
 
-      const tracedValue = deepTrace({ ...data, targetChain, value: data.value[key] as JSONStructure });
+      const structure = deepTrace({ ...data, targetChain, value: data.value[key] as JSONStructure });
 
-      (data.value[key] as JSONStructure) = tracedValue.proxy;
-      caughtReferences.push(...tracedValue.caughtReferences);
+      (data.value[key] as JSONStructure) = structure.proxy;
+      caughtReferences.push(...structure.caughtReferences);
+      tracedInnerValues.push({ key, proxy: structure.proxy });
     }
 
-    const proxyValue = Array.isArray(data.value)
+    const proxy = Array.isArray(data.value)
       ? getTracedProxyArray(data as TRequiredApplyProxyParams<JSONArray>)
       : getTracedProxyObject(data as TRequiredApplyProxyParams<JSONObject>);
 
-    tracedValuesMetadata.set(proxyValue, { targetChain: data.targetChain });
+    for (const value of tracedInnerValues) {
+      tracedValuesMetadata.set(value.proxy, {
+        parentRef: proxy,
+        key: value.key,
+      });
+    }
 
     return {
-      proxy: proxyValue as T,
+      proxy: proxy as T,
       caughtReferences,
     };
   }
@@ -62,6 +68,6 @@ export function deepTrace<T extends JSONStructure>(data: TRequiredApplyProxyPara
   // we should return the value as is
   return {
     proxy: data.value,
-    caughtReferences,
+    caughtReferences: [],
   };
 }
