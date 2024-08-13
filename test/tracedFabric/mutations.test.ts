@@ -523,7 +523,7 @@ describe('tracedFabric array', () => {
   test('reverse uses one mutation', () => {
     const tracing = traceFabric<any>([[1, 1.5], 2, 3, 4, 5]);
 
-    tracing.value[5] = [99, 98, 97, 96];
+    tracing.value.push([99, 98, 97, 96]);
     tracing.value[0].reverse();
     tracing.value.reverse();
     tracing.value[0].reverse();
@@ -531,7 +531,7 @@ describe('tracedFabric array', () => {
     const trace = tracing.getTrace();
     expect(trace[0]).toEqual({
       mutated: EMutated.array,
-      targetChain: [0],
+      targetChain: [5],
       type: EArrayMutation.set,
       value: [99, 98, 97, 96],
     });
