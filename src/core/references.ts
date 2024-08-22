@@ -1,5 +1,5 @@
 import type { TTarget, TTraceChange, TTracedFabricValue, TTracedValueId } from '../types/mutation';
-import { symbolTracedFabricRootId } from '../utils/symbols';
+import { symbolTracedFabricRootId } from './symbols';
 
 let id: TTracedValueId = 0;
 export const getTracedValueId = (): number => id++;
