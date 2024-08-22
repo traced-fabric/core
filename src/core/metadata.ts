@@ -1,7 +1,8 @@
 import type { JSONStructure } from '../types/json';
-import type { TTarget } from '../types/mutation';
+import type { TTarget, TTracedFabricValue } from '../types/mutation';
 
 export type TTracedValueMetadata = {
+  rootRef: TTracedFabricValue;
   parentRef: JSONStructure;
   key: TTarget;
 };
