@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../../src/traceFabric';
 import { EMutated, EObjectMutation } from '../../src/types/mutation';
-import { symbolTracedFabric } from '../../src/utils/symbols';
 import { deepClone } from '../../src/deepClone';
+import { symbolTracedFabric } from '../../src/core/symbols';
 
 describe('tracedFabric should return ', () => {
   test('should have a tracedFabric symbol', () => {
