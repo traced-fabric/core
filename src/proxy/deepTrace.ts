@@ -46,15 +46,11 @@ function deepTrace<T extends JSONStructure>(
   for (const key in value) {
     if (!isStructure(value[key])) continue;
 
-    (value[key] as JSONStructure) = deepTrace(
-      value[key] as JSONStructure,
-      mutationCallback,
-      {
-        rootRef,
-        parentRef: proxy,
-        key: Number.isInteger(+key) ? +key : key,
-      },
-    );
+    (value[key] as JSONStructure) = deepTrace(value[key] as JSONStructure, mutationCallback, {
+      rootRef,
+      parentRef: proxy,
+      key: Number.isInteger(+key) ? +key : key,
+    });
   }
 
   return proxy as T;
