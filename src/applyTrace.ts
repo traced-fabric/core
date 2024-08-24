@@ -9,7 +9,7 @@ import {
   type TTraceChange,
 } from './types/mutation';
 
-export function applyObjectMutation(value: JSONObject, mutation: TObjectMutation): void {
+function applyObjectMutation(value: JSONObject, mutation: TObjectMutation): void {
   const lastKey = mutation.targetChain.at(-1);
   if (lastKey === undefined) throw new Error('Invalid target chain');
 
@@ -21,7 +21,7 @@ export function applyObjectMutation(value: JSONObject, mutation: TObjectMutation
   }
 }
 
-export function applyArrayMutation(value: JSONArray, mutation: TArrayMutation): void {
+function applyArrayMutation(value: JSONArray, mutation: TArrayMutation): void {
   const lastKey = mutation.targetChain.at(-1);
   if (lastKey === undefined) throw new Error('Invalid target chain');
 
@@ -30,7 +30,7 @@ export function applyArrayMutation(value: JSONArray, mutation: TArrayMutation): 
   else if (mutation.type === EArrayMutation.reverse) value.reverse();
 }
 
-export function getMutationTargetWithoutLastKey(
+function getMutationTargetWithoutLastKey(
   value: JSONStructure,
   targetChain: TTarget[],
 ): JSONStructure {
@@ -61,7 +61,7 @@ export function getMutationTargetWithoutLastKey(
  *
  * applyTrace(target, fabric.getTrace());
  *
- * console.log(target); // { season: 'winter' }
+ * console.log(target); // { season: 'summer' }
  *
  * @since 0.0.1
  */
