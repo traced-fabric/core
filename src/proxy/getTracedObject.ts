@@ -3,7 +3,7 @@ import { EMutated, EObjectMutation, type TMutationCallback } from '../types/muta
 import { deepClone } from '../deepClone';
 import { isTracing } from '../utils/withoutTracing';
 import { type TTracedValueMetadata, getTargetChain } from '../core/metadata';
-import { addTracedSubscriber, isTracedValue, removeTracedSubscriber } from '../core/references';
+import { isTracedValue, removeTracedSubscriber } from '../core/references';
 import type { TTracedFabricValue } from '../types/tracedValue';
 import { deepTrace } from './deepTrace';
 
@@ -14,39 +14,30 @@ export function getTracedProxyObject<T extends JSONObject>(
 ): T {
   const mutated = EMutated.object;
 
-  return new Proxy(value, {
+  const proxy = new WeakRef(new Proxy(value, {
     set(target, key, value, receiver) {
       if (typeof key === 'symbol') return Reflect.set(target, key, value);
 
-      const targetChain = [...getTargetChain(receiver), key];
+      const childMetadata: TTracedValueMetadata = {
+        rootRef: metadata?.rootRef ?? receiver,
+        parentRef: receiver,
+        key,
+      };
 
       // if the value that is overridden and it is a tracedFabric,
       // we should remove the subscriber from the old value
-      if (isTracedValue(target[key])) {
-        removeTracedSubscriber(target[key], {
-          rootRef: metadata?.rootRef ?? receiver,
-          parentRef: receiver,
-          key,
+      if (isTracedValue(target[key])) removeTracedSubscriber(target[key], childMetadata);
+
+      if (isTracing()) {
+        mutationCallback({
+          mutated,
+          targetChain: [...getTargetChain(receiver), key],
+          value: deepClone(value),
+          type: EObjectMutation.set,
         });
       }
 
-      // if new value is tracedFabric, we should subscribe the current
-      // tracedFabric to the new value mutations
-      if (isTracedValue(value)) {
-        addTracedSubscriber(value, {
-          rootRef: metadata?.rootRef ?? receiver,
-          parentRef: receiver,
-          key,
-        });
-      }
-
-      if (isTracing()) mutationCallback({ mutated, targetChain, value: deepClone(value), type: EObjectMutation.set });
-
-      const proxy = deepTrace(value, mutationCallback, {
-        rootRef: metadata ? metadata.rootRef : receiver,
-        parentRef: receiver,
-        key,
-      });
+      const proxy = deepTrace(value, mutationCallback, childMetadata);
 
       return Reflect.set(target, key, proxy);
     },
@@ -54,19 +45,28 @@ export function getTracedProxyObject<T extends JSONObject>(
     deleteProperty(target, key) {
       if (typeof key === 'symbol') return Reflect.set(target, key, value);
 
-      const targetChain = [...getTargetChain(target), key];
+      const ref = proxy.deref();
+      if (!ref) return Reflect.deleteProperty(target, key);
 
       if (isTracedValue(target[key])) {
         removeTracedSubscriber(target[key], {
-          rootRef: metadata?.rootRef ?? target as unknown as TTracedFabricValue,
-          parentRef: target,
+          rootRef: metadata?.rootRef ?? ref as unknown as TTracedFabricValue,
+          parentRef: ref,
           key,
         });
       }
 
-      if (isTracing()) mutationCallback({ mutated, targetChain, type: EObjectMutation.delete });
+      if (isTracing()) {
+        mutationCallback({
+          mutated,
+          targetChain: [...getTargetChain(ref), key],
+          type: EObjectMutation.delete,
+        });
+      }
 
       return Reflect.deleteProperty(target, key);
     },
-  });
+  }));
+
+  return proxy.deref() as T;
 }
