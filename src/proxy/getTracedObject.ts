@@ -42,13 +42,11 @@ export function getTracedProxyObject<T extends JSONObject>(
 
       if (isTracing()) mutationCallback({ mutated, targetChain, value: deepClone(value), type: EObjectMutation.set });
 
-      const proxy = deepTrace(value, mutationCallback, metadata
-        ? {
-            rootRef: metadata.rootRef,
-            parentRef: receiver,
-            key,
-          }
-        : undefined);
+      const proxy = deepTrace(value, mutationCallback, {
+        rootRef: metadata ? metadata.rootRef : receiver,
+        parentRef: receiver,
+        key,
+      });
 
       return Reflect.set(target, key, proxy);
     },
