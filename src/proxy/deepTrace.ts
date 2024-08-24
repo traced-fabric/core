@@ -3,7 +3,6 @@ import type { TMutationCallback } from '../types/mutation';
 import { type TTracedValueMetadata, setMetadata } from '../core/metadata';
 import { addTracedSubscriber, getNewTracedValueId } from '../core/references';
 import { symbolTracedFabricRootId } from '../core/symbols';
-import { withoutTracing } from '../utils/withoutTracing';
 import { isStructure } from '../utils/isStructure';
 import type { TTracedFabricValue } from '../types/tracedValue';
 import { getTracedProxyArray } from './getTracedArray';
@@ -14,15 +13,16 @@ import { getTracedProxyObject } from './getTracedObject';
 // * will set the tracedFabric references
 // * will set the tracedValues metadata
 // * if the value is already a traced fabric, return as is
-function deepTrace<T extends JSONStructure>(
+// * if the value is not a structure (Object/Array), return as is
+export function deepTrace<T extends JSONStructure>(
   value: T,
   mutationCallback: TMutationCallback,
   metadata?: TTracedValueMetadata,
 ): T {
   // if data type is common and not structure-like, return as is
-  if (value === null || typeof value !== 'object') return value;
+  if (!isStructure(value)) return value;
 
-  // if the given value is already traced,
+  // if the given value is already traced (tracedFabric),
   // we should subscribe the current value to metadata root(tracedFabric)
   if ((value as TTracedFabricValue)[symbolTracedFabricRootId]) {
     if (metadata) addTracedSubscriber((value as TTracedFabricValue), metadata);
@@ -55,9 +55,3 @@ function deepTrace<T extends JSONStructure>(
 
   return proxy as T;
 }
-
-const deepTraceWithoutTracing: typeof deepTrace = (...args) => withoutTracing(() => deepTrace(...args));
-
-export {
-  deepTraceWithoutTracing as deepTrace,
-};
