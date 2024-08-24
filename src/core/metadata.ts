@@ -2,9 +2,9 @@ import type { JSONStructure } from '../types/json';
 import type { TTarget } from '../types/mutation';
 import type { TTracedFabricValue } from '../types/tracedValue';
 
-export type TTracedValueMetadata = {
+export type TTracedValueMetadata<T extends JSONStructure = JSONStructure> = {
   // [ ] - make it a weak map
-  rootRef: TTracedFabricValue;
+  rootRef: TTracedFabricValue<T>;
   // [ ] - make it a weak map
   parentRef: JSONStructure;
   key: TTarget;
