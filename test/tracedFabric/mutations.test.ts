@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../../src/traceFabric';
 import { EArrayMutation, EMutated, EObjectMutation } from '../../src/types/mutation';
+import { deepClone } from '../../src/deepClone';
 
 describe('tracedFabric stores trace on changed', () => {
   test('string', () => {
@@ -524,9 +525,10 @@ describe('tracedFabric array', () => {
     const tracing = traceFabric<any>([[1, 1.5], 2, 3, 4, 5]);
 
     tracing.value.push([99, 98, 97, 96]);
+    tracing.value.push(100);
     tracing.value[0].reverse();
     tracing.value.reverse();
-    tracing.value[0].reverse();
+    tracing.value[1].reverse();
 
     const trace = tracing.getTrace();
     expect(trace[0]).toEqual({
@@ -537,19 +539,28 @@ describe('tracedFabric array', () => {
     });
     expect(trace[1]).toEqual({
       mutated: EMutated.array,
+      targetChain: [6],
+      type: EArrayMutation.set,
+      value: 100,
+    });
+    expect(trace[2]).toEqual({
+      mutated: EMutated.array,
       targetChain: [0],
       type: EArrayMutation.reverse,
     });
-    expect(trace[2]).toEqual({
+    expect(deepClone(tracing.value[1])).toEqual([96, 97, 98, 99]);
+    expect(trace[3]).toEqual({
       mutated: EMutated.array,
       targetChain: [],
       type: EArrayMutation.reverse,
     });
-    expect(trace[3]).toEqual({
+    expect(deepClone(tracing.value)).toEqual([100, [96, 97, 98, 99], 5, 4, 3, 2, [1.5, 1]]);
+    expect(trace[4]).toEqual({
       mutated: EMutated.array,
-      targetChain: [0],
+      targetChain: [1],
       type: EArrayMutation.reverse,
     });
-    expect(tracing.getTraceLength()).toBe(4);
+    expect(deepClone(tracing.value[1])).toEqual([96, 97, 98, 99]);
+    expect(tracing.getTraceLength()).toBe(5);
   });
 });
