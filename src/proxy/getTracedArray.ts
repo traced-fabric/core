@@ -55,7 +55,7 @@ export function getTracedProxyArray<T extends JSONArray>(
 
       // if the value that is overridden and it is a tracedFabric,
       // we should remove the subscriber from the old value
-      if (isTracedValue(target[index])) removeTracedSubscriber(target[index], childMetadata);
+      if (isTracedValue(target[index])) removeTracedSubscriber(target[index] as TTracedFabricValue, childMetadata);
 
       if (isTracing()) {
         mutationCallback({
@@ -82,7 +82,7 @@ export function getTracedProxyArray<T extends JSONArray>(
       if (!ref) return Reflect.deleteProperty(target, key);
 
       if (isTracedValue(target[index])) {
-        removeTracedSubscriber(target[index], {
+        removeTracedSubscriber(target[index] as TTracedFabricValue, {
           rootRef: metadata?.rootRef ?? ref as unknown as TTracedFabricValue,
           parentRef: ref,
           key: index,
