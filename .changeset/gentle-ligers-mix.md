@@ -4,7 +4,7 @@
 
 ## Fixes
 
-* Fixed children targetChain not being properly updated when parent structure is reversed, that was causing wrong targetChain output in mutations.
+* Fixed children targetChain not being properly updated when parent array is reversed, that was causing wrong targetChain output in mutations.
 
 ## Code Refactoring
 
@@ -15,6 +15,8 @@
 * The tracedSubscribers weakMap, inside references.ts file, is no longer exported. The usage of it is forward to smaller functions in the same file. references.ts file is not exported by the library to avoid uses interfere with the library behavior.
 
 * Removed onCaughtReference functions and all adjacent code. This behaviour is now covered by the deepTrace, getTracedArray/Object functions.
+
+* applyObjectMutation, applyArrayMutation, getMutationTargetWithoutLastKey are no longer exported by the library. They are now used internally by the applyMutation function.
 
 ## New features
 
