@@ -71,13 +71,11 @@ export function getTracedProxyArray<T extends JSONArray>(
 
       if (isTracing()) mutationCallback({ mutated, targetChain, value: deepClone(value), type: EArrayMutation.set });
 
-      const proxy = deepTrace(value, mutationCallback, metadata
-        ? {
-            rootRef: metadata.rootRef,
-            parentRef: receiver,
-            key: index,
-          }
-        : undefined);
+      const proxy = deepTrace(value, mutationCallback, {
+        rootRef: metadata ? metadata.rootRef : receiver,
+        parentRef: receiver,
+        key: index,
+      });
 
       return Reflect.set(target, key, proxy);
     },
