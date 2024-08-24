@@ -58,10 +58,7 @@ export function updateSubscribers(
   const subscribers = tracedSubscribers.get(changesSender);
   if (!subscribers) return;
 
-  for (const value of subscribers) {
-    const receiver = value[0];
-    const metadata = value[1];
-
+  for (const [receiver, metadata] of subscribers.entries()) {
     const traceLog = tracedLogs.get(receiver);
     if (!traceLog) continue;
 
