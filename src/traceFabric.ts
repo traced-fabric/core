@@ -7,6 +7,7 @@ import type {
 } from './types/mutation';
 import { deepTrace } from './proxy/deepTrace';
 import type { TTracedFabricValue } from './types/tracedValue';
+import { withoutTracing } from './utils/withoutTracing';
 
 export type TTracedFabric<T extends JSONStructure> = {
   [symbolTracedFabric]: true;
@@ -60,10 +61,10 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
     updateSubscribers(proxyRef, mutation);
   };
 
-  proxyRef = deepTrace(
+  proxyRef = withoutTracing(() => deepTrace(
     value,
     mutationCallback,
-  ) as TTracedFabricValue<T>;
+  ) as TTracedFabricValue<T>);
 
   tracedLogs.set(proxyRef, []);
 
