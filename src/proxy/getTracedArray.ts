@@ -53,7 +53,7 @@ export function getTracedProxyArray<T extends JSONArray>(
       // we should remove the subscriber from the old value
       if (isTracedValue(target[index])) {
         removeTracedSubscriber(target[index], {
-          rootRef: metadata?.rootRef ?? receiver as unknown as TTracedFabricValue,
+          rootRef: metadata?.rootRef ?? receiver,
           parentRef: receiver,
           key: index,
         });
@@ -63,7 +63,7 @@ export function getTracedProxyArray<T extends JSONArray>(
       // tracedFabric to the new value mutations
       if (isTracedValue(value)) {
         addTracedSubscriber(value, {
-          rootRef: metadata?.rootRef ?? receiver as unknown as TTracedFabricValue,
+          rootRef: metadata?.rootRef ?? receiver,
           parentRef: receiver,
           key: index,
         });
