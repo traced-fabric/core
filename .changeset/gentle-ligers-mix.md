@@ -4,15 +4,15 @@
 
 ## Fixes
 
-* Fixed children targetChain not being properly updated when parent array is reversed, that was causing wrong targetChain output in mutations.
+* Fixed children targetChain not being properly updated when the parent array is reversed, causing wrong targetChain output in mutations.
 
 ## Code Refactoring
 
-* Removed getTracedValue file and function. It's behavior is now covered by the deepTrace function.
+* Removed getTracedValue file and function. Its behaviour is now covered by the deepTrace function.
 
-* The library is now using the metadata for the child structures that are inside tracedFabric values. This change allows storing references between children and parent. Mainly used for getTargetChain function.
+* The library is now using the metadata for the child structures that are inside tracedFabric values. This change allows storing references between children and parents. It is mainly used for the getTargetChain function.
 
-* The tracedSubscribers weakMap, inside references.ts file, is no longer exported. The usage of it is forward to smaller functions in the same file. references.ts file is not exported by the library to avoid uses interfere with the library behavior.
+* The tracedSubscribers weakMap, inside the references.ts file, is no longer exported. The usage of it is forward to smaller functions in the same file. the library does not export references.ts file to avoid uses interfering with the library behaviour.
 
 * Removed onCaughtReference functions and all adjacent code. This behaviour is now covered by the deepTrace, getTracedArray/Object functions.
 
