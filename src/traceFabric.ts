@@ -12,10 +12,10 @@ import { withoutTracing } from './utils/withoutTracing';
 export type TTracedFabric<T extends JSONStructure> = {
   [symbolTracedFabric]: true;
 
-  // not setting here TTracedFabricValue,
-  // to avid typescript firing error about symbol.
-  // If, for some reason, the value needs included symbols,
-  // the type can be wrapped in TTracedFabricValue
+  /**
+   * Not setting here TTracedFabricValue, to avoid typescript firing error about symbol.
+   * If the value should included tracedFabric symbol, the generic can be wrapped in TTracedFabricValue
+   */
   value: T;
 
   getTrace: () => TTraceChange[];
@@ -37,12 +37,30 @@ export type TTracedFabric<T extends JSONStructure> = {
  * @returns The tracedFabric object
  *
  * @example
- * const fabric = traceFabric({ season: 'winter', bestDays: [2, 7, 16] });
+ * const bestDays = traceFabric([2, 7, 16]);
+ * const fabric = traceFabric({
+ *   season: 'winter',
+ *   bestDays: bestDays.value,
+ * });
  *
  * fabric.value.season = 'summer';
  * fabric.value.bestDays.push(25);
+ * bestDays.value.push(26);
  *
  * console.log(fabric.getTrace());
+ * // [{
+ * //   mutated: 'object', type: 'set',
+ * //   targetChain: ['season'],
+ * //   value: 'summer',
+ * // }, {
+ * //   mutated: 'array', type: 'set',
+ * //   targetChain: ['bestDays', 3],
+ * //   value: 25,
+ * // }, {
+ * //   mutated: 'array', type: 'set',
+ * //   targetChain: ['bestDays', 4],
+ * //   value: 26,
+ * // }]
  *
  * @since 0.0.1
  */
