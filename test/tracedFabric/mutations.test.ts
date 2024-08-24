@@ -163,40 +163,66 @@ describe('tracedFabric with nested tracedFabric changes', () => {
     const tracingChild1 = traceFabric({ string: 'no changes 1' });
     const tracingChild2 = traceFabric({ string: 'no changes 2' });
     const tracingParent = traceFabric({
-      child: tracingChild1.value,
+      child1: tracingChild1.value,
       child2: tracingChild2.value,
       children: [tracingChild1.value, tracingChild2.value],
     });
 
-    tracingChild1.value.string = 'changed 1';
-    tracingChild2.value.string = 'changed 2';
+    tracingChild1.value.string = 'changed 1 once';
+    tracingChild2.value.string = 'changed 2 once';
+    tracingParent.value.child1.string = 'changed 1 twice';
+    tracingParent.value.child2.string = 'changed 2 twice';
 
     const trace = tracingParent.getTrace();
     expect(trace[0]).toEqual({
       mutated: EMutated.object,
-      targetChain: ['child', 'string'],
+      targetChain: ['child1', 'string'],
       type: EObjectMutation.set,
-      value: 'changed 1',
+      value: 'changed 1 once',
     });
     expect(trace[1]).toEqual({
       mutated: EMutated.object,
       targetChain: ['children', 0, 'string'],
       type: EObjectMutation.set,
-      value: 'changed 1',
+      value: 'changed 1 once',
     });
     expect(trace[2]).toEqual({
       mutated: EMutated.object,
       targetChain: ['child2', 'string'],
       type: EObjectMutation.set,
-      value: 'changed 2',
+      value: 'changed 2 once',
     });
     expect(trace[3]).toEqual({
       mutated: EMutated.object,
       targetChain: ['children', 1, 'string'],
       type: EObjectMutation.set,
-      value: 'changed 2',
+      value: 'changed 2 once',
     });
-    expect(tracingParent.getTraceLength()).toBe(4);
+    expect(trace[4]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child1', 'string'],
+      type: EObjectMutation.set,
+      value: 'changed 1 twice',
+    });
+    expect(trace[5]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['children', 0, 'string'],
+      type: EObjectMutation.set,
+      value: 'changed 1 twice',
+    });
+    expect(trace[6]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child2', 'string'],
+      type: EObjectMutation.set,
+      value: 'changed 2 twice',
+    });
+    expect(trace[7]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['children', 1, 'string'],
+      type: EObjectMutation.set,
+      value: 'changed 2 twice',
+    });
+    expect(tracingParent.getTraceLength()).toBe(8);
   });
 
   test('parent should match if child number changes', () => {
@@ -210,6 +236,8 @@ describe('tracedFabric with nested tracedFabric changes', () => {
 
     tracingChild1.value.number = 2;
     tracingChild2.value.number = 4;
+    tracingParent.value.child.number = 3;
+    tracingParent.value.child2.number = 5;
 
     const trace = tracingParent.getTrace();
     expect(trace[0]).toEqual({
@@ -236,7 +264,31 @@ describe('tracedFabric with nested tracedFabric changes', () => {
       type: EObjectMutation.set,
       value: 4,
     });
-    expect(tracingParent.getTraceLength()).toBe(4);
+    expect(trace[4]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child', 'number'],
+      type: EObjectMutation.set,
+      value: 3,
+    });
+    expect(trace[5]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['children', 0, 'number'],
+      type: EObjectMutation.set,
+      value: 3,
+    });
+    expect(trace[6]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['child2', 'number'],
+      type: EObjectMutation.set,
+      value: 5,
+    });
+    expect(trace[7]).toEqual({
+      mutated: EMutated.object,
+      targetChain: ['children', 1, 'number'],
+      type: EObjectMutation.set,
+      value: 5,
+    });
+    expect(tracingParent.getTraceLength()).toBe(8);
   });
 
   test('parent should match if child nullOrNumber changes', () => {
@@ -320,28 +372,33 @@ describe('tracedFabric with nested tracedFabric changes', () => {
   });
 
   test('parent should match if child array changes', () => {
-    const tracingChild1 = traceFabric<any>({ array: [1, 2] });
-    const tracingChild2 = traceFabric<any>({ array: [4, 5] });
+    const tracingChild1 = traceFabric([1, 2]);
+    const tracingChild2 = traceFabric({ array: [4, 5] });
     const tracingParent = traceFabric({
-      child: tracingChild1.value,
+      child1: tracingChild1.value,
       child2: tracingChild2.value,
       children: [tracingChild1.value, tracingChild2.value],
     });
 
-    tracingChild1.value.array.push(3);
+    tracingChild1.value.push(3);
     tracingChild2.value.array.push(6);
-    tracingChild1.value.array.pop();
+    tracingChild1.value.pop();
+    tracingChild2.value.array.pop();
+    tracingParent.value.child1.push(11);
+    tracingParent.value.child2.array.push(12);
+    tracingParent.value.child1.pop();
+    tracingParent.value.child2.array.pop();
 
     const trace = tracingParent.getTrace();
     expect(trace[0]).toEqual({
       mutated: EMutated.array,
-      targetChain: ['child', 'array', 2],
+      targetChain: ['child1', 2],
       type: EArrayMutation.set,
       value: 3,
     });
     expect(trace[1]).toEqual({
       mutated: EMutated.array,
-      targetChain: ['children', 0, 'array', 2],
+      targetChain: ['children', 0, 2],
       type: EArrayMutation.set,
       value: 3,
     });
@@ -359,15 +416,69 @@ describe('tracedFabric with nested tracedFabric changes', () => {
     });
     expect(trace[4]).toEqual({
       mutated: EMutated.array,
-      targetChain: ['child', 'array', 2],
+      targetChain: ['child1', 2],
       type: EArrayMutation.delete,
     });
     expect(trace[5]).toEqual({
       mutated: EMutated.array,
-      targetChain: ['children', 0, 'array', 2],
+      targetChain: ['children', 0, 2],
       type: EArrayMutation.delete,
     });
-    expect(tracingParent.getTraceLength()).toBe(6);
+    expect(trace[6]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['child2', 'array', 2],
+      type: EArrayMutation.delete,
+    });
+    expect(trace[7]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['children', 1, 'array', 2],
+      type: EArrayMutation.delete,
+    });
+    expect(trace[8]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['child1', 2],
+      type: EArrayMutation.set,
+      value: 11,
+    });
+    expect(trace[9]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['children', 0, 2],
+      type: EArrayMutation.set,
+      value: 11,
+    });
+    expect(trace[10]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['child2', 'array', 2],
+      type: EArrayMutation.set,
+      value: 12,
+    });
+    expect(trace[11]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['children', 1, 'array', 2],
+      type: EArrayMutation.set,
+      value: 12,
+    });
+    expect(trace[12]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['child1', 2],
+      type: EArrayMutation.delete,
+    });
+    expect(trace[13]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['children', 0, 2],
+      type: EArrayMutation.delete,
+    });
+    expect(trace[14]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['child2', 'array', 2],
+      type: EArrayMutation.delete,
+    });
+    expect(trace[15]).toEqual({
+      mutated: EMutated.array,
+      targetChain: ['children', 1, 'array', 2],
+      type: EArrayMutation.delete,
+    });
+    expect(tracingParent.getTraceLength()).toBe(16);
   });
 
   test('parent should match if child object changes', () => {
@@ -422,7 +533,7 @@ describe('tracedFabric with nested tracedFabric changes', () => {
   });
 });
 
-describe('tracedFabric not changes on nested tracedFabric removes', () => {
+describe('tracedFabric not changing on nested tracedFabric removes', () => {
   test('when child is in object', () => {
     const tracingChild1 = traceFabric({ object: { key: 'value 1' } });
     const tracingParent = traceFabric({ child: tracingChild1.value });
