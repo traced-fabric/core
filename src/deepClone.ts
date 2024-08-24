@@ -13,11 +13,11 @@
  *
  * @example
  * const fabric = traceFabric({ season: 'winter', bestDays: [2, 7, 16] });
- * const clone = deepClone(origin.value);
+ * const clone = deepClone(fabric.value);
  *
  * console.log(clone); // { season: 'winter', bestDays: [2, 7, 16] }
- * console.log(clone === origin); // false
- * console.log(clone.bestDays === origin.bestDays); // false
+ * console.log(clone === fabric.value); // false
+ * console.log(clone.bestDays === fabric.value.bestDays); // false
  *
  * @since 0.0.1
  */
