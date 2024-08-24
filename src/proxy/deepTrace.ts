@@ -19,6 +19,9 @@ function deepTrace<T extends JSONStructure>(
   mutationCallback: TMutationCallback,
   metadata?: TTracedValueMetadata,
 ): T {
+  // if data type is common and not structure-like, return as is
+  if (value === null || typeof value !== 'object') return value;
+
   // if the given value is already traced,
   // we should subscribe the current value to metadata root(tracedFabric)
   if ((value as TTracedFabricValue)[symbolTracedFabricRootId]) {
@@ -31,35 +34,30 @@ function deepTrace<T extends JSONStructure>(
   // 1. apply the tracing behavior to the given value
   // 2. iterate over the object, to see if keys
   //    are also objects-like structures and trace them recursively
-  if (typeof value === 'object' && value !== null) {
-    const proxy = Array.isArray(value)
-      ? getTracedProxyArray(value, mutationCallback, metadata)
-      : getTracedProxyObject(value, mutationCallback, metadata);
+  const proxy = Array.isArray(value)
+    ? getTracedProxyArray(value, mutationCallback, metadata)
+    : getTracedProxyObject(value, mutationCallback, metadata);
 
-    if (!metadata) (proxy as TTracedFabricValue)[symbolTracedFabricRootId] = getNewTracedValueId();
-    else setMetadata(proxy, metadata);
+  if (!metadata) (proxy as TTracedFabricValue)[symbolTracedFabricRootId] = getNewTracedValueId();
+  else setMetadata(proxy, metadata);
 
-    const rootRef = metadata ? metadata.rootRef : proxy as TTracedFabricValue;
+  const rootRef = metadata ? metadata.rootRef : proxy as TTracedFabricValue;
 
-    for (const key in value) {
-      if (!isStructure(value[key])) continue;
+  for (const key in value) {
+    if (!isStructure(value[key])) continue;
 
-      (value[key] as JSONStructure) = deepTrace(
-        value[key] as JSONStructure,
-        mutationCallback,
-        {
-          rootRef,
-          parentRef: proxy,
-          key: Number.isInteger(+key) ? +key : key,
-        },
-      );
-    }
-
-    return proxy as T;
+    (value[key] as JSONStructure) = deepTrace(
+      value[key] as JSONStructure,
+      mutationCallback,
+      {
+        rootRef,
+        parentRef: proxy,
+        key: Number.isInteger(+key) ? +key : key,
+      },
+    );
   }
 
-  // if data type is common and not structure-like, return as is
-  return value;
+  return proxy as T;
 }
 
 const deepTraceWithoutTracing: typeof deepTrace = (...args) => withoutTracing(() => deepTrace(...args));
