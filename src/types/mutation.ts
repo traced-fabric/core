@@ -1,7 +1,5 @@
 import type { JSONValue } from './json';
 
-export type TTracedValueId = number;
-
 export enum EObjectMutation {
   set = 'set',
   delete = 'delete',
@@ -45,16 +43,3 @@ export type TArrayMutation = {
 export type TMutationCallback = (mutation: TObjectMutation | TArrayMutation) => void;
 
 export type TTraceChange = TObjectMutation | TArrayMutation;
-
-export type TCaughtReference = {
-  subscriber: object;
-  targetChain: TTarget[];
-};
-export type TOnCaughtReference = (caughtReference: TCaughtReference) => void;
-export type TRequiredApplyProxyParams<T extends JSONValue> = {
-  originId: TTracedValueId;
-  value: T;
-  mutationCallback: TMutationCallback;
-  onCaughtTrace: TOnCaughtReference;
-  targetChain: TTarget[];
-};
