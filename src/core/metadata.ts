@@ -12,22 +12,18 @@ export type TTracedValueMetadata<T extends JSONStructure = JSONStructure> = {
 
 const tracedValuesMetadata = new WeakMap<JSONStructure, TTracedValueMetadata>();
 
-export function getTargetChain(target: JSONStructure): TTarget[] {
-  const metadata = tracedValuesMetadata.get(target);
-
-  if (!metadata) return [];
-
-  return [...getTargetChain(metadata.parentRef), metadata.key];
-}
-
-export function hasMetadata(target: JSONStructure): boolean {
-  return tracedValuesMetadata.has(target);
-}
-
 export function getMetadata(target: JSONStructure): TTracedValueMetadata | undefined {
   return tracedValuesMetadata.get(target);
 }
 
 export function setMetadata(target: JSONStructure, metadata: TTracedValueMetadata): void {
   tracedValuesMetadata.set(target, metadata);
+}
+
+export function getTargetChain(target: JSONStructure): TTarget[] {
+  const metadata = getMetadata(target);
+
+  return metadata
+    ? [...getTargetChain(metadata.parentRef), metadata.key]
+    : [];
 }
