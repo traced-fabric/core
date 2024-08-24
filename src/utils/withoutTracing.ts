@@ -1,7 +1,7 @@
 let allowTracing = true;
 
 export function isTracing(): boolean {
-  return allowTracing;
+  return !!allowTracing;
 }
 
 export function withoutTracing<T>(callback: () => T): T {
