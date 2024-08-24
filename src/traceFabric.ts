@@ -1,21 +1,20 @@
-import {
-  getTracedValueId,
-  tracedLogs,
-  tracedSubscribers,
-  tracedValues,
-} from './utils/references';
-import { symbolTracedFabric, symbolTracedFabricRootId } from './utils/symbols';
+import { tracedLogs, updateSubscribers } from './core/references';
+import { symbolTracedFabric } from './core/symbols';
 import type { JSONStructure } from './types/json';
 import type {
-  TCaughtReference,
   TMutationCallback,
   TTraceChange,
 } from './types/mutation';
 import { deepTrace } from './proxy/deepTrace';
+import type { TTracedFabricValue } from './types/tracedValue';
 
 export type TTracedFabric<T extends JSONStructure> = {
   [symbolTracedFabric]: true;
 
+  // not setting here TTracedFabricValue,
+  // to avid typescript firing error about symbol.
+  // If, for some reason, the value needs included symbols,
+  // the type can be wrapped in TTracedFabricValue
   value: T;
 
   getTrace: () => TTraceChange[];
@@ -47,9 +46,7 @@ export type TTracedFabric<T extends JSONStructure> = {
  * @since 0.0.1
  */
 export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T> {
-  const id = getTracedValueId();
-
-  let proxyRef: T;
+  let proxyRef: TTracedFabricValue<T>;
 
   const getTrace = (): TTraceChange[] => tracedLogs.get(proxyRef)!;
   const getTraceLength = (): number => getTrace().length;
@@ -60,49 +57,15 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
 
   const mutationCallback: TMutationCallback = (mutation) => {
     getTrace()?.push(mutation);
-
-    const tracedSubscriber = tracedSubscribers.get(proxyRef);
-    if (!tracedSubscriber) return;
-
-    for (const trace of Object.values(tracedSubscriber)) {
-      for (const { subscriber, targetChain } of Object.values(trace)) {
-        const subscriberTraceLog = tracedLogs.get(subscriber);
-
-        if (!subscriberTraceLog) return;
-
-        subscriberTraceLog.push({
-          ...mutation,
-          targetChain: targetChain.concat(mutation.targetChain),
-        });
-      }
-    }
+    updateSubscribers(proxyRef, mutation);
   };
 
-  const onCaughtTrace = (references: TCaughtReference): void => {
-    if (!tracedSubscribers.has(references.subscriber)) tracedSubscribers.set(references.subscriber, { [id]: {} });
-    if (!tracedSubscribers.get(references.subscriber)![id]) tracedSubscribers.get(references.subscriber)![id] = {};
-
-    tracedSubscribers.get(references.subscriber)![id]![references.targetChain.join('')] = {
-      subscriber: proxyRef,
-      targetChain: references.targetChain,
-    };
-  };
-
-  const tracing = deepTrace({
-    originId: id,
+  proxyRef = deepTrace(
     value,
-    targetChain: [],
     mutationCallback,
-    onCaughtTrace,
-  });
+  ) as TTracedFabricValue<T>;
 
-  proxyRef = tracing.proxy;
-  (proxyRef as any)[symbolTracedFabricRootId] = id;
-
-  tracedValues.add(proxyRef);
-  clearTrace();
-
-  tracing.caughtReferences.forEach(onCaughtTrace);
+  tracedLogs.set(proxyRef, []);
 
   return {
     [symbolTracedFabric]: true,
