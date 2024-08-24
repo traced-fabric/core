@@ -1,8 +1,11 @@
 import type { JSONStructure } from '../types/json';
-import type { TTarget, TTracedFabricValue } from '../types/mutation';
+import type { TTarget } from '../types/mutation';
+import type { TTracedFabricValue } from '../types/tracedValue';
 
 export type TTracedValueMetadata = {
+  // [ ] - make it a weak map
   rootRef: TTracedFabricValue;
+  // [ ] - make it a weak map
   parentRef: JSONStructure;
   key: TTarget;
 };
@@ -15,6 +18,14 @@ export function getTargetChain(target: JSONStructure): TTarget[] {
   if (!metadata) return [];
 
   return [...getTargetChain(metadata.parentRef), metadata.key];
+}
+
+export function hasMetadata(target: JSONStructure): boolean {
+  return tracedValuesMetadata.has(target);
+}
+
+export function getMetadata(target: JSONStructure): TTracedValueMetadata | undefined {
+  return tracedValuesMetadata.get(target);
 }
 
 export function setMetadata(target: JSONStructure, metadata: TTracedValueMetadata): void {
