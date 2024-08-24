@@ -1,73 +1,69 @@
-import type { JSONArray, JSONObject, JSONStructure } from '../types/json';
-import type { TCaughtReference, TRequiredApplyProxyParams } from '../types/mutation';
-import { tracedValuesMetadata } from '../utils/metadata';
-import { tracedValues } from '../utils/references';
+import type { JSONStructure } from '../types/json';
+import type { TMutationCallback } from '../types/mutation';
+import { type TTracedValueMetadata, setMetadata } from '../core/metadata';
+import { addTracedSubscriber, getNewTracedValueId } from '../core/references';
+import { symbolTracedFabricRootId } from '../core/symbols';
+import { withoutTracing } from '../utils/withoutTracing';
+import { isStructure } from '../utils/isStructure';
+import type { TTracedFabricValue } from '../types/tracedValue';
 import { getTracedProxyArray } from './getTracedArray';
 import { getTracedProxyObject } from './getTracedObject';
 
-export function deepTrace<T extends JSONStructure>(data: TRequiredApplyProxyParams<T>): {
-  proxy: T;
-  caughtReferences: TCaughtReference[];
-} {
+// what this function should do:
+// * will trace the given value recursively
+// * will set the tracedFabric references
+// * will set the tracedValues metadata
+// * if the value is already a traced fabric, return as is
+function deepTrace<T extends JSONStructure>(
+  value: T,
+  mutationCallback: TMutationCallback,
+  metadata?: TTracedValueMetadata,
+): T {
   // if the given value is already traced,
-  // we should subscribe the current value to the caught references
-  if (tracedValues.has(data.value)) {
-    return {
-      proxy: data.value,
-      caughtReferences: [{
-        subscriber: data.value,
-        targetChain: data.targetChain,
-      }],
-    };
+  // we should subscribe the current value to metadata root(tracedFabric)
+  if ((value as TTracedFabricValue)[symbolTracedFabricRootId]) {
+    if (metadata) addTracedSubscriber((value as TTracedFabricValue), metadata);
+
+    return value;
   }
 
-  // if we found that the given value is an object-like structure,
-  // we should iterate over the object, to see if keys
-  // are also objects-like structures and trace them recursively
-  // finally apply the tracing behavior to the given object
-  if (typeof data.value === 'object' && data.value !== null) {
-    const caughtReferences = [] as TCaughtReference[];
-    const tracedInnerValues = [] as { key: number | string; proxy: JSONStructure }[];
+  // if we found that the given value is an object-like structure:
+  // 1. apply the tracing behavior to the given value
+  // 2. iterate over the object, to see if keys
+  //    are also objects-like structures and trace them recursively
+  if (typeof value === 'object' && value !== null) {
+    const proxy = Array.isArray(value)
+      ? getTracedProxyArray(value, mutationCallback, metadata)
+      : getTracedProxyObject(value, mutationCallback, metadata);
 
-    for (const valueKey in data.value) {
-      if (
-        data.value[valueKey] === null
-        || typeof data.value[valueKey] !== 'object'
-        || typeof valueKey === 'symbol'
-      ) { continue; }
+    if (!metadata) (proxy as TTracedFabricValue)[symbolTracedFabricRootId] = getNewTracedValueId();
+    else setMetadata(proxy, metadata);
 
-      const maybeNumber = +valueKey;
-      const key = Number.isInteger(maybeNumber) ? maybeNumber : valueKey;
-      const targetChain = data.targetChain.concat(key);
+    const rootRef = metadata ? metadata.rootRef : proxy as TTracedFabricValue;
 
-      const structure = deepTrace({ ...data, targetChain, value: data.value[key] as JSONStructure });
+    for (const key in value) {
+      if (!isStructure(value[key])) continue;
 
-      (data.value[key] as JSONStructure) = structure.proxy;
-      caughtReferences.push(...structure.caughtReferences);
-      tracedInnerValues.push({ key, proxy: structure.proxy });
+      (value[key] as JSONStructure) = deepTrace(
+        value[key] as JSONStructure,
+        mutationCallback,
+        {
+          rootRef,
+          parentRef: proxy,
+          key: Number.isInteger(+key) ? +key : key,
+        },
+      );
     }
 
-    const proxy = Array.isArray(data.value)
-      ? getTracedProxyArray(data as TRequiredApplyProxyParams<JSONArray>)
-      : getTracedProxyObject(data as TRequiredApplyProxyParams<JSONObject>);
-
-    for (const value of tracedInnerValues) {
-      tracedValuesMetadata.set(value.proxy, {
-        parentRef: proxy,
-        key: value.key,
-      });
-    }
-
-    return {
-      proxy: proxy as T,
-      caughtReferences,
-    };
+    return proxy as T;
   }
 
-  // if the value is not traced and cannot be traced,
-  // we should return the value as is
-  return {
-    proxy: data.value,
-    caughtReferences: [],
-  };
+  // if data type is common and not structure-like, return as is
+  return value;
 }
+
+const deepTraceWithoutTracing: typeof deepTrace = (...args) => withoutTracing(() => deepTrace(...args));
+
+export {
+  deepTraceWithoutTracing as deepTrace,
+};
