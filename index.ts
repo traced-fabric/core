@@ -1,5 +1,3 @@
-export * from './src/core/symbols';
-
 export * from './src/proxy/deepTrace';
 export * from './src/proxy/getTracedArray';
 export * from './src/proxy/getTracedObject';
@@ -8,6 +6,7 @@ export * from './src/types/json';
 export * from './src/types/mutation';
 
 export * from './src/utils/isStructure';
+export * from './src/utils/isTraced';
 export * from './src/utils/withoutTracing';
 
 export * from './src/applyTrace';
