@@ -32,6 +32,33 @@ export function addTracedSubscriber(
   });
 }
 
+/**
+ * Will drop the subscription of the sender from the receiver.
+ * Sender and receiver are both tracedFabric values.
+ * After calling, receiver will no longer receive any updates from the sender,
+ * but objects will still be linked.
+ *
+ * Needs to be used to avoid memory leaks.
+ *
+ * @param changesSender the sender of the updates (value that is a part of the receiver)
+ * @param changesReceiver reviver of the updates
+ *
+ * @example
+ * const globalMessages = traceFabric(['Welcome!']);
+ *
+ * function userLifecycle(): void {
+ *   const user = traceFabric({
+ *     globalMessages: globalMessages.value,
+ *   });
+ *
+ *   // The `globalMessages` binds itself to the `user`, to provide updates.
+ *   // To remove the binding and avoid memory leaks, we should remove the subscription
+ *   // at the end of the `user` lifecycle.
+ *   removeTraceSubscription(globalMessages.value, user.value);
+ * }
+ *
+ * @since 0.4.0
+ */
 export function removeTraceSubscription(
   changesSender: JSONStructure,
   changesReceiver: JSONStructure,
