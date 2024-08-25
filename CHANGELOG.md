@@ -1,5 +1,13 @@
 # @traced-fabric/core
 
+## 0.3.1
+
+### Patch Changes
+
+- 970822d: #### Fixes
+
+  - Fixed issue when deleted value with other tracedFabrics keeps updating the parent tracedFabric.
+
 ## 0.3.0
 
 ### Minor Changes
