@@ -40,6 +40,6 @@ export type TArrayMutation = {
   type: EArrayMutation.reverse;
 });
 
-export type TMutationCallback = (mutation: TObjectMutation | TArrayMutation) => void;
-
 export type TTraceChange = TObjectMutation | TArrayMutation;
+
+export type TMutationCallback = (mutation: TTraceChange) => void;
