@@ -1,3 +1,5 @@
+import { isStructure } from './utils/isStructure';
+
 // For tracedFabric structuredClone can't be used,
 // because it breaks when trying to copy traced values and general slowness.
 
@@ -22,14 +24,10 @@
  * @since 0.0.1
  */
 export function deepClone<T>(value: T): T {
-  if (typeof value !== 'object') return value;
-  if (!value) return value;
+  if (!isStructure(value)) return value;
 
   const newValue = (Array.isArray(value) ? [] : {}) as T;
-
-  for (const i in value) {
-    newValue[i] = !value[i] || typeof value[i] !== 'object' ? value[i] : deepClone(value[i]);
-  }
+  for (const i in value) newValue[i] = isStructure(value[i]) ? deepClone(value[i]) : value[i];
 
   return newValue as T;
 }
