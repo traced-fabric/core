@@ -30,14 +30,12 @@ export function isTracing(): boolean {
  * });
  *
  * console.log(fabric.getTrace());
- * // [
- * //   {
- * //     mutated: "object",
- * //     targetChain: [ "season" ],
- * //     value: "spring",
- * //     type: "set",
- * //   }
- * // ]
+ * // [{
+ * //   mutated: "object",
+ * //   targetChain: [ "season" ],
+ * //   value: "spring",
+ * //   type: "set",
+ * // }]
  *
  * @since 0.2.0
  */
