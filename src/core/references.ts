@@ -1,6 +1,8 @@
 import type { JSONStructure } from '../types/json';
 import type { TTraceChange } from '../types/mutation';
-import { type TTracedValueMetadata, getTargetChain } from './metadata';
+import { isStructure } from '../utils/isStructure';
+import { isTracedRootValue } from '../utils/isTraced';
+import { type TTracedValueMetadata, getMetadata, getTargetChain } from './metadata';
 
 export const tracedLogs = new WeakMap<JSONStructure, TTraceChange[]>();
 
@@ -24,7 +26,10 @@ export function addTracedSubscriber(
     = subscribers.get(metadata.rootRef)
     ?? subscribers.set(metadata.rootRef, []).get(metadata.rootRef)!;
 
-  receiver.push(metadata);
+  receiver.push({
+    parentRef: metadata.parentRef,
+    key: metadata.key,
+  });
 }
 
 export function removeTracedSubscriber(
@@ -40,6 +45,29 @@ export function removeTracedSubscriber(
   const index = receiver.findIndex(m => m.key === metadata.key && m.parentRef === metadata.parentRef);
 
   if (index !== -1) receiver.splice(index, 1);
+}
+
+export function removeNestedTracedSubscribers(
+  changesSender: JSONStructure,
+  metadata: TTracedValueMetadata,
+): void {
+  const target = (metadata.parentRef as any)[metadata.key] as JSONStructure;
+
+  if (isTracedRootValue(target)) return removeTracedSubscriber(changesSender, metadata);
+
+  for (const key in target) {
+    const maybeIndex = Number.isNaN(+key) ? key : +key;
+    const child = (target as any)[maybeIndex] as JSONStructure;
+
+    if (!isStructure(child)) continue;
+
+    const childMetadata = getMetadata(child);
+
+    if (childMetadata)
+      removeNestedTracedSubscribers(target, childMetadata);
+    else if (isTracedRootValue(child))
+      removeTracedSubscriber(child, { rootRef: metadata.rootRef, parentRef: target, key: maybeIndex });
+  }
 }
 
 export function updateSubscribers(
