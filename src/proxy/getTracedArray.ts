@@ -1,11 +1,10 @@
 import type { JSONArray, JSONStructure } from '../types/json';
 import { EArrayMutation, EMutated, type TMutationCallback } from '../types/mutation';
-import { removeTracedSubscriber } from '../core/references';
+import { removeNestedTracedSubscribers } from '../core/references';
 import { deepClone } from '../deepClone';
 import { type TTracedValueMetadata, getMetadata, getTargetChain } from '../core/metadata';
 import { isStructure } from '../utils/isStructure';
 import { isTracing } from '../utils/withoutTracing';
-import { isTracedRootValue } from '../utils/isTraced';
 import { deepTrace } from './deepTrace';
 
 export function getTracedProxyArray<T extends JSONArray>(
@@ -45,7 +44,7 @@ export function getTracedProxyArray<T extends JSONArray>(
       const index = +key;
 
       // ignoring non-integer keys (for example 'length')
-      if (!Number.isInteger(index)) return Reflect.set(target, key, value);
+      if (Number.isNaN(index)) return Reflect.set(target, key, value);
 
       const childMetadata: TTracedValueMetadata = {
         rootRef: metadata?.rootRef ?? receiver,
@@ -55,8 +54,8 @@ export function getTracedProxyArray<T extends JSONArray>(
 
       // if the value that is overridden and it is a tracedFabric,
       // we should remove the subscriber from the old value
-      if (isStructure(target[index]) && isTracedRootValue(target[index]))
-        removeTracedSubscriber(target[index] as JSONStructure, childMetadata);
+      if (isStructure(target[index]))
+        removeNestedTracedSubscribers(target[index] as JSONStructure, childMetadata);
 
       if (isTracing()) {
         mutationCallback({
@@ -77,13 +76,13 @@ export function getTracedProxyArray<T extends JSONArray>(
 
       const index = +key;
 
-      if (!Number.isInteger(index)) return Reflect.deleteProperty(target, key);
+      if (Number.isNaN(index)) return Reflect.deleteProperty(target, key);
 
       const ref = proxy.deref();
       if (!ref) return Reflect.deleteProperty(target, key);
 
-      if (isStructure(target[index]) && isTracedRootValue(target[index])) {
-        removeTracedSubscriber(target[index] as JSONStructure, {
+      if (isStructure(target[index])) {
+        removeNestedTracedSubscribers(target[index] as JSONStructure, {
           rootRef: metadata?.rootRef ?? ref,
           parentRef: ref,
           key: index,
