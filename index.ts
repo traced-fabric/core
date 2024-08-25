@@ -1,3 +1,5 @@
+export { removeTraceSubscription } from './src/core/references';
+
 export * from './src/proxy/deepTrace';
 export * from './src/proxy/getTracedArray';
 export * from './src/proxy/getTracedObject';
