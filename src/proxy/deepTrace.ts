@@ -1,10 +1,9 @@
 import type { JSONStructure } from '../types/json';
 import type { TMutationCallback } from '../types/mutation';
 import { type TTracedValueMetadata, setMetadata } from '../core/metadata';
-import { addTracedSubscriber, getNewTracedValueId, isTracedValue } from '../core/references';
-import { symbolTracedFabricRootId } from '../core/symbols';
+import { addTracedSubscriber } from '../core/references';
 import { isStructure } from '../utils/isStructure';
-import type { TTracedFabricValue } from '../types/tracedValue';
+import { isTracedRootValue } from '../utils/isTraced';
 import { getTracedProxyArray } from './getTracedArray';
 import { getTracedProxyObject } from './getTracedObject';
 
@@ -24,8 +23,8 @@ export function deepTrace<T extends JSONStructure>(
 
   // if the given value is already traced (tracedFabric),
   // we should subscribe the current value to metadata root(tracedFabric)
-  if (isTracedValue(value)) {
-    if (metadata) addTracedSubscriber((value as TTracedFabricValue), metadata);
+  if (isTracedRootValue(value)) {
+    if (metadata) addTracedSubscriber(value, metadata);
 
     return value;
   }
@@ -38,10 +37,9 @@ export function deepTrace<T extends JSONStructure>(
     ? getTracedProxyArray(value, mutationCallback, metadata)
     : getTracedProxyObject(value, mutationCallback, metadata);
 
-  if (!metadata) (proxy as TTracedFabricValue)[symbolTracedFabricRootId] = getNewTracedValueId();
-  else setMetadata(proxy, metadata);
+  if (metadata) setMetadata(proxy, metadata);
 
-  const rootRef = metadata ? metadata.rootRef : proxy as TTracedFabricValue;
+  const rootRef = metadata ? metadata.rootRef : proxy;
 
   for (const key in value) {
     if (!isStructure(value[key])) continue;

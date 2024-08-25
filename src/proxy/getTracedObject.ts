@@ -1,10 +1,11 @@
-import type { JSONObject } from '../types/json';
+import type { JSONObject, JSONStructure } from '../types/json';
 import { EMutated, EObjectMutation, type TMutationCallback } from '../types/mutation';
 import { deepClone } from '../deepClone';
 import { isTracing } from '../utils/withoutTracing';
 import { type TTracedValueMetadata, getTargetChain } from '../core/metadata';
-import { isTracedValue, removeTracedSubscriber } from '../core/references';
-import type { TTracedFabricValue } from '../types/tracedValue';
+import { removeTracedSubscriber } from '../core/references';
+import { isStructure } from '../utils/isStructure';
+import { isTracedRootValue } from '../utils/isTraced';
 import { deepTrace } from './deepTrace';
 
 export function getTracedProxyObject<T extends JSONObject>(
@@ -26,7 +27,8 @@ export function getTracedProxyObject<T extends JSONObject>(
 
       // if the value that is overridden and it is a tracedFabric,
       // we should remove the subscriber from the old value
-      if (isTracedValue(target[key])) removeTracedSubscriber(target[key] as TTracedFabricValue, childMetadata);
+      if (isStructure(target[key]) && isTracedRootValue(target[key]))
+        removeTracedSubscriber(target[key] as JSONStructure, childMetadata);
 
       if (isTracing()) {
         mutationCallback({
@@ -48,9 +50,9 @@ export function getTracedProxyObject<T extends JSONObject>(
       const ref = proxy.deref();
       if (!ref) return Reflect.deleteProperty(target, key);
 
-      if (isTracedValue(target[key])) {
-        removeTracedSubscriber(target[key] as TTracedFabricValue, {
-          rootRef: metadata?.rootRef ?? ref as unknown as TTracedFabricValue,
+      if (isStructure(target[key]) && isTracedRootValue(target[key])) {
+        removeTracedSubscriber(target[key] as JSONStructure, {
+          rootRef: metadata?.rootRef ?? ref,
           parentRef: ref,
           key,
         });

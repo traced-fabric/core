@@ -1,21 +1,14 @@
 import { tracedLogs, updateSubscribers } from './core/references';
-import { symbolTracedFabric } from './core/symbols';
 import type { JSONStructure } from './types/json';
 import type {
   TMutationCallback,
   TTraceChange,
 } from './types/mutation';
 import { deepTrace } from './proxy/deepTrace';
-import type { TTracedFabricValue } from './types/tracedValue';
 import { withoutTracing } from './utils/withoutTracing';
 
 export type TTracedFabric<T extends JSONStructure> = {
-  [symbolTracedFabric]: true;
-
-  /**
-   * Not setting here TTracedFabricValue, to avoid typescript firing error about symbol.
-   * If the value should included tracedFabric symbol, the generic can be wrapped in TTracedFabricValue
-   */
+  // The proxy object that is used to trace the mutations
   value: T;
 
   getTrace: () => TTraceChange[];
@@ -65,7 +58,7 @@ export type TTracedFabric<T extends JSONStructure> = {
  * @since 0.0.1
  */
 export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T> {
-  let proxyRef: TTracedFabricValue<T>;
+  let proxyRef: T;
 
   const getTrace = (): TTraceChange[] => tracedLogs.get(proxyRef)!;
   const getTraceLength = (): number => getTrace().length;
@@ -82,13 +75,11 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
   proxyRef = withoutTracing(() => deepTrace(
     value,
     mutationCallback,
-  ) as TTracedFabricValue<T>);
+  ));
 
   tracedLogs.set(proxyRef, []);
 
   return {
-    [symbolTracedFabric]: true,
-
     value: proxyRef,
 
     getTrace,
