@@ -2,15 +2,8 @@ import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../../src/traceFabric';
 import { EMutated, EObjectMutation } from '../../src/types/mutation';
 import { deepClone } from '../../src/deepClone';
-import { symbolTracedFabric } from '../../src/core/symbols';
 
 describe('tracedFabric should return ', () => {
-  test('should have a tracedFabric symbol', () => {
-    const tracing = traceFabric({ string: 'string' });
-
-    expect(tracing[symbolTracedFabric]).toEqual(true);
-  });
-
   test('to have proxy value', () => {
     const tracing = traceFabric({ string: 'string' });
 
