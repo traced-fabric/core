@@ -1,28 +1,19 @@
 import type { JSONStructure } from '../types/json';
 import type { TTraceChange } from '../types/mutation';
-import type { TTracedFabricValue, TTracedValueId } from '../types/tracedValue';
 import { type TTracedValueMetadata, getTargetChain } from './metadata';
-import { symbolTracedFabricRootId } from './symbols';
-
-let id: TTracedValueId = 0;
-export const getNewTracedValueId = (): number => id++;
 
 export const tracedLogs = new WeakMap<JSONStructure, TTraceChange[]>();
 
 const tracedSubscribers = new WeakMap<
-  TTracedFabricValue, // the sender of the updates (if update happen, this value will send the updates to receivers)
+  JSONStructure, // the sender of the updates (if update happen, this value will send the updates to receivers)
   Map<
     TTracedValueMetadata['rootRef'], // receiver of the updates
     Pick<TTracedValueMetadata, 'key' | 'parentRef'>[] // set of childMetadata (the path to the sender in receiver's value)
   >
 >();
 
-export function isTracedValue(value: any): value is TTracedFabricValue {
-  return value?.[symbolTracedFabricRootId] !== undefined;
-}
-
 export function addTracedSubscriber(
-  changesSender: TTracedFabricValue,
+  changesSender: JSONStructure,
   metadata: TTracedValueMetadata,
 ): void {
   const subscribers
@@ -37,7 +28,7 @@ export function addTracedSubscriber(
 }
 
 export function removeTracedSubscriber(
-  changesSender: TTracedFabricValue,
+  changesSender: JSONStructure,
   metadata: TTracedValueMetadata,
 ): void {
   const subscribers = tracedSubscribers.get(changesSender);
@@ -52,7 +43,7 @@ export function removeTracedSubscriber(
 }
 
 export function updateSubscribers(
-  changesSender: TTracedFabricValue,
+  changesSender: JSONStructure,
   mutation: TTraceChange,
 ): void {
   const subscribers = tracedSubscribers.get(changesSender);
