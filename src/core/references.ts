@@ -2,7 +2,7 @@ import type { JSONStructure } from '../types/json';
 import type { TTraceChange } from '../types/mutation';
 import { isStructure } from '../utils/isStructure';
 import { isTracedRootValue } from '../utils/isTraced';
-import { type TTracedValueMetadata, getMetadata, getTargetChain } from './metadata';
+import { type TTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
 
 export const tracedLogs = new WeakMap<JSONStructure, TTraceChange[]>();
 
@@ -61,7 +61,7 @@ export function removeNestedTracedSubscribers(
 
     if (!isStructure(child)) continue;
 
-    const childMetadata = getMetadata(child);
+    const childMetadata = getStrongMetadata(child);
 
     if (childMetadata)
       removeNestedTracedSubscribers(target, childMetadata);
