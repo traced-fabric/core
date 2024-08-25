@@ -4,9 +4,9 @@
 
 ### Patch Changes
 
-- 970822d: #### Fixes
+#### Fixes
 
-  - Fixed issue when deleted value with other tracedFabrics keeps updating the parent tracedFabric.
+- Fixed issue when deleted value with other tracedFabrics keeps updating the parent tracedFabric.
 
 ## 0.3.0
 
