@@ -47,7 +47,7 @@ export function deepTrace<T extends JSONStructure>(
     (value[key] as JSONStructure) = deepTrace(value[key] as JSONStructure, mutationCallback, {
       rootRef,
       parentRef: proxy,
-      key: Number.isInteger(+key) ? +key : key,
+      key: Number.isNaN(+key) ? key : +key,
     });
   }
 
