@@ -32,6 +32,16 @@ export function addTracedSubscriber(
   });
 }
 
+export function removeTraceSubscription(
+  changesSender: JSONStructure,
+  changesReceiver: JSONStructure,
+): void {
+  const subscribers = tracedSubscribers.get(changesSender);
+  if (!subscribers) return;
+
+  subscribers.delete(changesReceiver);
+}
+
 export function removeTracedSubscriber(
   changesSender: JSONStructure,
   metadata: TTracedValueMetadata,
