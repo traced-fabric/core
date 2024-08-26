@@ -39,13 +39,11 @@ export function deepTrace<T extends JSONStructure>(
 
   if (metadata) setMetadata(proxy, metadata);
 
-  const rootRef = metadata ? metadata.rootRef : proxy;
-
   for (const key in value) {
     if (!isStructure(value[key])) continue;
 
     (value[key] as JSONStructure) = deepTrace(value[key] as JSONStructure, mutationCallback, {
-      rootRef,
+      rootRef: metadata ? metadata.rootRef : proxy,
       parentRef: proxy,
       key: Number.isNaN(+key) ? key : +key,
     });
