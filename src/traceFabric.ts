@@ -72,11 +72,7 @@ export function traceFabric<T extends JSONStructure>(value: T): TTracedFabric<T>
     updateSubscribers(proxyRef, mutation);
   };
 
-  proxyRef = withoutTracing(() => deepTrace(
-    value,
-    mutationCallback,
-  ));
-
+  proxyRef = withoutTracing(() => deepTrace(value, mutationCallback));
   tracedLogs.set(proxyRef, []);
 
   return {
