@@ -2,15 +2,16 @@ import type { JSONStructure } from '../types/json';
 import type { TTraceChange } from '../types/mutation';
 import { isStructure } from '../utils/isStructure';
 import { isTracedRootValue } from '../utils/isTraced';
-import { type TTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
+import IterableWeakMap from './iterableWeakMap';
+import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
 
 export const tracedLogs = new WeakMap<JSONStructure, TTraceChange[]>();
 
 const tracedSubscribers = new WeakMap<
   JSONStructure, // the sender of the updates (if update happen, this value will send the updates to receivers)
-  Map<
+  IterableWeakMap<
     TTracedValueMetadata['rootRef'], // receiver of the updates
-    Pick<TTracedValueMetadata, 'key' | 'parentRef'>[] // set of childMetadata (the path to the sender in receiver's value)
+    Pick<TWeakTracedValueMetadata, 'key' | 'parentRef'>[] // set of childMetadata (the path to the sender in receiver's value)
   >
 >();
 
@@ -20,16 +21,13 @@ export function addTracedSubscriber(
 ): void {
   const subscribers
     = tracedSubscribers.get(changesSender)
-    ?? tracedSubscribers.set(changesSender, new Map()).get(changesSender)!;
+    ?? tracedSubscribers.set(changesSender, new IterableWeakMap()).get(changesSender)!;
 
   const receiver
     = subscribers.get(metadata.rootRef)
     ?? subscribers.set(metadata.rootRef, []).get(metadata.rootRef)!;
 
-  receiver.push({
-    parentRef: metadata.parentRef,
-    key: metadata.key,
-  });
+  receiver.push({ parentRef: new WeakRef(metadata.parentRef), key: metadata.key });
 }
 
 /**
@@ -79,7 +77,7 @@ export function removeTracedSubscriber(
   const receiver = subscribers.get(metadata.rootRef);
   if (!receiver) return;
 
-  const index = receiver.findIndex(m => m.key === metadata.key && m.parentRef === metadata.parentRef);
+  const index = receiver.findIndex(m => m.key === metadata.key && m.parentRef.deref() === metadata.parentRef);
 
   if (index !== -1) receiver.splice(index, 1);
 }
@@ -119,12 +117,13 @@ export function updateSubscribers(
     if (!traceLog) continue;
 
     for (const trace of metadata) {
-      const targetChain = getTargetChain(trace.parentRef).concat(trace.key);
+      const parentRef = trace.parentRef.deref();
 
-      traceLog.push({
-        ...mutation,
-        targetChain: targetChain.concat(mutation.targetChain),
-      });
+      const targetChain = (parentRef ? getTargetChain(parentRef) : [])
+        .concat(trace.key)
+        .concat(mutation.targetChain);
+
+      traceLog.push({ ...mutation, targetChain });
     }
   }
 }
