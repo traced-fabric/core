@@ -47,10 +47,8 @@ export function setMetadata(target: JSONStructure, metadata: TTracedValueMetadat
 }
 
 export function getTargetChain(target: JSONStructure): TTarget[] {
-  const metadata = getMetadata(target);
-  const parentRef = metadata?.parentRef.deref();
-
-  const parentTargetChain = parentRef ? getTargetChain(parentRef) : [];
+  const metadata = getStrongMetadata(target);
+  const parentTargetChain = metadata?.parentRef ? getTargetChain(metadata.parentRef) : [];
 
   return metadata ? [...parentTargetChain, metadata.key] : [];
 }
