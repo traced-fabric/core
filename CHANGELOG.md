@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.4.2
+
+### Patch Changes
+
+- acc2efa: Fixed issue with FinalizationRegistry cleanup not being called on Bun.gc
+
 ## 0.4.1
 
 ### Patch Changes
