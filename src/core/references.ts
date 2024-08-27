@@ -113,8 +113,8 @@ export function updateSubscribers(
   if (!subscribers) return;
 
   for (const [receiver, metadata] of subscribers.entries()) {
-    const traceLog = tracedLogs.get(receiver);
-    if (!traceLog) continue;
+    const traceLogs = tracedLogs.get(receiver);
+    if (!traceLogs) continue;
 
     for (const trace of metadata) {
       const parentRef = trace.parentRef.deref();
@@ -123,7 +123,10 @@ export function updateSubscribers(
         .concat(trace.key)
         .concat(mutation.targetChain);
 
-      traceLog.push({ ...mutation, targetChain });
+      const traceLog = { ...mutation, targetChain };
+
+      traceLogs.push(traceLog);
+      updateSubscribers(receiver, traceLog);
     }
   }
 }
