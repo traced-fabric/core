@@ -5,10 +5,13 @@ export default class IterableWeakMap<
   _KEY extends object,
   _VALUE extends object,
 > {
-  #weakMap = new WeakMap<_KEY, { value: _VALUE; ref: WeakRef<_KEY> }>();
-  #refSet = new Set<WeakRef<_KEY>>();
+  #weakKeySet = new Set<WeakRef<_KEY>>();
+  #weakMap = new WeakMap<
+    _KEY,
+    { value: _VALUE; weakKey: WeakRef<_KEY> }
+  >();
 
-  #cleanupRegistry = new FinalizationRegistry((weakRef: WeakRef<_KEY>) => this.#refSet.delete(weakRef));
+  #cleanupRegistry = new FinalizationRegistry((weakRef: WeakRef<_KEY>) => this.#weakKeySet.delete(weakRef));
 
   set(key: _KEY, value: _VALUE): this {
     const entry = this.#weakMap.get(key);
@@ -18,11 +21,11 @@ export default class IterableWeakMap<
       return this;
     }
 
-    const weakRef = new WeakRef(key);
+    const weakKey = new WeakRef(key);
 
-    this.#weakMap.set(key, { value, ref: weakRef });
-    this.#refSet.add(weakRef);
-    this.#cleanupRegistry.register(key, weakRef, weakRef);
+    this.#weakMap.set(key, { value, weakKey });
+    this.#weakKeySet.add(weakKey);
+    this.#cleanupRegistry.register(key, weakKey, weakKey);
 
     return this;
   }
@@ -40,14 +43,14 @@ export default class IterableWeakMap<
     if (!entry) return false;
 
     this.#weakMap.delete(key);
-    this.#refSet.delete(entry.ref);
-    this.#cleanupRegistry.unregister(entry.ref);
+    this.#weakKeySet.delete(entry.weakKey);
+    this.#cleanupRegistry.unregister(entry.weakKey);
 
     return true;
   }
 
   *[Symbol.iterator](): IterableIterator<[key: _KEY, value: _VALUE]> {
-    for (const ref of this.#refSet) {
+    for (const ref of this.#weakKeySet) {
       const key = ref.deref();
       if (!key) continue;
 
