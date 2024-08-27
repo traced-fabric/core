@@ -106,6 +106,32 @@ describe('tracedFabric reflects mutated tracedFabric', () => {
   });
 });
 
+describe('tracedFabric reflects recursively nested mutated tracedFabric', () => {
+  test('object', () => {
+    const tracingChild1 = traceFabric<{ key: string; key2?: string }>({ key: 'value', key2: 'value2' });
+    const tracingChild2 = traceFabric({ tracingChild1: tracingChild1.value });
+    const tracing = traceFabric({ object: tracingChild2.value });
+
+    tracingChild1.value.key = 'new value';
+    delete tracing.value.object.tracingChild1.key2;
+
+    expect(deepClone(tracing.value)).toEqual({
+      object: { tracingChild1: { key: 'new value' } },
+    });
+  });
+
+  test('array', () => {
+    const tracingChild1 = traceFabric([1, 2]);
+    const tracingChild2 = traceFabric([tracingChild1.value]);
+    const tracing = traceFabric([tracingChild2.value]);
+
+    tracingChild1.value.push(3);
+    tracingChild1.value.pop();
+
+    expect(deepClone(tracing.value)).toEqual([[[1, 2]]]);
+  });
+});
+
 describe('tracedFabric reflects added tracedFabric', () => {
   test('object', () => {
     const tracingChild = traceFabric<{ key: string; key2?: null }>({ key: 'value', key2: null });
@@ -133,6 +159,34 @@ describe('tracedFabric reflects added tracedFabric', () => {
   });
 });
 
+describe('tracedFabric reflects recursively nested added tracedFabric', () => {
+  test('object', () => {
+    const tracingChild1 = traceFabric({ key: 'value' });
+    const tracingChild2 = traceFabric({ tracingChild1: null });
+    const tracing = traceFabric<Record<string, any>>({ object: {} });
+
+    tracing.value.object.tracingChild1 = tracingChild1.value;
+    tracingChild2.value.tracingChild1 = tracingChild1.value;
+    tracingChild1.value.key = 'new value';
+
+    expect(deepClone(tracing.value)).toEqual({
+      object: { tracingChild1: { key: 'new value' } },
+    });
+  });
+
+  test('array', () => {
+    const tracingChild1 = traceFabric([1]);
+    const tracingChild2 = traceFabric<any[]>([]);
+    const tracing = traceFabric<any[]>([]);
+
+    tracing.value.push(tracingChild2.value);
+    tracingChild2.value.push(tracingChild1.value);
+    tracingChild1.value.push(2, 3);
+
+    expect(deepClone(tracing.value)).toEqual([[[1, 2, 3]]]);
+  });
+});
+
 describe('tracedFabric reflects deleted tracedFabric', () => {
   test('object', () => {
     const tracingChild = traceFabric<{ key: string }>({ key: 'value' });
@@ -152,6 +206,30 @@ describe('tracedFabric reflects deleted tracedFabric', () => {
     tracingChild.value.push(2, 3);
 
     expect(deepClone(tracing.value)).toEqual({});
+  });
+});
+
+describe('tracedFabric reflects recursively nested deleted tracedFabric', () => {
+  test('object', () => {
+    const tracingChild1 = traceFabric({ key: 'value' });
+    const tracingChild2 = traceFabric({ tracingChild1: tracingChild1.value });
+    const tracing = traceFabric<{ object?: typeof tracingChild2['value'] }>({ object: tracingChild2.value });
+
+    delete tracing.value.object;
+    tracingChild1.value.key = 'new value';
+
+    expect(deepClone(tracing.value)).toEqual({});
+  });
+
+  test('array', () => {
+    const tracingChild1 = traceFabric([1]);
+    const tracingChild2 = traceFabric([tracingChild1.value]);
+    const tracing = traceFabric([tracingChild2.value]);
+
+    tracing.value.pop();
+    tracingChild1.value.push(2, 3);
+
+    expect(deepClone(tracing.value)).toEqual([]);
   });
 });
 
