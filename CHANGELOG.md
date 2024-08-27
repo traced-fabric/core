@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.4.1
+
+### Patch Changes
+
+- 7b2c5df: Increased garbage collection speed of IterableWeakMap
+
 ## 0.4.0
 
 ### Minor Changes
