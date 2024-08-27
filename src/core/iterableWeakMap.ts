@@ -7,13 +7,10 @@ export default class IterableWeakMap<
 > {
   #weakMap = new WeakMap<_KEY, { value: _VALUE; ref: WeakRef<_KEY> }>();
   #refSet = new Set<WeakRef<_KEY>>();
-  #finalizationGroup = new FinalizationRegistry(IterableWeakMap.#cleanup);
+  #finalizationGroup = new FinalizationRegistry(this.#cleanup);
 
-  static #cleanup({ refSet, weakRef }: {
-    refSet: Set<WeakRef<object>>;
-    weakRef: WeakRef<object>;
-  }): void {
-    refSet.delete(weakRef);
+  #cleanup(weakRef: WeakRef<_KEY>): void {
+    this.#refSet.delete(weakRef);
   }
 
   set(key: _KEY, value: _VALUE): this {
@@ -28,7 +25,7 @@ export default class IterableWeakMap<
 
     this.#weakMap.set(key, { value, ref: weakRef });
     this.#refSet.add(weakRef);
-    this.#finalizationGroup.register(key, { refSet: this.#refSet, weakRef }, weakRef);
+    this.#finalizationGroup.register(key, weakRef, weakRef);
 
     return this;
   }
