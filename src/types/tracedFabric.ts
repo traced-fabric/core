@@ -7,6 +7,7 @@ export type TTraceFabricOptionDefaults = {
 };
 
 export type TTracedFabricMutationMap<T = TTraceChange> = (mutation: TTraceChange) => T;
+export type TTracedFabricMutationUnMap<T = TTraceChange> = (mutationMap: T) => TTraceChange;
 
 export type TTraceFabricOptions<_OPTIONS extends TTraceFabricOptionUnknown = TTraceFabricOptionDefaults> = {
   mutationMap: TTracedFabricMutationMap<_OPTIONS['TraceChange']>;
