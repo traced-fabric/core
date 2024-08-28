@@ -26,6 +26,7 @@ export type TObjectMutation = {
   value: JSONValue;
 } | {
   type: EObjectMutation.delete;
+  value?: never;
 });
 
 export type TArrayMutation = {
@@ -36,8 +37,10 @@ export type TArrayMutation = {
   value: JSONValue;
 } | {
   type: EArrayMutation.delete;
+  value?: never;
 } | {
   type: EArrayMutation.reverse;
+  value?: never;
 });
 
 export type TTraceChange = TObjectMutation | TArrayMutation;
