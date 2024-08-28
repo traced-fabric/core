@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.5.0
+
+### Minor Changes
+
+- cb3f8c1: Reqursievly nested tracedFabrics now all get traceLogs updated if the deepest of them updates
+
 ## 0.4.2
 
 ### Patch Changes
