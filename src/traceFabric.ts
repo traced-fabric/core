@@ -6,16 +6,7 @@ import type {
 } from './types/mutation';
 import { deepTrace } from './proxy/deepTrace';
 import { withoutTracing } from './utils/withoutTracing';
-
-export type TTracedFabric<T extends JSONStructure> = {
-  // The proxy object that is used to trace the mutations
-  value: T;
-
-  getTrace: () => TTraceChange[];
-  getTraceLength: () => number;
-
-  clearTrace: () => void;
-};
+import type { TTracedFabric } from './types/tracedFabric';
 
 /**
  * Track the mutation of a given JSON-like object or array.
