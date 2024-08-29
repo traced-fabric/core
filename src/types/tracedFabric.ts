@@ -1,17 +1,7 @@
 import type { JSONStructure } from './json';
 import type { TTraceChange } from './mutation';
 
-export type TTraceFabricOptionUnknown = Partial<Record<keyof TTraceFabricOptionDefaults, unknown>>;
-export type TTraceFabricOptionDefaults = {
-  TraceChange: TTraceChange;
-};
-
-export type TTracedFabricMutationMap<T = TTraceChange> = (mutation: TTraceChange) => T;
-export type TTracedFabricMutationUnMap<T = TTraceChange> = (mutationMap: T) => TTraceChange;
-
-export type TTraceFabricOptions<_OPTIONS extends TTraceFabricOptionUnknown = TTraceFabricOptionDefaults> = {
-  mutationMap: TTracedFabricMutationMap<_OPTIONS['TraceChange']>;
-};
+export type TOnMutation<T = TTraceChange> = (mutation: TTraceChange) => T;
 
 /**
  * The output of the traceFabric function
@@ -21,11 +11,11 @@ export type TTraceFabricOptions<_OPTIONS extends TTraceFabricOptionUnknown = TTr
  */
 export type TTracedFabric<
   T extends JSONStructure,
-  _OPTIONS extends TTraceFabricOptionUnknown = TTraceFabricOptionDefaults,
+  _TRACE_CHANGE = TTraceChange,
 > = {
   value: T;
 
-  getTrace: () => _OPTIONS['TraceChange'][];
+  getTrace: () => _TRACE_CHANGE[];
   getTraceLength: () => number;
 
   clearTrace: () => void;
