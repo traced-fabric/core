@@ -4,6 +4,7 @@ import { isStructure } from '../utils/isStructure';
 import { isTracedRootValue } from '../utils/isTraced';
 import IterableWeakMap from './iterableWeakMap';
 import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
+import { mutationCallbacks } from './mutationCallback';
 
 export const tracedLogs = new WeakMap<JSONStructure, any[]>();
 
@@ -113,8 +114,10 @@ export function updateSubscribers(
   if (!subscribers) return;
 
   for (const [receiver, metadata] of subscribers.entries()) {
-    const traceLogs = tracedLogs.get(receiver);
-    if (!traceLogs) continue;
+    const trace = tracedLogs.get(receiver);
+    const receiverMutationCallback = mutationCallbacks.get(receiver);
+
+    if (!trace || !receiverMutationCallback) continue;
 
     for (const trace of metadata) {
       const parentRef = trace.parentRef.deref();
@@ -125,8 +128,7 @@ export function updateSubscribers(
 
       const traceLog = { ...mutation, targetChain };
 
-      traceLogs.push(traceLog);
-      updateSubscribers(receiver, traceLog);
+      receiverMutationCallback(traceLog);
     }
   }
 }
