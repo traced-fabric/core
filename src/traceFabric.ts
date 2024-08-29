@@ -1,7 +1,7 @@
 import { tracedLogs, updateSubscribers } from './core/references';
 import type { JSONStructure } from './types/json';
 import type { TMutationCallback, TTraceChange } from './types/mutation';
-import { deepTrace } from './proxy/deepTrace';
+import { deepTrace } from './core/proxy/deepTrace';
 import { withoutTracing } from './utils/withoutTracing';
 import type { TOnMutation, TTracedFabric } from './types/tracedFabric';
 import { mutationCallbacks } from './core/mutationCallback';
