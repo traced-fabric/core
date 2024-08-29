@@ -1,9 +1,9 @@
-import type { JSONStructure } from '../types/json';
-import type { TMutationCallback } from '../types/mutation';
-import { type TTracedValueMetadata, setMetadata } from '../core/metadata';
-import { addTracedSubscriber } from '../core/references';
-import { isStructure } from '../utils/isStructure';
-import { isTracedRootValue } from '../utils/isTraced';
+import type { JSONStructure } from '../../types/json';
+import type { TMutationCallback } from '../../types/mutation';
+import { type TTracedValueMetadata, setMetadata } from '../metadata';
+import { addTracedSubscriber } from '../references';
+import { isStructure } from '../../utils/isStructure';
+import { isTracedRootValue } from '../../utils/isTraced';
 import { getTracedProxyArray } from './getTracedArray';
 import { getTracedProxyObject } from './getTracedObject';
 
