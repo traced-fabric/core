@@ -40,17 +40,17 @@ describe('withoutTracing', () => {
 
   test('should disable tracing for the tracedFabric values', () => {
     const tracedObject = traceFabric({ objects: { a: 1, b: 2 } as any, arrays: [1, 2, 3] });
-    const tracedArray = traceFabric([{ a: 1, b: 2 }, [1, 2, 3]]);
+    const tracedArray = traceFabric([{ a: 1, b: 2 }, [1, 2, 3]] as any);
 
     withoutTracing(() => {
       tracedObject.value.objects.a = 2;
       tracedObject.value.arrays[0] = 2;
-      (tracedArray.value[0] as any).a = 'new a';
+      tracedArray.value[0].a = 'new a';
       tracedArray.value[1][0] = 2;
 
       tracedObject.value.objects.c = 3;
       tracedObject.value.arrays[3] = 4;
-      (tracedArray.value[0] as any).c = 'new c';
+      tracedArray.value[0].c = 'new c';
       tracedArray.value[1][3] = 4;
 
       delete tracedObject.value.objects.b;
@@ -67,7 +67,7 @@ describe('withoutTracing', () => {
 
   test('should not affect the value change', () => {
     const tracedObject = traceFabric({ objects: { a: 1, b: 2 } as any, arrays: [1, 2, 3] });
-    const tracedArray = traceFabric([{ a: 1, b: 2 }, [1, 2, 3]]);
+    const tracedArray = traceFabric([{ a: 1, b: 2 }, [1, 2, 3]] as any);
 
     withoutTracing(() => {
       tracedObject.value.objects.a = 2;

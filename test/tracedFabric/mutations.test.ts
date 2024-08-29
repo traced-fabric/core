@@ -33,7 +33,7 @@ describe('tracedFabric stores trace on changed', () => {
   });
 
   test('null', () => {
-    const tracing = traceFabric({ nullOrNumber: null });
+    const tracing = traceFabric({ nullOrNumber: null as null | number });
 
     tracing.value.nullOrNumber = 1;
 
@@ -47,7 +47,7 @@ describe('tracedFabric stores trace on changed', () => {
   });
 
   test('undefined', () => {
-    const tracing = traceFabric({ undefinedOfNumber: undefined });
+    const tracing = traceFabric<{ undefinedOfNumber?: number }>({ undefinedOfNumber: undefined });
 
     tracing.value.undefinedOfNumber = 1;
 
@@ -292,8 +292,8 @@ describe('tracedFabric with nested tracedFabric changes', () => {
   });
 
   test('parent should match if child nullOrNumber changes', () => {
-    const tracingChild1 = traceFabric({ nullOrNumber: null });
-    const tracingChild2 = traceFabric({ nullOrNumber: 2 });
+    const tracingChild1 = traceFabric({ nullOrNumber: null as null | number });
+    const tracingChild2 = traceFabric({ nullOrNumber: 2 as null | number });
     const tracingParent = traceFabric({
       child: tracingChild1.value,
       child2: tracingChild2.value,
@@ -600,7 +600,7 @@ describe('tracedFabric with recursively nested tracedFabric changes', () => {
 describe('tracedFabric not changing on nested tracedFabric removes', () => {
   test('when child is in object', () => {
     const tracingChild1 = traceFabric({ object: { key: 'value 1' } });
-    const tracingParent = traceFabric({ child: tracingChild1.value });
+    const tracingParent = traceFabric<{ child?: typeof tracingChild1.value }>({ child: tracingChild1.value });
 
     tracingChild1.value.object.key = 'value 2';
     delete tracingParent.value.child;
@@ -649,7 +649,7 @@ describe('tracedFabric not changing on recursively nested tracedFabric removes',
   test('object', () => {
     const child0 = traceFabric({ key: 'value 1' });
     const child1 = traceFabric({ child0: child0.value });
-    const parent = traceFabric({ child1: child1.value });
+    const parent = traceFabric<{ child1?: typeof child1.value }>({ child1: child1.value });
 
     child0.value.key = 'value 2';
     delete parent.value.child1;
@@ -748,7 +748,9 @@ describe('tracedFabric not changing on recursively nested tracedFabric removes',
 describe('tracedFabric not changing on parent with tracedFabric removes', () => {
   test('when parent is an object', () => {
     const tracingChild = traceFabric({ object: { key: 'value 1' } });
-    const tracingParent = traceFabric({ nested1: { nested2: { child: tracingChild.value } } });
+    const tracingParent = traceFabric<{ nested1?: any }>({
+      nested1: { nested2: { child: tracingChild.value } },
+    });
 
     tracingChild.value.object.key = 'value 2';
     delete tracingParent.value.nested1;
@@ -797,7 +799,7 @@ describe('tracedFabric not changing on parent with recursively nested tracedFabr
   test('object', () => {
     const child0 = traceFabric({ key: 'value 1' });
     const child1 = traceFabric({ child0: child0.value });
-    const parent = traceFabric({ nested1: { nested2: { child1: child1.value } } });
+    const parent = traceFabric<{ nested1?: any }>({ nested1: { nested2: { child1: child1.value } } });
 
     child0.value.key = 'value 2';
     delete parent.value.nested1;
@@ -920,7 +922,7 @@ describe('tracedFabric subscribes on tracedFabric added', () => {
 
   test('when child is in array', () => {
     const tracingChild1 = traceFabric({ object: { key: 'value 1' } });
-    const tracingParent = traceFabric({ child: [] });
+    const tracingParent = traceFabric({ child: [] as typeof tracingChild1.value[] });
 
     tracingChild1.value.object.key = 'value 2';
     tracingParent.value.child.push(tracingChild1.value);
