@@ -2,6 +2,7 @@ export { removeTraceSubscription } from './src/core/references';
 
 export * from './src/types/json';
 export * from './src/types/mutation';
+export * from './src/types/tracedFabric';
 
 export * from './src/utils/isStructure';
 export * from './src/utils/isTraced';
