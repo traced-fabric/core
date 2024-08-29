@@ -1,9 +1,9 @@
 import { tracedLogs, updateSubscribers } from './core/references';
 import type { JSONStructure } from './types/json';
-import type { TMutationCallback } from './types/mutation';
+import type { TMutationCallback, TTraceChange } from './types/mutation';
 import { deepTrace } from './proxy/deepTrace';
 import { withoutTracing } from './utils/withoutTracing';
-import type { TTraceFabricOptionDefaults, TTraceFabricOptionUnknown, TTraceFabricOptions, TTracedFabric } from './types/tracedFabric';
+import type { TOnMutation, TTracedFabric } from './types/tracedFabric';
 
 /**
  * Track the mutation of a given JSON-like object or array.
@@ -46,15 +46,15 @@ import type { TTraceFabricOptionDefaults, TTraceFabricOptionUnknown, TTraceFabri
  * @since 0.0.1
  */
 export function traceFabric<
-  T extends JSONStructure,
-  _OPTIONS extends TTraceFabricOptionUnknown = TTraceFabricOptionDefaults,
+  T extends JSONStructure = JSONStructure,
+  _TRACE_CHANGE = TTraceChange,
 >(
   value: T,
-  options?: TTraceFabricOptions<_OPTIONS>,
-): TTracedFabric<T, _OPTIONS> {
+  onMutation?: TOnMutation<_TRACE_CHANGE>,
+): TTracedFabric<T, _TRACE_CHANGE> {
   let proxyRef: T;
 
-  const getTrace = (): _OPTIONS['TraceChange'][] => tracedLogs.get(proxyRef)!;
+  const getTrace = (): _TRACE_CHANGE[] => tracedLogs.get(proxyRef)!;
   const getTraceLength = (): number => getTrace().length;
 
   const clearTrace = (): void => {
@@ -62,7 +62,7 @@ export function traceFabric<
   };
 
   const mutationCallback: TMutationCallback = (mutation) => {
-    getTrace()?.push(options?.mutationMap?.(mutation) ?? mutation);
+    getTrace()?.push(onMutation?.(mutation) ?? mutation as _TRACE_CHANGE);
     updateSubscribers(proxyRef, mutation);
   };
 
