@@ -25,6 +25,11 @@ describe('index file should export', () => {
     expectType<TF.TMutationCallback>();
   });
 
+  test('types tracedFabric', () => {
+    expectType<TF.TOnMutation>();
+    expectType<TF.TTracedFabric<any>>();
+  });
+
   test('isStructure', () => expect(TF.isStructure).toBeDefined());
   test('isTraced', () => expect(TF.isTraced).toBeDefined());
   test('withoutTracing', () => expect(TF.withoutTracing).toBeDefined());
