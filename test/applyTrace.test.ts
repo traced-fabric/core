@@ -45,7 +45,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
   });
 
   test('undefined', () => {
-    const tracing = traceFabric<{ undefined: undefined | number }>({ undefined: 0 });
+    const tracing = traceFabric({ undefined: 0 as number | undefined });
     const cloned = deepClone(tracing.value);
 
     tracing.value.undefined = undefined;
@@ -67,7 +67,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
   });
 
   test('object', () => {
-    const tracing = traceFabric({ object1: { key: 'value' }, object2: null });
+    const tracing = traceFabric({ object1: { key: 'value' }, object2: null as any });
     const cloned = deepClone(tracing.value);
 
     tracing.value.object1.key = 'new value';
@@ -92,8 +92,8 @@ describe('applyTrace result matches tracedFabric on deleted tracedFabric', () =>
   });
 
   test('object', () => {
-    const tracingChild = traceFabric({ key: 'value' });
-    const tracingParent = traceFabric({ object: { key: tracingChild.value } });
+    const tracingChild = traceFabric({ key: 'value' as any });
+    const tracingParent = traceFabric({ object: { key: tracingChild.value as any } });
     const cloned = deepClone(tracingParent.value);
 
     delete tracingChild.value.key;
@@ -107,7 +107,7 @@ describe('applyTrace result matches tracedFabric on deleted tracedFabric', () =>
 describe('applyTrace result matches tracedFabric on added tracedFabric', () => {
   test('array', () => {
     const tracingChild = traceFabric({ array: [1] });
-    const tracingParent = traceFabric({ array: [] });
+    const tracingParent = traceFabric({ array: [] as any });
     const cloned = deepClone(tracingParent.value);
 
     tracingChild.value.array.push(2);
@@ -119,8 +119,8 @@ describe('applyTrace result matches tracedFabric on added tracedFabric', () => {
   });
 
   test('object', () => {
-    const tracingChild = traceFabric<Record<string, string>>({ key: 'value 1' });
-    const tracingParent = traceFabric<Record<string, any>>({ object: {} });
+    const tracingChild = traceFabric({ key: 'value 1' } as any);
+    const tracingParent = traceFabric({ object: {} as any });
     const cloned = deepClone(tracingParent.value);
 
     tracingChild.value.key = 'new value 1';

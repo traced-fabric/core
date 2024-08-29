@@ -135,7 +135,7 @@ describe('tracedFabric reflects recursively nested mutated tracedFabric', () => 
 describe('tracedFabric reflects added tracedFabric', () => {
   test('object', () => {
     const tracingChild = traceFabric<{ key: string; key2?: null }>({ key: 'value', key2: null });
-    const tracing = traceFabric<Record<string, any>>({ object: {} });
+    const tracing = traceFabric({ object: {} as any });
 
     tracing.value.object.key = tracingChild.value;
     delete tracingChild.value.key2;
@@ -147,7 +147,7 @@ describe('tracedFabric reflects added tracedFabric', () => {
 
   test('array', () => {
     const tracingChild = traceFabric([1]);
-    const tracing = traceFabric({ array: null });
+    const tracing = traceFabric<{ array: null | typeof tracingChild.value }>({ array: null });
 
     tracing.value.array = tracingChild.value;
     tracingChild.value.push(2, 3);
@@ -162,8 +162,8 @@ describe('tracedFabric reflects added tracedFabric', () => {
 describe('tracedFabric reflects recursively nested added tracedFabric', () => {
   test('object', () => {
     const tracingChild1 = traceFabric({ key: 'value' });
-    const tracingChild2 = traceFabric({ tracingChild1: null });
-    const tracing = traceFabric<Record<string, any>>({ object: {} });
+    const tracingChild2 = traceFabric({ tracingChild1: null as null | typeof tracingChild1['value'] });
+    const tracing = traceFabric({ object: {} as any });
 
     tracing.value.object.tracingChild1 = tracingChild1.value;
     tracingChild2.value.tracingChild1 = tracingChild1.value;
