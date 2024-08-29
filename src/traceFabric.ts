@@ -4,6 +4,7 @@ import type { TMutationCallback, TTraceChange } from './types/mutation';
 import { deepTrace } from './proxy/deepTrace';
 import { withoutTracing } from './utils/withoutTracing';
 import type { TOnMutation, TTracedFabric } from './types/tracedFabric';
+import { mutationCallbacks } from './core/mutationCallback';
 
 /**
  * Track the mutation of a given JSON-like object or array.
@@ -67,7 +68,9 @@ export function traceFabric<
   };
 
   proxyRef = withoutTracing(() => deepTrace(value, mutationCallback));
+
   tracedLogs.set(proxyRef, []);
+  mutationCallbacks.set(proxyRef, mutationCallback);
 
   return {
     value: proxyRef,
