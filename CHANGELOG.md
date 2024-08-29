@@ -12,8 +12,7 @@
 
 #### New features
 
-- You can now add `onMutation` callback to the traced object as a second argument.
-    With `onMutation` you can add additional logic when the object is mutated, and change the structure of trace that will be recorded to the traceLog.
+- You can now add `onMutation` callback to the traced object as a second argument. With `onMutation` you can add additional logic when the object is mutated, and change the structure of trace that will be recorded to the traceLog.
 
 - Added `TOnMutation` type for easier creation of `onMutation` callback.
 
