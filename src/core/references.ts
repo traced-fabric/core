@@ -5,7 +5,7 @@ import { isTracedRootValue } from '../utils/isTraced';
 import IterableWeakMap from './iterableWeakMap';
 import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
 
-export const tracedLogs = new WeakMap<JSONStructure, TTraceChange[]>();
+export const tracedLogs = new WeakMap<JSONStructure, any[]>();
 
 const tracedSubscribers = new WeakMap<
   JSONStructure, // the sender of the updates (if update happen, this value will send the updates to receivers)
