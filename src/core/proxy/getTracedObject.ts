@@ -1,10 +1,10 @@
-import type { JSONObject, JSONStructure } from '../types/json';
-import { EMutated, EObjectMutation, type TMutationCallback } from '../types/mutation';
-import { deepClone } from '../deepClone';
-import { isTracing } from '../utils/withoutTracing';
-import { type TTracedValueMetadata, getTargetChain } from '../core/metadata';
-import { removeNestedTracedSubscribers } from '../core/references';
-import { isStructure } from '../utils/isStructure';
+import type { JSONObject, JSONStructure } from '../../types/json';
+import { EMutated, EObjectMutation, type TMutationCallback } from '../../types/mutation';
+import { deepClone } from '../../deepClone';
+import { isTracing } from '../../utils/withoutTracing';
+import { type TTracedValueMetadata, getTargetChain } from '../metadata';
+import { removeNestedTracedSubscribers } from '../references';
+import { isStructure } from '../../utils/isStructure';
 import { deepTrace } from './deepTrace';
 
 export function getTracedProxyObject<T extends JSONObject>(
