@@ -2,7 +2,7 @@ import type { JSONStructure } from '../types/json';
 import type { TMutation } from '../types/mutation';
 import { isStructure } from '../utils/isStructure';
 import { isTracedRootValue } from '../utils/isTraced';
-import IterableWeakMap from './iterableWeakMap';
+import IterableWeakMap from '../utils/iterableWeakMap';
 import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
 import { mutationCallbacks } from './mutationCallback';
 import { traces } from './traces';
