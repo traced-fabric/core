@@ -1,3 +1,3 @@
 import type { JSONStructure } from '../types/json';
 
-export const traces = new WeakMap<JSONStructure, any[]>();
+export const tracedFabricsTrace = new WeakMap<JSONStructure, any[]>();

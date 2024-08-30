@@ -1,5 +1,5 @@
 import { tracedValuesMetadata } from '../core/metadata';
-import { traces } from '../core/traces';
+import { tracedFabricsTrace } from '../core/traces';
 
 /**
  * Check if the given value is a `traced root value` of a `traceFabric` function.
@@ -20,7 +20,7 @@ import { traces } from '../core/traces';
  * @since 0.2.0
  */
 export function isTracedRootValue(value: any): boolean {
-  return traces.has(value);
+  return tracedFabricsTrace.has(value);
 }
 
 /**
