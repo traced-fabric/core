@@ -7,7 +7,7 @@ import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getStrongMeta
 import { mutationCallbacks } from './mutationCallback';
 import { traces } from './traces';
 
-const tracedSubscribers = new WeakMap<
+const tracedFabricSubscribers = new WeakMap<
   JSONStructure, // the sender of the updates (if update happen, this value will send the updates to receivers)
   IterableWeakMap<
     TTracedValueMetadata['rootRef'], // receiver of the updates
@@ -20,8 +20,8 @@ export function addTracedSubscriber(
   metadata: TTracedValueMetadata,
 ): void {
   const subscribers
-    = tracedSubscribers.get(changesSender)
-    ?? tracedSubscribers.set(changesSender, new IterableWeakMap()).get(changesSender)!;
+    = tracedFabricSubscribers.get(changesSender)
+    ?? tracedFabricSubscribers.set(changesSender, new IterableWeakMap()).get(changesSender)!;
 
   const receiver
     = subscribers.get(metadata.rootRef)
@@ -61,7 +61,7 @@ export function removeTraceSubscription(
   changesSender: JSONStructure,
   changesReceiver: JSONStructure,
 ): void {
-  const subscribers = tracedSubscribers.get(changesSender);
+  const subscribers = tracedFabricSubscribers.get(changesSender);
   if (!subscribers) return;
 
   subscribers.delete(changesReceiver);
@@ -71,7 +71,7 @@ export function removeTracedSubscriber(
   changesSender: JSONStructure,
   metadata: TTracedValueMetadata,
 ): void {
-  const subscribers = tracedSubscribers.get(changesSender);
+  const subscribers = tracedFabricSubscribers.get(changesSender);
   if (!subscribers) return;
 
   const receiver = subscribers.get(metadata.rootRef);
@@ -109,7 +109,7 @@ export function updateSubscribers(
   changesSender: JSONStructure,
   mutation: TMutation,
 ): void {
-  const subscribers = tracedSubscribers.get(changesSender);
+  const subscribers = tracedFabricSubscribers.get(changesSender);
   if (!subscribers) return;
 
   for (const [receiver, metadata] of subscribers.entries()) {
