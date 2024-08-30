@@ -59,10 +59,10 @@ describe('withoutTracing', () => {
       (tracedArray.value[1] as Array<any>).pop();
     });
 
-    expect(tracedObject.getTraceLength()).toBe(0);
-    expect(tracedArray.getTraceLength()).toBe(0);
-    expect(tracedObject.getTrace()).toEqual([]);
-    expect(tracedArray.getTrace()).toEqual([]);
+    expect(tracedObject.trace.length).toBe(0);
+    expect(tracedArray.trace.length).toBe(0);
+    expect(tracedObject.trace).toEqual([]);
+    expect(tracedArray.trace).toEqual([]);
   });
 
   test('should not affect the value change', () => {
