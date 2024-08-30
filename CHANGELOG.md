@@ -4,17 +4,16 @@
 
 ### Minor Changes
 
-- 6fb5c8a: #### ⚠️⚠️⚠️ BREAKING CHANGES ⚠️⚠️⚠️
+#### ⚠️⚠️⚠️ BREAKING CHANGES ⚠️⚠️⚠️
 
-  - Renamed `TTraceChange` to `TMutation`
+- Renamed `TTraceChange` to `TMutation`
 
-  - `traceFabric` no longer has a `getTrace()` method. Use `trace` value instead.
+- `traceFabric` no longer has a `getTrace()` method. Use `trace` value instead.
+- `traceFabric` no longer has a `getTraceLength()` method. Use `trace.length` value instead.
 
-  - `traceFabric` no longer has a `getTraceLength()` method. Use `trace.length` value instead.
+#### New features
 
-  #### New features
-
-  - Added `iterableWeakMap` to package exports.
+- Added `iterableWeakMap` to package exports.
 
 ## 0.6.0
 
