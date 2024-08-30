@@ -43,6 +43,6 @@ export type TArrayMutation = {
   value?: never;
 });
 
-export type TTraceChange = TObjectMutation | TArrayMutation;
+export type TMutation = TObjectMutation | TArrayMutation;
 
-export type TMutationCallback = (mutation: TTraceChange) => void;
+export type TMutationCallback = (mutation: TMutation) => void;

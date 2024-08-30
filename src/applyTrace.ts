@@ -4,9 +4,9 @@ import {
   EMutated,
   EObjectMutation,
   type TArrayMutation,
+  type TMutation,
   type TObjectMutation,
   type TTarget,
-  type TTraceChange,
 } from './types/mutation';
 
 function applyObjectMutation(value: JSONObject, mutation: TObjectMutation): void {
@@ -67,7 +67,7 @@ function getMutationTargetWithoutLastKey(
  */
 export function applyTrace<T extends JSONStructure>(
   value: T,
-  trace: TTraceChange[],
+  trace: TMutation[],
 ): void {
   for (const mutation of trace) {
     const mutationTarget = getMutationTargetWithoutLastKey(value, mutation.targetChain);

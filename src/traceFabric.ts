@@ -1,6 +1,6 @@
 import { tracedLogs, updateSubscribers } from './core/references';
 import type { JSONStructure } from './types/json';
-import type { TMutationCallback, TTraceChange } from './types/mutation';
+import type { TMutation, TMutationCallback } from './types/mutation';
 import { deepTrace } from './core/proxy/deepTrace';
 import { withoutTracing } from './utils/withoutTracing';
 import type { TOnMutation, TTracedFabric } from './types/tracedFabric';
@@ -48,7 +48,7 @@ import { mutationCallbacks } from './core/mutationCallback';
  */
 export function traceFabric<
   T extends JSONStructure = JSONStructure,
-  _TRACE_CHANGE = TTraceChange,
+  _TRACE_CHANGE = TMutation,
 >(
   value: T,
   onMutation?: TOnMutation<_TRACE_CHANGE>,
