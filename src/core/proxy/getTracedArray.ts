@@ -1,6 +1,6 @@
 import type { JSONArray, JSONStructure } from '../../types/json';
 import { EArrayMutation, EMutated, type TMutationCallback } from '../../types/mutation';
-import { removeNestedTracedSubscribers } from '../references';
+import { removeNestedTracedSubscribers } from '../subscribers';
 import { deepClone } from '../../deepClone';
 import { type TTracedValueMetadata, getMetadata, getTargetChain } from '../metadata';
 import { isStructure } from '../../utils/isStructure';

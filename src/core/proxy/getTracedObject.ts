@@ -3,7 +3,7 @@ import { EMutated, EObjectMutation, type TMutationCallback } from '../../types/m
 import { deepClone } from '../../deepClone';
 import { isTracing } from '../../utils/withoutTracing';
 import { type TTracedValueMetadata, getTargetChain } from '../metadata';
-import { removeNestedTracedSubscribers } from '../references';
+import { removeNestedTracedSubscribers } from '../subscribers';
 import { isStructure } from '../../utils/isStructure';
 import { deepTrace } from './deepTrace';
 
