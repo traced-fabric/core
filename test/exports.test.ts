@@ -21,7 +21,7 @@ describe('index file should export', () => {
     expectType<TF.TTarget>();
     expectType<TF.TObjectMutation>();
     expectType<TF.TArrayMutation>();
-    expectType<TF.TTraceChange>();
+    expectType<TF.TMutation>();
     expectType<TF.TMutationCallback>();
   });
 
