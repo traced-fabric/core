@@ -11,10 +11,10 @@ export type TOnMutation<T = TMutation> = (mutation: TMutation) => T;
  */
 export type TTracedFabric<
   T extends JSONStructure,
-  _TRACE_CHANGE = TMutation,
+  _MUTATION = TMutation,
 > = {
   value: T;
 
-  trace: _TRACE_CHANGE[];
+  trace: _MUTATION[];
   clearTrace: () => void;
 };
