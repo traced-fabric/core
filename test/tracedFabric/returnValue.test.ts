@@ -15,7 +15,7 @@ describe('tracedFabric should return ', () => {
 
     tracing.value.string = 'new string';
 
-    expect(tracing.getTrace()).toEqual([{
+    expect(tracing.trace).toEqual([{
       mutated: EMutated.object,
       type: EObjectMutation.set,
       targetChain: ['string'],
@@ -24,8 +24,8 @@ describe('tracedFabric should return ', () => {
 
     tracing.clearTrace();
 
-    expect(tracing.getTrace()).toEqual([]);
-    expect(tracing.getTraceLength()).toEqual(0);
+    expect(tracing.trace).toEqual([]);
+    expect(tracing.trace.length).toEqual(0);
   });
 
   test('function to get trace length', () => {
@@ -36,7 +36,7 @@ describe('tracedFabric should return ', () => {
     tracing.value.string = 'new string 2';
     tracing.value.string = 'new string 3';
 
-    expect(tracing.getTraceLength()).toEqual(4);
+    expect(tracing.trace.length).toEqual(4);
   });
 
   test('function to get trace', () => {
@@ -44,7 +44,7 @@ describe('tracedFabric should return ', () => {
 
     tracing.value.string = 'new string';
 
-    expect(tracing.getTrace()).toEqual([{
+    expect(tracing.trace).toEqual([{
       mutated: EMutated.object,
       type: EObjectMutation.set,
       targetChain: ['string'],
@@ -53,7 +53,7 @@ describe('tracedFabric should return ', () => {
 
     tracing.value.string = 'new string 2';
 
-    expect(tracing.getTrace()).toEqual([{
+    expect(tracing.trace).toEqual([{
       mutated: EMutated.object,
       type: EObjectMutation.set,
       targetChain: ['string'],

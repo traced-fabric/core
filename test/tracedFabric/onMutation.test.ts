@@ -35,7 +35,7 @@ describe('tracedFabric onMutation', () => {
 
     fabric.value.season = 'summer';
 
-    expect(fabric.getTrace()[0]).toEqual({
+    expect(fabric.trace[0]).toEqual({
       mutated: EMutated.object,
       type: EObjectMutation.set,
       targetChain: ['season'],
@@ -53,7 +53,7 @@ describe('tracedFabric onMutation', () => {
 
     child.value.push(4);
 
-    expect(parent.getTrace()[0]).toEqual({
+    expect(parent.trace[0]).toEqual({
       mutated: EMutated.array,
       type: EArrayMutation.set,
       targetChain: ['child', 3],
@@ -75,7 +75,7 @@ describe('tracedFabric onMutation', () => {
     child.value.push(4);
     parent.value.number = 2;
 
-    const childTrace = child.getTrace();
+    const childTrace = child.trace;
     expect(childTrace[0]).toEqual({
       mutated: EMutated.array,
       type: EArrayMutation.set,
@@ -84,7 +84,7 @@ describe('tracedFabric onMutation', () => {
       time: expect.any(String),
     });
     expect(childTrace.length).toBe(1);
-    const parentTrace = parent.getTrace();
+    const parentTrace = parent.trace;
     expect(parentTrace[0]).toEqual({
       mutated: EMutated.array,
       type: EArrayMutation.set,

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../src/traceFabric';
-import { removeTraceSubscription } from '../src/core/references';
+import { removeTraceSubscription } from '../src/core/subscribers';
 import { deepClone } from '../src/deepClone';
 import { EArrayMutation, EMutated } from '../src/types/mutation';
 
@@ -14,12 +14,12 @@ describe('removeTraceSubscription', () => {
     tracedChild.value.push(5);
 
     expect(deepClone(tracedParent.value.innerArray)).toEqual([1, 2, 3, 4, 5]);
-    expect(tracedParent.getTrace()).toEqual([{
+    expect(tracedParent.trace).toEqual([{
       mutated: EMutated.array,
       targetChain: ['innerArray', 3],
       type: EArrayMutation.set,
       value: 4,
     }]);
-    expect(tracedParent.getTraceLength()).toBe(1);
+    expect(tracedParent.trace.length).toBe(1);
   });
 });

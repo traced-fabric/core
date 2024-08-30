@@ -9,7 +9,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.string = 'new string';
-    applyTrace(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.trace);
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -19,7 +19,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.number = 2;
-    applyTrace(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.trace);
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -29,7 +29,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.boolean = false;
-    applyTrace(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.trace);
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -39,7 +39,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.null = null;
-    applyTrace(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.trace);
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -49,7 +49,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
     const cloned = deepClone(tracing.value);
 
     tracing.value.undefined = undefined;
-    applyTrace(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.trace);
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -61,7 +61,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
     tracing.value.array.push(2);
     tracing.value.array.push(3);
     tracing.value.array.pop();
-    applyTrace(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.trace);
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -72,7 +72,7 @@ describe('applyTrace result matches tracedFabric on changed', () => {
 
     tracing.value.object1.key = 'new value';
     delete tracing.value.object2;
-    applyTrace(cloned, tracing.getTrace());
+    applyTrace(cloned, tracing.trace);
 
     expect(deepClone(tracing.value)).toEqual(cloned);
   });
@@ -86,7 +86,7 @@ describe('applyTrace result matches tracedFabric on deleted tracedFabric', () =>
 
     tracingChild.value.array.pop();
     tracingParent.value.array.pop();
-    applyTrace(cloned, tracingParent.getTrace());
+    applyTrace(cloned, tracingParent.trace);
 
     expect(deepClone(tracingParent.value)).toEqual(cloned);
   });
@@ -98,7 +98,7 @@ describe('applyTrace result matches tracedFabric on deleted tracedFabric', () =>
 
     delete tracingChild.value.key;
     delete tracingParent.value.object.key;
-    applyTrace(cloned, tracingParent.getTrace());
+    applyTrace(cloned, tracingParent.trace);
 
     expect(deepClone(tracingParent.value)).toEqual(cloned);
   });
@@ -113,7 +113,7 @@ describe('applyTrace result matches tracedFabric on added tracedFabric', () => {
     tracingChild.value.array.push(2);
     tracingParent.value.array.push(tracingChild.value);
     tracingChild.value.array.push(3);
-    applyTrace(cloned, tracingParent.getTrace());
+    applyTrace(cloned, tracingParent.trace);
 
     expect(deepClone(tracingParent.value)).toEqual(cloned);
   });
@@ -126,7 +126,7 @@ describe('applyTrace result matches tracedFabric on added tracedFabric', () => {
     tracingChild.value.key = 'new value 1';
     tracingParent.value.object.key = tracingChild.value;
     tracingChild.value.key2 = 'value 2';
-    applyTrace(cloned, tracingParent.getTrace());
+    applyTrace(cloned, tracingParent.trace);
 
     expect(deepClone(tracingParent.value)).toEqual(cloned);
   });
