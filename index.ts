@@ -6,6 +6,7 @@ export * from './src/types/tracedFabric';
 
 export * from './src/utils/isStructure';
 export * from './src/utils/isTraced';
+export * from './src/utils/iterableWeakMap';
 export * from './src/utils/withoutTracing';
 
 export * from './src/applyTrace';

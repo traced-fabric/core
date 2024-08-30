@@ -1,7 +1,7 @@
 /**
  * @source [tc39 / proposal weakrefs](https://github.com/tc39/proposal-weakrefs?tab=readme-ov-file#iterable-weakmaps)
  */
-export default class IterableWeakMap<
+export class IterableWeakMap<
   _KEY extends object,
   _VALUE extends object,
 > {

@@ -32,6 +32,7 @@ describe('index file should export', () => {
 
   test('isStructure', () => expect(TF.isStructure).toBeDefined());
   test('isTraced', () => expect(TF.isTraced).toBeDefined());
+  test('iterableWeakMap', () => expect(TF.IterableWeakMap).toBeDefined());
   test('withoutTracing', () => expect(TF.withoutTracing).toBeDefined());
 
   test('applyTrace', () => expect(TF.applyTrace).toBeDefined());
