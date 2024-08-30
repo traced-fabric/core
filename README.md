@@ -36,7 +36,7 @@ stateOfTheApp.value.seasonEmotes = ['🌞', '🌊', '🍦'];
 // update_state_of_environment_a - is your implementation
 // of a function that sends state updates to environment B
 update_state_of_environment_b(
-  JSON.stringify(stateOfTheApp.getTrace())
+  JSON.stringify(stateOfTheApp.trace)
 );
 ```
 
