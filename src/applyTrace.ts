@@ -59,7 +59,7 @@ function getMutationTargetWithoutLastKey(
  *
  * target.season = 'summer';
  *
- * applyTrace(target, fabric.getTrace());
+ * applyTrace(target, fabric.trace);
  *
  * console.log(target); // { season: 'summer' }
  *

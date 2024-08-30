@@ -29,7 +29,7 @@ export function isTracing(): boolean {
  *   fabric.value.season = 'summer'; // no mutation is added to the traceLogs
  * });
  *
- * console.log(fabric.getTrace());
+ * console.log(fabric.trace);
  * // [{
  * //   mutated: "object",
  * //   targetChain: [ "season" ],

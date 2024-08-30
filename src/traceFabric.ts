@@ -30,7 +30,7 @@ import { tracedFabricsTrace } from './core/traces';
  * fabric.value.bestDays.push(25);
  * bestDays.value.push(26);
  *
- * console.log(fabric.getTrace());
+ * console.log(fabric.trace);
  * // [{
  * //   mutated: 'object', type: 'set',
  * //   targetChain: ['season'],
