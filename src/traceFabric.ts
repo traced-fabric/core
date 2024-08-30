@@ -1,4 +1,4 @@
-import { updateSubscribers } from './core/references';
+import { updateSubscribers } from './core/subscribers';
 import type { JSONStructure } from './types/json';
 import type { TMutation, TMutationCallback } from './types/mutation';
 import { deepTrace } from './core/proxy/deepTrace';

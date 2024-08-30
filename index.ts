@@ -1,4 +1,4 @@
-export { removeTraceSubscription } from './src/core/references';
+export { removeTraceSubscription } from './src/core/subscribers';
 
 export * from './src/types/json';
 export * from './src/types/mutation';
