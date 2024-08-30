@@ -15,8 +15,6 @@ export type TTracedFabric<
 > = {
   value: T;
 
-  getTrace: () => _TRACE_CHANGE[];
-  getTraceLength: () => number;
-
+  trace: _TRACE_CHANGE[];
   clearTrace: () => void;
 };
