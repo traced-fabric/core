@@ -5,7 +5,7 @@ import { isTracedRootValue } from '../utils/isTraced';
 import { IterableWeakMap } from '../utils/iterableWeakMap';
 import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
 import { mutationCallbacks } from './mutationCallback';
-import { traces } from './traces';
+import { tracedFabricsTrace } from './traces';
 
 const tracedFabricSubscribers = new WeakMap<
   JSONStructure, // the sender of the updates (if update happen, this value will send the updates to receivers)
@@ -113,7 +113,7 @@ export function updateSubscribers(
   if (!subscribers) return;
 
   for (const [receiver, metadata] of subscribers.entries()) {
-    const trace = traces.get(receiver);
+    const trace = tracedFabricsTrace.get(receiver);
     const receiverMutationCallback = mutationCallbacks.get(receiver);
 
     if (!trace || !receiverMutationCallback) continue;
