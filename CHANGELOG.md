@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.7.1
+
+### Patch Changes
+
+- 6851dde: Updated Readme file
+
 ## 0.7.0
 
 ### Minor Changes
