@@ -73,6 +73,39 @@ export function getTracedProxyArray<T extends JSONArray>(
         };
       }
 
+      else if (key === EArrayMutation.unshift) {
+        return (...args: JSONValue[]) => {
+          const initialLength = target.length;
+          const tracedArgs = args.map((arg, i) => deepTrace(arg, mutationCallback, {
+            rootRef: metadata?.rootRef ?? receiver,
+            parentRef: receiver,
+            key: initialLength + i,
+          }));
+
+          // before unshifting we should update the target chain of all items
+          // that are already nested in the array
+          for (let i = 0; i < target.length; i++) {
+            if (!isStructure(target[i])) continue;
+
+            const metadata = getMetadata(target[i] as JSONStructure);
+            if (metadata) metadata.key = initialLength + i;
+          }
+
+          const reflection = Reflect.apply(target.unshift, target, tracedArgs);
+
+          if (isTracing()) {
+            mutationCallback({
+              mutated,
+              targetChain: getTargetChain(receiver),
+              value: deepClone(args),
+              type: key,
+            });
+          }
+
+          return reflection;
+        };
+      }
+
       return Reflect.get(target, key);
     },
 
