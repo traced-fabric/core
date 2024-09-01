@@ -29,6 +29,8 @@ export enum EArrayMutation {
 
   push = 'push',
   reverse = 'reverse',
+  shift = 'shift',
+  unshift = 'unshift',
 }
 
 export type TArrayMutation = {
@@ -38,13 +40,13 @@ export type TArrayMutation = {
   type: EArrayMutation.set;
   value: JSONValue;
 } | {
-  type: EArrayMutation.delete;
-  value?: never;
-} | {
   type: EArrayMutation.push;
   value: JSONValue[];
 } | {
-  type: EArrayMutation.reverse;
+  type:
+    EArrayMutation.delete |
+    EArrayMutation.reverse |
+    EArrayMutation.shift;
   value?: never;
 });
 
