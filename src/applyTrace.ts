@@ -27,7 +27,10 @@ function applyArrayMutation(value: JSONArray, mutation: TArrayMutation): void {
 
   if (mutation.type === EArrayMutation.set) value[lastKey as number] = mutation.value;
   else if (mutation.type === EArrayMutation.delete) value.splice(lastKey as number, 1);
+  else if (mutation.type === EArrayMutation.push) value.push(...mutation.value);
   else if (mutation.type === EArrayMutation.reverse) value.reverse();
+  else if (mutation.type === EArrayMutation.shift) value.shift();
+  else if (mutation.type === EArrayMutation.unshift) value.unshift(...mutation.value);
 }
 
 function getMutationTargetWithoutLastKey(
