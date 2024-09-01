@@ -50,13 +50,17 @@ export function getTracedProxyArray<T extends JSONArray>(
         };
       }
 
-      else if (key === EArrayMutation.reverse) {
+      else if (
+        key === EArrayMutation.reverse
+        || key === EArrayMutation.shift
+      ) {
         if (isTracing()) mutationCallback({ mutated, targetChain: getTargetChain(receiver), type: key });
 
-        // if the array is reversed, we should update all nested values target chain,
+        // if majority of array items are changed their positions
+        // their target chain should be updated
         // so if in the future we will reference them, the reference chain will be correct
         return () => {
-          const reflection = Reflect.apply(target.reverse, target, []);
+          const reflection = Reflect.apply(target[key], target, []);
 
           for (let i = 0; i < target.length; i++) {
             if (!isStructure(target[i])) continue;
