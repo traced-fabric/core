@@ -25,8 +25,6 @@ export function getTracedProxyArray<T extends JSONArray>(
             key: initialLength + i,
           }));
 
-          const reflection = Reflect.apply(target.push, target, tracedArgs);
-
           if (isTracing()) {
             if (args.length > 1) {
               mutationCallback({
@@ -46,7 +44,7 @@ export function getTracedProxyArray<T extends JSONArray>(
             }
           }
 
-          return reflection;
+          return Reflect.apply(target.push, target, tracedArgs);
         };
       }
 
@@ -60,16 +58,14 @@ export function getTracedProxyArray<T extends JSONArray>(
         // their target chain should be updated
         // so if in the future we will reference them, the reference chain will be correct
         return () => {
-          const reflection = Reflect.apply(target[key], target, []);
-
           for (let i = 0; i < target.length; i++) {
             if (!isStructure(target[i])) continue;
 
             const metadata = getMetadata(target[i] as JSONStructure);
-            if (metadata) metadata.key = i;
+            if (metadata) metadata.key = target.length - i - 1;
           }
 
-          return reflection;
+          return Reflect.apply(target[key], target, []);
         };
       }
 
@@ -82,17 +78,6 @@ export function getTracedProxyArray<T extends JSONArray>(
             key: initialLength + i,
           }));
 
-          // before unshifting we should update the target chain of all items
-          // that are already nested in the array
-          for (let i = 0; i < target.length; i++) {
-            if (!isStructure(target[i])) continue;
-
-            const metadata = getMetadata(target[i] as JSONStructure);
-            if (metadata) metadata.key = initialLength + i;
-          }
-
-          const reflection = Reflect.apply(target.unshift, target, tracedArgs);
-
           if (isTracing()) {
             mutationCallback({
               mutated,
@@ -102,7 +87,16 @@ export function getTracedProxyArray<T extends JSONArray>(
             });
           }
 
-          return reflection;
+          // before unshifting we should update the target chain of all items
+          // that are already nested in the array
+          for (let i = 0; i < target.length; i++) {
+            if (!isStructure(target[i])) continue;
+
+            const metadata = getMetadata(target[i] as JSONStructure);
+            if (metadata) metadata.key = initialLength + i;
+          }
+
+          return Reflect.apply(target.unshift, target, tracedArgs);
         };
       }
 
