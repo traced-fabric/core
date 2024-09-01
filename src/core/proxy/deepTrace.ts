@@ -1,4 +1,4 @@
-import type { JSONStructure } from '../../types/json';
+import type { JSONStructure, JSONValue } from '../../types/json';
 import type { TMutationCallback } from '../../types/mutation';
 import { type TTracedValueMetadata, setMetadata } from '../metadata';
 import { addTracedSubscriber } from '../subscribers';
@@ -13,7 +13,7 @@ import { getTracedProxyObject } from './getTracedObject';
 // * will set the tracedValues metadata
 // * if the value is already a traced fabric, return as is
 // * if the value is not a structure (Object/Array), return as is
-export function deepTrace<T extends JSONStructure>(
+export function deepTrace<T extends JSONValue>(
   value: T,
   mutationCallback: TMutationCallback,
   metadata?: TTracedValueMetadata,
