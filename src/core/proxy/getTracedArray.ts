@@ -1,4 +1,4 @@
-import type { JSONArray, JSONStructure } from '../../types/json';
+import type { JSONArray, JSONStructure, JSONValue } from '../../types/json';
 import { EArrayMutation, EMutated, type TMutationCallback } from '../../types/mutation';
 import { removeNestedTracedSubscribers } from '../subscribers';
 import { deepClone } from '../../deepClone';
@@ -16,7 +16,41 @@ export function getTracedProxyArray<T extends JSONArray>(
 
   const proxy = new WeakRef(new Proxy(value, {
     get(target, key, receiver) {
-      if (key === EArrayMutation.reverse) {
+      if (key === EArrayMutation.push) {
+        return (...args: JSONValue[]) => {
+          const initialLength = target.length;
+          const tracedArgs = args.map((arg, i) => deepTrace(arg, mutationCallback, {
+            rootRef: metadata?.rootRef ?? receiver,
+            parentRef: receiver,
+            key: initialLength + i,
+          }));
+
+          const reflection = Reflect.apply(target.push, target, tracedArgs);
+
+          if (isTracing()) {
+            if (args.length > 1) {
+              mutationCallback({
+                mutated,
+                targetChain: getTargetChain(receiver),
+                value: deepClone(args),
+                type: key,
+              });
+            }
+            else {
+              mutationCallback({
+                mutated,
+                targetChain: [...getTargetChain(receiver), initialLength],
+                value: deepClone(args[0]),
+                type: EArrayMutation.set,
+              });
+            }
+          }
+
+          return reflection;
+        };
+      }
+
+      else if (key === EArrayMutation.reverse) {
         if (isTracing()) mutationCallback({ mutated, targetChain: getTargetChain(receiver), type: key });
 
         // if the array is reversed, we should update all nested values target chain,
