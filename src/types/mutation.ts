@@ -40,7 +40,9 @@ export type TArrayMutation = {
   type: EArrayMutation.set;
   value: JSONValue;
 } | {
-  type: EArrayMutation.push;
+  type:
+    EArrayMutation.push |
+    EArrayMutation.unshift;
   value: JSONValue[];
 } | {
   type:
