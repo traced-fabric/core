@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.8.2
+
+### Patch Changes
+
+- 63e78d9: Updated package details
+
 ## 0.8.1
 
 ### Patch Changes
