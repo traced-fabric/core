@@ -52,8 +52,6 @@ export function getTracedProxyArray<T extends JSONArray>(
         key === EArrayMutation.reverse
         || key === EArrayMutation.shift
       ) {
-        if (isTracing()) mutationCallback({ mutated, targetChain: getTargetChain(receiver), type: key });
-
         // if majority of array items are changed their positions
         // their target chain should be updated
         // so if in the future we will reference them, the reference chain will be correct
@@ -64,6 +62,8 @@ export function getTracedProxyArray<T extends JSONArray>(
             const metadata = getMetadata(target[i] as JSONStructure);
             if (metadata) metadata.key = target.length - i - 1;
           }
+
+          if (isTracing()) mutationCallback({ mutated, targetChain: getTargetChain(receiver), type: key });
 
           return Reflect.apply(target[key], target, []);
         };
