@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 63e78d9: Updated package details
+- b23dc9d: Updated package details
 
 ## 0.8.1
 
