@@ -1030,6 +1030,36 @@ describe('tracedFabric subscribes on recursively tracedFabric added', () => {
 });
 
 describe('tracedFabric array', () => {
+  test('push with single value using set mutation', () => {
+    const tracing = traceFabric<any>([1, 2, 3, 4, 5]);
+
+    tracing.value.push(6);
+
+    const trace = tracing.trace;
+    expect(trace[0]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [5],
+      type: EArrayMutation.set,
+      value: 6,
+    });
+    expect(tracing.trace.length).toBe(1);
+  });
+
+  test('push with multiple values uses one mutation', () => {
+    const tracing = traceFabric<any>([1, 2, 3, 4, 5]);
+
+    tracing.value.push(6, 7, 8);
+
+    const trace = tracing.trace;
+    expect(trace[0]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [],
+      type: EArrayMutation.push,
+      value: [6, 7, 8],
+    });
+    expect(tracing.trace.length).toBe(1);
+  });
+
   test('reverse uses one mutation', () => {
     const tracing = traceFabric<any>([[1, 1.5], 2, 3, 4, 5]);
 
@@ -1071,5 +1101,64 @@ describe('tracedFabric array', () => {
     });
     expect(deepClone(tracing.value[1])).toEqual([96, 97, 98, 99]);
     expect(tracing.trace.length).toBe(5);
+  });
+
+  test('shift uses one mutation', () => {
+    const tracing = traceFabric<any>([0, [1, 1.5], 2, 3, 4, 5]);
+
+    tracing.value.push([99, 98, 97, 96]);
+    tracing.value.push(100);
+    tracing.value[1].shift();
+    tracing.value.shift();
+
+    const trace = tracing.trace;
+    expect(trace[0]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [6],
+      type: EArrayMutation.set,
+      value: [99, 98, 97, 96],
+    });
+    expect(trace[1]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [7],
+      type: EArrayMutation.set,
+      value: 100,
+    });
+    expect(trace[2]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [1],
+      type: EArrayMutation.shift,
+    });
+    expect(deepClone(tracing.value[0])).toEqual([1.5]);
+    expect(trace[3]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [],
+      type: EArrayMutation.shift,
+    });
+    expect(deepClone(tracing.value)).toEqual([[1.5], 2, 3, 4, 5, [99, 98, 97, 96], 100]);
+    expect(tracing.trace.length).toBe(4);
+  });
+
+  test('unshift uses one mutation', () => {
+    const tracing = traceFabric<any>([0, [1, 1.5], 2, 3, 4, 5]);
+
+    tracing.value[1].unshift(0.5);
+    tracing.value.unshift(-1);
+
+    const trace = tracing.trace;
+    expect(trace[0]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [1],
+      type: EArrayMutation.unshift,
+      value: [0.5],
+    });
+    expect(trace[1]).toEqual({
+      mutated: EMutated.array,
+      targetChain: [],
+      type: EArrayMutation.unshift,
+      value: [-1],
+    });
+    expect(deepClone(tracing.value)).toEqual([-1, 0, [0.5, 1, 1.5], 2, 3, 4, 5]);
+    expect(tracing.trace.length).toBe(2);
   });
 });
