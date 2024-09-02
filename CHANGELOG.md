@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.8.1
+
+### Patch Changes
+
+- eaed3a6: Fixed array reverse mutation being pushed without calling the function
+
 ## 0.8.0
 
 ### Minor Changes
