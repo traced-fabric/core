@@ -1030,8 +1030,17 @@ describe('tracedFabric subscribes on recursively tracedFabric added', () => {
 });
 
 describe('tracedFabric array', () => {
+  test('push mutation is not added when not called', () => {
+    const tracing = traceFabric([1, 2, 3, 4, 5]);
+
+    const push = tracing.value.push;
+
+    expect(push).toBeFunction();
+    expect(tracing.trace.length).toBe(0);
+  });
+
   test('push with single value using set mutation', () => {
-    const tracing = traceFabric<any>([1, 2, 3, 4, 5]);
+    const tracing = traceFabric([1, 2, 3, 4, 5]);
 
     tracing.value.push(6);
 
@@ -1046,7 +1055,7 @@ describe('tracedFabric array', () => {
   });
 
   test('push with multiple values uses one mutation', () => {
-    const tracing = traceFabric<any>([1, 2, 3, 4, 5]);
+    const tracing = traceFabric([1, 2, 3, 4, 5]);
 
     tracing.value.push(6, 7, 8);
 
@@ -1058,6 +1067,15 @@ describe('tracedFabric array', () => {
       value: [6, 7, 8],
     });
     expect(tracing.trace.length).toBe(1);
+  });
+
+  test('reverse mutation is not added when not called', () => {
+    const tracing = traceFabric([1, 2, 3, 4, 5]);
+
+    const reverse = tracing.value.reverse;
+
+    expect(reverse).toBeFunction();
+    expect(tracing.trace.length).toBe(0);
   });
 
   test('reverse uses one mutation', () => {
@@ -1103,6 +1121,15 @@ describe('tracedFabric array', () => {
     expect(tracing.trace.length).toBe(5);
   });
 
+  test('shift mutation is not added when not called', () => {
+    const tracing = traceFabric([1, 2, 3, 4, 5]);
+
+    const shift = tracing.value.shift;
+
+    expect(shift).toBeFunction();
+    expect(tracing.trace.length).toBe(0);
+  });
+
   test('shift uses one mutation', () => {
     const tracing = traceFabric<any>([0, [1, 1.5], 2, 3, 4, 5]);
 
@@ -1137,6 +1164,15 @@ describe('tracedFabric array', () => {
     });
     expect(deepClone(tracing.value)).toEqual([[1.5], 2, 3, 4, 5, [99, 98, 97, 96], 100]);
     expect(tracing.trace.length).toBe(4);
+  });
+
+  test('unshift mutation is not added when not called', () => {
+    const tracing = traceFabric([1, 2, 3, 4, 5]);
+
+    const unshift = tracing.value.unshift;
+
+    expect(unshift).toBeFunction();
+    expect(tracing.trace.length).toBe(0);
   });
 
   test('unshift uses one mutation', () => {
