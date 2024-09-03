@@ -1,10 +1,25 @@
 import type { JSONObject } from '../types/json';
 
 /**
- * Check if the value is a `typeof 'object'` and not `null`.
+ * Check if the value is a typeof object and not null.
  *
- * @param value - value to check
- * @returns true if the value is a structure, false otherwise
+ * @param value - value that needs to be checked
+ * @returns `boolean`
+ *
+ * @example
+ * ```typescript
+ * console.log(isStructure({ hello: 'world' })); // true
+ * console.log(isStructure(['hello', 'world'])); // true
+ *
+ * console.log(isStructure(1)); // false
+ * console.log(isStructure(true)); // false
+ * console.log(isStructure('hello')); // false
+ * console.log(isStructure(null)); // false
+ * console.log(isStructure(undefined)); // false
+ * console.log(isStructure(true)); // false
+ * ```
+ *
+ * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-isstructure Wiki page}.
  *
  * @since 0.2.0
  */
