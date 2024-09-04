@@ -5,10 +5,13 @@ import { isStructure } from './utils/isStructure';
 
 /**
  * Deep clone an object or array.
- * Primarily used to clone traceFabric values without inheriting proxy metadata,
+ *
+ * Primarily used to clone `tracedFabric` and `tracedValues` without inheriting proxy traps,
  * and potentially breaking tracedFabric.
  *
- * @note The deepClone will not copy symbols
+ * @note `deepClone(...)` will not copy symbols
+ *
+ * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-deepclone Wiki page.}
  *
  * @param value - The value to clone
  * @returns The cloned value
