@@ -4,13 +4,13 @@
 
 ### Minor Changes
 
-- 0b94845: #### ⚠️⚠️⚠️ BREAKING CHANGES ⚠️⚠️⚠️
+#### ⚠️⚠️⚠️ BREAKING CHANGES ⚠️⚠️⚠️
 
-  - Renamed `isTracedRootValue` to `isTracedFabric`
+- Renamed `isTracedRootValue` to `isTracedFabric`
 
-  #### New features
+#### New features
 
-  - Updated JS Doc for all exported functions.
+- Updated JS Doc for all exported functions.
 
 ## 0.8.2
 
