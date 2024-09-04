@@ -31,15 +31,13 @@ export function addTracedSubscriber(
 }
 
 /**
- * Will drop the subscription of the sender from the receiver.
- * Sender and receiver are both tracedFabric values.
- * After calling, receiver will no longer receive any updates from the sender,
- * but objects will still be linked.
+ * Will unsubscribe the `receiver` from the `sender`.
+ * So after mutating the `sender`, the `receiver` will not receive any updates.
  *
- * Needs to be used to avoid memory leaks.
+ * Needs to be used to speed up garbage collection.
  *
- * @param changesSender the sender of the updates (value that is a part of the receiver)
- * @param changesReceiver reviver of the updates
+ * @param changesSender the `sender` of the updates (value that is a part of the receiver).
+ * @param changesReceiver `receiver` of the updates.
  *
  * @example
  * ```typescript
@@ -50,12 +48,13 @@ export function addTracedSubscriber(
  *     globalMessages: globalMessages.value,
  *   });
  *
- *   // The `globalMessages` binds itself to the `user`, to provide updates.
- *   // To remove the binding and avoid memory leaks, we should remove the subscription
- *   // at the end of the `user` lifecycle.
+ *   // The `globalMessages` subscribes to the `user` value to send updates.
+ *   // To speed up the gc, remove the subscription, at the end of the `user` lifecycle.
  *   removeTraceSubscription(globalMessages.value, user.value);
  * }
  * ```
+ *
+ * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-removetracesubscription Wiki page.}
  *
  * @since 0.4.0
  */
