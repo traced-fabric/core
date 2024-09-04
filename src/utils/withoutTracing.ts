@@ -32,6 +32,7 @@ export function isTracing(): boolean {
  * @returns same as the return value of the given function
  *
  * @example
+ * ```typescript
  * const fabric = traceFabric({ season: 'winter' });
  * fabric.value.season = 'spring'; // adds mutation to the traceLogs
  *
@@ -46,6 +47,7 @@ export function isTracing(): boolean {
  * //   value: "spring",
  * //   type: "set",
  * // }]
+ * ```
  *
  * @since 0.2.0
  */

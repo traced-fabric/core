@@ -14,12 +14,14 @@ import { isStructure } from './utils/isStructure';
  * @returns The cloned value
  *
  * @example
+ * ```typescript
  * const fabric = traceFabric({ season: 'winter', bestDays: [2, 7, 16] });
  * const clone = deepClone(fabric.value);
  *
  * console.log(clone); // { season: 'winter', bestDays: [2, 7, 16] }
  * console.log(clone === fabric.value); // false
  * console.log(clone.bestDays === fabric.value.bestDays); // false
+ * ```
  *
  * @since 0.0.1
  */
