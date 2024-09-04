@@ -48,15 +48,18 @@ function getMutationTargetWithoutLastKey(
 }
 
 /**
- * Applies tracedFabric mutations to the given value.
- * The value should have the same state as the traceFabric value before allied mutations.
+ * Applies `tracedFabric` `mutations` to the given value.
+ * The value should have the same state as the `traceFabric` value before allied mutations.
  *
  * @WARN This function mutates the value directly.
  *
- * @param value - The value to apply the mutations to.
- * @param trace - The trace chain from tracedFabric to apply.
+ * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-applytrace Wiki page.}
+ *
+ * @param value - the object to which the **trace** will be directly applied.
+ * @param trace - the `trace` (array of `mutations`) to apply to the given **value**.
  *
  * @example
+ * ```typescript
  * const fabric = traceFabric({ season: 'winter' });
  * const target = { season: 'winter' };
  *
@@ -65,6 +68,7 @@ function getMutationTargetWithoutLastKey(
  * applyTrace(target, fabric.trace);
  *
  * console.log(target); // { season: 'summer' }
+ * ```
  *
  * @since 0.0.1
  */
