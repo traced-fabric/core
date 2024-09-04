@@ -1,5 +1,17 @@
 # @traced-fabric/core
 
+## 0.9.0
+
+### Minor Changes
+
+- 0b94845: #### ⚠️⚠️⚠️ BREAKING CHANGES ⚠️⚠️⚠️
+
+  - Renamed `isTracedRootValue` to `isTracedFabric`
+
+  #### New features
+
+  - Updated JS Doc for all exported functions.
+
 ## 0.8.2
 
 ### Patch Changes
