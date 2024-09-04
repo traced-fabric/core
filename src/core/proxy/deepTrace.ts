@@ -3,7 +3,7 @@ import type { TMutationCallback } from '../../types/mutation';
 import { type TTracedValueMetadata, setMetadata } from '../metadata';
 import { addTracedSubscriber } from '../subscribers';
 import { isStructure } from '../../utils/isStructure';
-import { isTracedRootValue } from '../../utils/isTraced';
+import { isTracedFabric } from '../../utils/isTraced';
 import { getTracedProxyArray } from './getTracedArray';
 import { getTracedProxyObject } from './getTracedObject';
 
@@ -23,7 +23,7 @@ export function deepTrace<T extends JSONValue>(
 
   // if the given value is already traced (tracedFabric),
   // we should subscribe the current value to metadata root(tracedFabric)
-  if (isTracedRootValue(value)) {
+  if (isTracedFabric(value)) {
     if (metadata) addTracedSubscriber(value, metadata);
 
     return value;

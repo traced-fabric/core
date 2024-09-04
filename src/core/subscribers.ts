@@ -1,7 +1,7 @@
 import type { JSONStructure } from '../types/json';
 import type { TMutation } from '../types/mutation';
 import { isStructure } from '../utils/isStructure';
-import { isTracedRootValue } from '../utils/isTraced';
+import { isTracedFabric } from '../utils/isTraced';
 import { IterableWeakMap } from '../utils/iterableWeakMap';
 import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
 import { mutationCallbacks } from './mutationCallback';
@@ -88,7 +88,7 @@ export function removeNestedTracedSubscribers(
 ): void {
   const target = (metadata.parentRef as any)[metadata.key] as JSONStructure;
 
-  if (isTracedRootValue(target)) return removeTracedSubscriber(changesSender, metadata);
+  if (isTracedFabric(target)) return removeTracedSubscriber(changesSender, metadata);
 
   for (const key in target) {
     const maybeIndex = Number.isNaN(+key) ? key : +key;
@@ -100,7 +100,7 @@ export function removeNestedTracedSubscribers(
 
     if (childMetadata)
       removeNestedTracedSubscribers(target, childMetadata);
-    else if (isTracedRootValue(child))
+    else if (isTracedFabric(child))
       removeTracedSubscriber(child, { rootRef: metadata.rootRef, parentRef: target, key: maybeIndex });
   }
 }
