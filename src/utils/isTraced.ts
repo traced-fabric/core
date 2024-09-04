@@ -8,8 +8,8 @@ import { tracedFabricsTrace } from '../core/traces';
  *
  * @example
  * ```typescript
- * const traced = traceFabric({ // --> traced root value AND traced
- *   innerArray: [1, 2, 3], // --> traced value AND traced
+ * const traced = traceFabric({ // --> tracedFabric value AND traced
+ *   innerArray: [1, 2, 3], // --> tracedValue AND traced
  * });
  *
  * isTracedFabric(traced.value); // true
@@ -31,8 +31,8 @@ export function isTracedFabric(value: any): boolean {
  *
  * @example
  * ```typescript
- * const traced = traceFabric({ // --> traced root value AND traced
- *   innerArray: [1, 2, 3], // --> traced value AND traced
+ * const traced = traceFabric({ // --> tracedFabric value AND traced
+ *   innerArray: [1, 2, 3], // --> tracedValue AND traced
  * });
  *
  * isTracedValue(traced.value); // false
@@ -54,8 +54,8 @@ export function isTracedValue(value: any): boolean {
  *
  * @example
  * ```typescript
- * const traced = traceFabric({ // --> traced root value AND traced
- *   innerArray: [1, 2, 3], // --> traced value AND traced
+ * const traced = traceFabric({ // --> tracedFabric value AND traced
+ *   innerArray: [1, 2, 3], // --> tracedValue AND traced
  * });
  *
  * isTraced(traced.value); // true
