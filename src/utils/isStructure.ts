@@ -1,7 +1,7 @@
 import type { JSONObject } from '../types/json';
 
 /**
- * Check if the value is a typeof object and not null.
+ * Check if the value is a typeof `object` and not `null`.
  *
  * @param value - value that needs to be checked.
  * @returns `boolean`
