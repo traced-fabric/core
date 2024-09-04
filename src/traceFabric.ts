@@ -25,6 +25,7 @@ import { tracedFabricsTrace } from './core/traces';
  * **clearTrace** - a function that clears the trace.
  *
  * @example
+ * ```typescript
  * const bestDays = traceFabric([2, 7, 16]);
  * const fabric = traceFabric({
  *   season: 'winter',
@@ -49,6 +50,7 @@ import { tracedFabricsTrace } from './core/traces';
  * //   targetChain: ['bestDays', 4],
  * //   value: 26,
  * // }]
+ * ```
  *
  * @since 0.0.1
  */

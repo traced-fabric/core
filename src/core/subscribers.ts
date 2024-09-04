@@ -42,6 +42,7 @@ export function addTracedSubscriber(
  * @param changesReceiver reviver of the updates
  *
  * @example
+ * ```typescript
  * const globalMessages = traceFabric(['Welcome!']);
  *
  * function userLifecycle(): void {
@@ -54,6 +55,7 @@ export function addTracedSubscriber(
  *   // at the end of the `user` lifecycle.
  *   removeTraceSubscription(globalMessages.value, user.value);
  * }
+ * ```
  *
  * @since 0.4.0
  */
