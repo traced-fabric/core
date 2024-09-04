@@ -12,15 +12,15 @@ import { tracedFabricsTrace } from '../core/traces';
  *   innerArray: [1, 2, 3], // --> traced value AND traced
  * });
  *
- * isTracedRootValue(traced.value); // true
- * isTracedRootValue(traced.value.innerArray); // false
+ * isTracedFabric(traced.value); // true
+ * isTracedFabric(traced.value.innerArray); // false
  * ```
  *
  * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-istracedfabric Wiki page.}
  *
  * @since 0.2.0
  */
-export function isTracedRootValue(value: any): boolean {
+export function isTracedFabric(value: any): boolean {
   return tracedFabricsTrace.has(value);
 }
 
@@ -67,5 +67,5 @@ export function isTracedValue(value: any): boolean {
  * @since 0.2.0
  */
 export function isTraced(value: any): boolean {
-  return isTracedValue(value) || isTracedRootValue(value);
+  return isTracedValue(value) || isTracedFabric(value);
 }
