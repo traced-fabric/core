@@ -2,12 +2,9 @@ import { tracedValuesMetadata } from '../core/metadata';
 import { tracedFabricsTrace } from '../core/traces';
 
 /**
- * Check if the given value is a `traced root value` of a `traceFabric` function.
- * Will return true only for the root traced values.
+ * Checks if the given value is a `tracedFabric`.
  *
- * To check if the value is `traced value` (not the root), use `isTracedValue` function.
- *
- * To check if the value is traced at any level, use `isTraced` function.
+ * To check the definition of `tracedFabric`, see [Wiki - 📜 Naming](https://github.com/traced-fabric/core/wiki/%F0%9F%93%9C-Naming)
  *
  * @example
  * const traced = traceFabric({ // --> traced root value AND traced
@@ -24,12 +21,9 @@ export function isTracedRootValue(value: any): boolean {
 }
 
 /**
- * Check if the given value is a `traced value` of a `traceFabric` function.
- * Will return true if the value is traced, but not at the root level.
+ * Checks if the given value is a `tracedValue`.
  *
- * To check if the value is `traced root value`, use `isTracedRootValue` function.
- *
- * To check if the value is traced at any level, use `isTraced` function.
+ * To check the definition of `tracedValue`, see [Wiki - 📜 Naming](https://github.com/traced-fabric/core/wiki/%F0%9F%93%9C-Naming)
  *
  * @example
  * const traced = traceFabric({ // --> traced root value AND traced
@@ -46,11 +40,9 @@ export function isTracedValue(value: any): boolean {
 }
 
 /**
- * Check if the given value is a `traced` of a `traceFabric` function.
+ * Checks if the given value is a `traced`.
  *
- * To check if the value is `traced root value`, use `isTracedRootValue` function.
- *
- * To check if the value is `traced value`, use `isTracedValue` function.
+ * To check the definition of `traced`, see [Wiki - 📜 Naming](https://github.com/traced-fabric/core/wiki/%F0%9F%93%9C-Naming)
  *
  * @example
  * const traced = traceFabric({ // --> traced root value AND traced
