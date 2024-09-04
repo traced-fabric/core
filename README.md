@@ -1,163 +1,30 @@
-## 📦 Installation
-
 ```bash
+# 📦 Installation
 npm install @traced-fabric/core
 ```
 
 ## 🔮 wTF (What is the Trace Fabric) ?
 
-Traced Fabric Core is a JavaScript library for tracking value changes.
-The main goal is to share the same value state between different environments where access to value memory is impossible (WebSockets, Workers, iframes, Chrome extensions, etc.).
+Traced Fabric Core is a JavaScript library designed to track value changes across different environments where direct memory access is not possible, such as WebSockets, Workers, iframes, and Chrome extensions.
 
-This package was created to simplify work with complex data structures that should be the same and up to date on the client side when using WebSockets.
+Originally developed to streamline the management of complex data structures in real-time WebSocket applications, the package's flexible implementation makes it suitable for use in any environment requiring consistent state synchronization across multiple instances.
 
-The main functionality here is provided by 2 functions:
+## ⚙️ How it works
 
-* **traceFabric(**_{ your: 'object', or: \[ 'array' \] }_**)** - function will return a **traced** proxy of a given value, so whenever you update anything the **mutation** that you've done will be stored inside the trace array.
-* **applyTrace(** _mirror, trace_ **)** - function that will apply _trace_ onto the given _mirror_ (object). But the _mirror_ should have the exact state of a mirrored object before it was changed.
+This package operates similarly to modern frontend frameworks with reactive state management. For instance, in Vue.js, the ref and reactive functions track value changes, updating the DOM accordingly.
 
-More on the exported stuff of the package and how all this works under the hood can be found in the WIKI (soon).
-For now, you can check the [source code](https://github.com/traced-fabric/core/tree/main/src) of the package.
+Traced Fabric adopts a comparable approach. By proxying values through the `traceFabric()` function, it enables tracking of those values. When changes occur, a corresponding mutation is recorded in the trace.
 
-## 🚀 Quick start
+The trace serves as a log of changes for the tracked value. You can then apply this trace to another value with the same initial state using the `applyTrace()` function, ensuring consistency across different instances.
 
-If you want to use this package, here is an example of how you can use it with WebSockets on the server and client side:
+## 🌌 Examples
 
-### 📱 Client example
+[🚀 Example | WebSockets (bun)](https://github.com/traced-fabric/core/wiki/%F0%9F%9A%80-Example-%7C-WebSockets-(bun))
 
-```typescript
-import { applyTrace } from '@traced-fabric/core';
+## ➡️ Next to discover
 
-// creating data storage that will be set and updated
-// here is used 'let' because initially client does not have
-// the data, but it will be set by the server
-let broadcastData, userPrivateData;
+[📜 Naming](https://github.com/traced-fabric/core/wiki/%F0%9F%93%9C-Naming) - to know how things are named, not get confused.
 
-// creating a new WebSocket connection
-const ws = new WebSocket('ws://localhost:3000');
-ws.onmessage = (event) => {
-  const { type, channel, data } = JSON.parse(event.data);
+[🧰 Essentials | Types](https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Types) - see what types are exported by this package.
 
-  if (type === 'setData') {
-    if (channel === 'userPrivateData') userPrivateData = data;
-    else if (channel === 'broadcast') broadcastData = data;
-  }
-
-  else if (type === 'updateData') {
-    if (data.channel === 'userPrivateData')
-      userPrivateData = applyTrace(userPrivateData, data);
-    else if (data.channel === 'broadcast')
-      broadcastData = applyTrace(broadcastData, data);
-  }
-};
-```
-
-### 🌐 Server example
-
-```typescript
-import { traceFabric } from '@traced-fabric/core';
-
-type TUserPublicData = {
-  id: string;
-  joinedAt: number;
-};
-
-type TUserPrivateData = {
-  youSecretEmoji: string;
-};
-
-// some sort of a broadcast data
-// here we will store all the users that joined the server
-// and their public data
-const joinedUsers = traceFabric<{
-  [_key: TUserPublicData['id']]: TUserPublicData;
-}>({});
-
-// defining the ws connection data type
-const server = Bun.serve<{
-  userPublicData: TTracedFabric<TUserPublicData>;
-  userPrivateData: TTracedFabric<TUserPrivateData>;
-}>({
-  fetch(req, server) {
-    // creating a new user public data
-    const userPublicData = traceFabric<TUserPublicData>({
-      id: Math.random().toString(36).slice(2),
-      joinedAt: Date.now(),
-    });
-
-    // creating a new user private data
-    const userPrivateData = traceFabric<TUserPrivateData>({
-      youSecretEmoji: ['☕', '🦄', '🐲', '⚗️'][Math.floor(Math.random() * 4)],
-    });
-
-    const success = server.upgrade(req, { data: { userPublicData, userPrivateData } });
-    if (success) return undefined;
-  },
-
-  websocket: {
-    // in the open function you will need to send
-    // the current state of user's data
-    // that will be updated in the future
-    //
-    // in the message we need to set 'type', for the client
-    // to understand what to do with the upcoming data
-    // and 'channel' to understand what data to update
-    open(ws) {
-      // NOTE: we don't need to send the user's public data here,
-      // as it comes as a part of the broadcast data
-      // to avoid duplication of the updates
-
-      // sending the current state of the user's private data
-      ws.send(JSON.stringify({
-        type: 'setData',
-        channel: 'userPrivateData',
-        data: ws.data.userPrivateData.value,
-      }));
-
-      // updating all the users with the new user id and data
-      joinedUsers.value[ws.data.userPublicData.value.id]
-        = ws.data.userPublicData.value;
-      server.publish('broadcast', JSON.stringify({
-        type: 'setData',
-        channel: 'broadcast',
-        data: joinedUsers.trace,
-      }));
-      // after updating all the users with the new user id
-      // we need to clear the trace, because if we don't
-      // the user will receive the same data again
-      joinedUsers.clearTrace();
-
-      // to receive the updates from the server we need
-      // to subscribe the user to the broadcast channel
-      ws.subscribe('broadcast');
-
-      // and at the end we need to send
-      // the current state of the broadcast data
-      // so the user can follow the updates
-      ws.send(JSON.stringify({
-        type: 'setData',
-        channel: 'broadcast',
-        data: joinedUsers.value,
-      }));
-    },
-
-    // here will go your logic of handling the incoming messages
-    message(ws, message) { },
-
-    close(ws) {
-      // removing the user from the broadcast data
-      delete joinedUsers.value[ws.data.userPublicData.value.id];
-      server.publish('broadcast', JSON.stringify({
-        type: 'setData',
-        channel: 'broadcast',
-        data: joinedUsers.trace,
-      }));
-      joinedUsers.clearTrace();
-    },
-  },
-});
-```
-
-## 📜 License
-
-This project is licensed under the [MIT License]((https://github.com/traced-fabric/core/blob/main/LICENCE))
+[🧰 Essentials | Package exports](https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports) - see what package exports.
