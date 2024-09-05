@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
-import { isStructure } from '../src/utils/isStructure';
+import { isStructure } from '../../src/utils/isStructure';
 
-describe('isStructure function', () => {
+describe('isStructure(...)', () => {
   test('returns false if given a number', () => {
     expect(isStructure(1)).toBe(false);
   });
