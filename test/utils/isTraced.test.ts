@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { traceFabric } from '../src/traceFabric';
-import { isTraced, isTracedFabric, isTracedValue } from '../src/utils/isTraced';
+import { traceFabric } from '../../src/traceFabric';
+import { isTraced, isTracedFabric, isTracedValue } from '../../src/utils/isTraced';
 
 describe('isTracedFabric(...)', () => {
   test('returns false if given a non-traced value', () => {
