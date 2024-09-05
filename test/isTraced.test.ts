@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../src/traceFabric';
 import { isTraced, isTracedFabric, isTracedValue } from '../src/utils/isTraced';
 
-describe('isTracedRootValue function', () => {
+describe('isTracedFabric(...)', () => {
   test('returns false if given a non-traced value', () => {
     expect(isTracedFabric(1)).toBe(false);
     expect(isTracedFabric('string')).toBe(false);
@@ -15,19 +15,27 @@ describe('isTracedRootValue function', () => {
     expect(isTracedFabric(() => {})).toBe(false);
   });
 
-  test('returns true if given a traced root value', () => {
+  test('returns true if given a tracedFabric', () => {
     const traced = traceFabric({
       innerArray: [1, 2, 3],
       innerObject: { a: 1, b: 2 },
     });
 
     expect(isTracedFabric(traced.value)).toBe(true);
+  });
+
+  test('returns false if given a tracedValue', () => {
+    const traced = traceFabric({
+      innerArray: [1, 2, 3],
+      innerObject: { a: 1, b: 2 },
+    });
+
     expect(isTracedFabric(traced.value.innerArray)).toBe(false);
     expect(isTracedFabric(traced.value.innerObject)).toBe(false);
   });
 });
 
-describe('isTracedValue function', () => {
+describe('isTracedValue(...)', () => {
   test('returns false if given a non-traced value', () => {
     expect(isTracedValue(1)).toBe(false);
     expect(isTracedValue('string')).toBe(false);
@@ -40,19 +48,27 @@ describe('isTracedValue function', () => {
     expect(isTracedValue(() => {})).toBe(false);
   });
 
-  test('returns true if given a traced root value', () => {
+  test('returns false if given a tracedFabric', () => {
     const traced = traceFabric({
       innerArray: [1, 2, 3],
       innerObject: { a: 1, b: 2 },
     });
 
     expect(isTracedValue(traced.value)).toBe(false);
+  });
+
+  test('returns true if given a tracedValue', () => {
+    const traced = traceFabric({
+      innerArray: [1, 2, 3],
+      innerObject: { a: 1, b: 2 },
+    });
+
     expect(isTracedValue(traced.value.innerArray)).toBe(true);
     expect(isTracedValue(traced.value.innerObject)).toBe(true);
   });
 });
 
-describe('isTraced function', () => {
+describe('isTraced(...)', () => {
   test('returns false if given a non-traced value', () => {
     expect(isTraced(1)).toBe(false);
     expect(isTraced('string')).toBe(false);
@@ -72,6 +88,14 @@ describe('isTraced function', () => {
     });
 
     expect(isTraced(traced.value)).toBe(true);
+  });
+
+  test('returns true if given a traced value', () => {
+    const traced = traceFabric({
+      innerArray: [1, 2, 3],
+      innerObject: { a: 1, b: 2 },
+    });
+
     expect(isTraced(traced.value.innerArray)).toBe(true);
     expect(isTraced(traced.value.innerObject)).toBe(true);
   });
