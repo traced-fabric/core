@@ -3,13 +3,13 @@ import { isTracing, withoutTracing } from '../src/utils/withoutTracing';
 import { traceFabric } from '../src/traceFabric';
 import { deepClone } from '../src/deepClone';
 
-describe('isTracing', () => {
+describe('isTracing(...)', () => {
   test('should be true by default', () => {
     expect(isTracing()).toBe(true);
   });
 });
 
-describe('withoutTracing', () => {
+describe('withoutTracing(...)', () => {
   test('should disable tracing in the callback', () => {
     withoutTracing(() => {
       expect(isTracing()).toBe(false);
@@ -38,7 +38,7 @@ describe('withoutTracing', () => {
     expect(resultFunction).toBeFunction();
   });
 
-  test('should disable tracing for the tracedFabric values', () => {
+  test('should disable tracing', () => {
     const tracedObject = traceFabric({ objects: { a: 1, b: 2 } as any, arrays: [1, 2, 3] });
     const tracedArray = traceFabric([{ a: 1, b: 2 }, [1, 2, 3]] as any);
 
@@ -65,7 +65,7 @@ describe('withoutTracing', () => {
     expect(tracedArray.trace).toEqual([]);
   });
 
-  test('should not affect the value change', () => {
+  test('should not affect the traced values change', () => {
     const tracedObject = traceFabric({ objects: { a: 1, b: 2 } as any, arrays: [1, 2, 3] });
     const tracedArray = traceFabric([{ a: 1, b: 2 }, [1, 2, 3]] as any);
 
