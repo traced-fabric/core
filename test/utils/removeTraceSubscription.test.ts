@@ -16,7 +16,7 @@ describe('removeTraceSubscription(...)', () => {
     expect(deepClone(parent.value.array)).toEqual([1, 2, 3, 4, 5]);
     expect(parent.trace).toEqual([{
       mutated: EMutated.array,
-      targetChain: ['innerArray', 3],
+      targetChain: ['array', 3],
       type: EArrayMutation.set,
       value: 4,
     }]);
