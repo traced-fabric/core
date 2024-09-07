@@ -4,6 +4,7 @@ export * from './src/types/json';
 export * from './src/types/mutation';
 export * from './src/types/tracedFabric';
 
+export * from './src/utils/disableTracing';
 export * from './src/utils/isStructure';
 export * from './src/utils/isTraced';
 export * from './src/utils/iterableWeakMap';
