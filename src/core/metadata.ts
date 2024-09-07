@@ -1,14 +1,13 @@
 import type { JSONStructure } from '../types/json';
 import type { TTarget } from '../types/mutation';
+import { isTracedFabric } from '../utils/isTraced';
 
 export type TTracedValueMetadata = {
-  rootRef: JSONStructure;
   parentRef: JSONStructure;
   key: TTarget;
 };
 
 export type TWeakTracedValueMetadata = {
-  rootRef: WeakRef<JSONStructure>;
   parentRef: WeakRef<JSONStructure>;
   key: TTarget;
 };
@@ -31,19 +30,26 @@ export function getStrongMetadata(target: JSONStructure): TTracedValueMetadata |
   const metadata = getMetadata(target);
   if (!metadata) return;
 
-  const rootRef = metadata?.rootRef.deref();
-  const parentRef = metadata?.parentRef.deref();
-  if (!rootRef || !parentRef) return;
+  const parentRef = metadata.parentRef.deref();
+  if (!parentRef) return;
 
-  return { rootRef, parentRef, key: metadata.key };
+  return { parentRef, key: metadata.key };
 }
 
-export function setMetadata(target: JSONStructure, metadata: TTracedValueMetadata): void {
+export function setMetadata(target: JSONStructure, metadata: Required<TTracedValueMetadata>): void {
   tracedValuesMetadata.set(target, {
-    rootRef: new WeakRef(metadata.rootRef),
     parentRef: new WeakRef(metadata.parentRef),
     key: metadata.key,
   });
+}
+
+export function getRootRef(target: JSONStructure): JSONStructure | undefined {
+  if (isTracedFabric(target)) return target;
+
+  const metadata = getStrongMetadata(target);
+  if (!metadata) return undefined;
+
+  return getRootRef(metadata.parentRef);
 }
 
 export function getTargetChain(target: JSONStructure): TTarget[] {
