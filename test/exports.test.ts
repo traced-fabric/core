@@ -30,6 +30,10 @@ describe('index file should export', () => {
     expectType<TF.TTracedFabric<any>>();
   });
 
+  test('isTracingEnabled', () => expect(TF.isTracingEnabled).toBeDefined());
+  test('disableTracing', () => expect(TF.disableTracing).toBeDefined());
+  test('enableTracing', () => expect(TF.enableTracing).toBeDefined());
+
   test('isStructure', () => expect(TF.isStructure).toBeDefined());
   test('isTraced', () => expect(TF.isTraced).toBeDefined());
   test('iterableWeakMap', () => expect(TF.IterableWeakMap).toBeDefined());
