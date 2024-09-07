@@ -10,7 +10,6 @@ import { deepTrace } from './deepTrace';
 export function getTracedProxyObject<T extends JSONObject>(
   value: T,
   mutationCallback: TMutationCallback,
-  metadata?: TTracedValueMetadata,
 ): T {
   const mutated = EMutated.object;
 
@@ -18,11 +17,7 @@ export function getTracedProxyObject<T extends JSONObject>(
     set(target, key, value, receiver) {
       if (typeof key === 'symbol') return Reflect.set(target, key, value);
 
-      const childMetadata: TTracedValueMetadata = {
-        rootRef: metadata?.rootRef ?? receiver,
-        parentRef: receiver,
-        key,
-      };
+      const childMetadata: TTracedValueMetadata = { parentRef: receiver, key };
 
       // if the value that is overridden and it is a tracedFabric,
       // we should remove the subscriber from the old value
@@ -51,7 +46,6 @@ export function getTracedProxyObject<T extends JSONObject>(
 
       if (isStructure(target[key])) {
         removeNestedTracedSubscribers(target[key] as JSONStructure, {
-          rootRef: metadata?.rootRef ?? ref,
           parentRef: ref,
           key,
         });
