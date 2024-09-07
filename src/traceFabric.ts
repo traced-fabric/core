@@ -4,7 +4,6 @@ import type { TMutation, TMutationCallback } from './types/mutation';
 import { deepTrace } from './core/proxy/deepTrace';
 import { withoutTracing } from './utils/withoutTracing';
 import type { TOnMutation, TTracedFabric } from './types/tracedFabric';
-import { mutationCallbacks } from './core/mutationCallback';
 import { tracedFabricsTrace } from './core/traces';
 
 /**
@@ -74,9 +73,6 @@ export function traceFabric<
   };
 
   proxyRef = withoutTracing(() => deepTrace(value, mutationCallback));
-
-  tracedFabricsTrace.set(proxyRef, []);
-  mutationCallbacks.set(proxyRef, mutationCallback);
 
   return {
     value: proxyRef,
