@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.10.2
+
+### Patch Changes
+
+- 4ce7cb7: Fixed disableTracing.ts not being exported by the library
+
 ## 0.10.1
 
 ### Patch Changes
