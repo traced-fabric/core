@@ -4,6 +4,7 @@ import { type TTracedValueMetadata, setMetadata } from '../metadata';
 import { addTracedSubscriber } from '../subscribers';
 import { isStructure } from '../../utils/isStructure';
 import { isTracedFabric } from '../../utils/isTraced';
+import { isTracingEnabled } from '../../utils/disableTracing';
 import { getTracedProxyArray } from './getTracedArray';
 import { getTracedProxyObject } from './getTracedObject';
 
@@ -20,6 +21,9 @@ export function deepTrace<T extends JSONValue>(
 ): T {
   // if data type is common and not structure-like, return as is
   if (!isStructure(value)) return value;
+
+  // if the given value is already disabled for tracing, return as is
+  if (!isTracingEnabled(value)) return value;
 
   // if the given value is already traced (tracedFabric),
   // we should subscribe the current value to metadata root(tracedFabric)
