@@ -35,8 +35,14 @@ describe('index file should export', () => {
   test('enableTracing', () => expect(TF.enableTracing).toBeDefined());
 
   test('isStructure', () => expect(TF.isStructure).toBeDefined());
+
+  test('isTracedFabric', () => expect(TF.isTracedFabric).toBeDefined());
+  test('isTracedValue', () => expect(TF.isTracedValue).toBeDefined());
   test('isTraced', () => expect(TF.isTraced).toBeDefined());
+
   test('iterableWeakMap', () => expect(TF.IterableWeakMap).toBeDefined());
+
+  test('isTracing', () => expect(TF.isTracing).toBeDefined());
   test('withoutTracing', () => expect(TF.withoutTracing).toBeDefined());
 
   test('applyTrace', () => expect(TF.applyTrace).toBeDefined());
