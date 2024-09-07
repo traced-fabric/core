@@ -20,9 +20,9 @@ import { tracedFabricsTrace } from './core/traces';
  * @param {TOnMutation} [onMutation] a function that is triggered when the `traced` value is mutated. The function receives the `mutation` as an argument and should return the `mutation` to be saved to the `trace`. If no modification is needed, return the original mutation; otherwise, return the modified mutation for storage.
  *
  * @returns {TTracedFabric} Object with the following properties:
- * **value** - the `traced` proxy of the given **value**.
- * **trace** - the array of `mutations` that are made to the **value**.
- * **clearTrace** - a function that clears the trace.
+ * - **value** - the `traced` proxy of the given **value**.
+ * - **trace** - the array of `mutations` that are made to the **value**.
+ * - **clearTrace** - a function that clears the trace.
  *
  * @example
  * ```typescript
