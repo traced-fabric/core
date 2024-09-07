@@ -3,15 +3,15 @@ import type { TMutation } from '../types/mutation';
 import { isStructure } from '../utils/isStructure';
 import { isTracedFabric } from '../utils/isTraced';
 import { IterableWeakMap } from '../utils/iterableWeakMap';
-import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getStrongMetadata, getTargetChain } from './metadata';
+import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getRootRef, getStrongMetadata, getTargetChain } from './metadata';
 import { mutationCallbacks } from './mutationCallback';
 import { tracedFabricsTrace } from './traces';
 
 const tracedFabricSubscribers = new WeakMap<
   JSONStructure, // the sender of the updates (if update happen, this value will send the updates to receivers)
   IterableWeakMap<
-    TTracedValueMetadata['rootRef'], // receiver of the updates
-    Pick<TWeakTracedValueMetadata, 'key' | 'parentRef'>[] // set of childMetadata (the path to the sender in receiver's value)
+    JSONStructure, // receiver of the updates
+    TWeakTracedValueMetadata[] // set of childMetadata (the path to the sender in receiver's value)
   >
 >();
 
@@ -23,9 +23,10 @@ export function addTracedSubscriber(
     = tracedFabricSubscribers.get(changesSender)
     ?? tracedFabricSubscribers.set(changesSender, new IterableWeakMap()).get(changesSender)!;
 
-  const receiver
-    = subscribers.get(metadata.rootRef)
-    ?? subscribers.set(metadata.rootRef, []).get(metadata.rootRef)!;
+  const rootRef = getRootRef(metadata.parentRef);
+  if (!rootRef) return;
+
+  const receiver = subscribers.get(rootRef) ?? subscribers.set(rootRef, []).get(rootRef)!;
 
   receiver.push({ parentRef: new WeakRef(metadata.parentRef), key: metadata.key });
 }
@@ -75,7 +76,10 @@ export function removeTracedSubscriber(
   const subscribers = tracedFabricSubscribers.get(changesSender);
   if (!subscribers) return;
 
-  const receiver = subscribers.get(metadata.rootRef);
+  const rootRef = getRootRef(metadata.parentRef);
+  if (!rootRef) return;
+
+  const receiver = subscribers.get(rootRef);
   if (!receiver) return;
 
   const index = receiver.findIndex(m => m.key === metadata.key && m.parentRef.deref() === metadata.parentRef);
@@ -99,10 +103,8 @@ export function removeNestedTracedSubscribers(
 
     const childMetadata = getStrongMetadata(child);
 
-    if (childMetadata)
-      removeNestedTracedSubscribers(target, childMetadata);
-    else if (isTracedFabric(child))
-      removeTracedSubscriber(child, { rootRef: metadata.rootRef, parentRef: target, key: maybeIndex });
+    if (childMetadata) removeNestedTracedSubscribers(target, childMetadata);
+    else if (isTracedFabric(child)) removeTracedSubscriber(child, { parentRef: target, key: maybeIndex });
   }
 }
 
