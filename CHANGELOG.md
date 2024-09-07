@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- b9b2eea: Slightly reduced memory usage
+- Slightly reduced memory usage
 
 ## 0.10.0
 
