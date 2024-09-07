@@ -5,6 +5,8 @@ import { addTracedSubscriber } from '../subscribers';
 import { isStructure } from '../../utils/isStructure';
 import { isTracedFabric } from '../../utils/isTraced';
 import { isTracingEnabled } from '../../utils/disableTracing';
+import { tracedFabricsTrace } from '../traces';
+import { mutationCallbacks } from '../mutationCallback';
 import { getTracedProxyArray } from './getTracedArray';
 import { getTracedProxyObject } from './getTracedObject';
 
@@ -38,16 +40,21 @@ export function deepTrace<T extends JSONValue>(
   // 2. iterate over the object, to see if keys
   //    are also objects-like structures and trace them recursively
   const proxy = Array.isArray(value)
-    ? getTracedProxyArray(value, mutationCallback, metadata)
-    : getTracedProxyObject(value, mutationCallback, metadata);
+    ? getTracedProxyArray(value, mutationCallback)
+    : getTracedProxyObject(value, mutationCallback);
 
-  if (metadata) setMetadata(proxy, metadata);
+  if (metadata) {
+    setMetadata(proxy, metadata);
+  }
+  else {
+    tracedFabricsTrace.set(proxy, []);
+    mutationCallbacks.set(proxy, mutationCallback);
+  }
 
   for (const key in value) {
     if (!isStructure(value[key])) continue;
 
     (value[key] as JSONStructure) = deepTrace(value[key] as JSONStructure, mutationCallback, {
-      rootRef: metadata ? metadata.rootRef : proxy,
       parentRef: proxy,
       key: Number.isNaN(+key) ? key : +key,
     });
