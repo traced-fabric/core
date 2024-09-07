@@ -5,6 +5,7 @@ import { deepTrace } from './core/proxy/deepTrace';
 import { withoutTracing } from './utils/withoutTracing';
 import type { TOnMutation, TTracedFabric } from './types/tracedFabric';
 import { tracedFabricsTrace } from './core/traces';
+import { isTracingEnabled } from './utils/disableTracing';
 
 /**
  * Track the mutation of a given JSON-like object or array.
@@ -60,6 +61,8 @@ export function traceFabric<
   value: T,
   onMutation?: TOnMutation<_MUTATION>,
 ): TTracedFabric<T, _MUTATION> {
+  if (!isTracingEnabled(value)) throw new Error('Cannot create traceFabric when tracing is disabled.');
+
   let proxyRef: T;
 
   const trace = (): _MUTATION[] => tracedFabricsTrace.get(proxyRef)!;
