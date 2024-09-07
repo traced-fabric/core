@@ -2,10 +2,6 @@ import type { JSONStructure } from '../types/json';
 
 const disabledTracingSymbol = Symbol('disabledTracing');
 
-export type TDisabledTracingJSON<
-  T extends JSONStructure = JSONStructure,
-> = T & { [disabledTracingSymbol]: true };
-
 /**
  * Check if the given value has `tracing` disabled.
  *
@@ -27,16 +23,15 @@ export type TDisabledTracingJSON<
  *
  * @since 0.10.0
  */
-export function isTracingEnabled<T extends JSONStructure>(
-  value: T,
-): value is T extends TDisabledTracingJSON ? TDisabledTracingJSON<T> : T {
+export function isTracingEnabled<T extends JSONStructure>(value: T): boolean {
   return !(disabledTracingSymbol in value);
 }
 
 /**
  * Disable `tracing` for the given value.
  *
- * Primarily used for static values that should not be traced or modified.
+ * Primarily used for static values that should not be traced or modified,
+ * also to reduce memory usage and improve performance.
  * The value will be modifiable, but the `mutations` will not be recorded.
  *
  * @param value - the value to disable tracing.
@@ -57,7 +52,7 @@ export function isTracingEnabled<T extends JSONStructure>(
  *
  * @since 0.10.0
  */
-export function disableTracing<T extends JSONStructure>(value: T): TDisabledTracingJSON<T> {
+export function disableTracing<T extends JSONStructure>(value: T): T {
   (value as any)[disabledTracingSymbol] = true;
   return value as ReturnType<typeof disableTracing<T>>;
 }
