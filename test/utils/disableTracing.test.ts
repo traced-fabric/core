@@ -35,12 +35,6 @@ describe('isTracingEnabled(...)', () => {
     expect(isTracingEnabled(disabled)).toBe(false);
   });
 
-  test('returns false if given a disabled tracedFabric', () => {
-    const disabled = traceFabric(disableTracing({ a: 1, b: 2 }));
-
-    expect(isTracingEnabled(disabled.value)).toBe(false);
-  });
-
   test('returns false if given a disabled tracedValue', () => {
     const disabled = traceFabric({ tracingDisabled: disableTracing([1, 2, 3]) });
 
@@ -56,16 +50,8 @@ describe('disableTracing(...)', () => {
     expect(disableTracing(value)).toBe(value as any);
   });
 
-  test('not record mutations for tracedFabric', () => {
-    const traced = traceFabric(disableTracing({
-      name: 'not changed',
-      array: [1, 2, 3],
-    }));
-
-    traced.value.name = 'changed';
-    traced.value.array.push(4);
-
-    expect(traced.trace.length).toBe(0);
+  test('throw an error if passed to traceFabric(...)', () => {
+    expect(() => traceFabric(disableTracing({}))).toThrowError();
   });
 
   test('not record mutations for tracedValue', () => {
@@ -102,19 +88,6 @@ describe('enableTracing(...)', () => {
     const enabled = enableTracing(disabled);
 
     expect(isTracingEnabled(enabled)).toBe(true);
-  });
-
-  test('not record mutations for tracedFabric after disabling', () => {
-    const traced = traceFabric(disableTracing({
-      name: 'not changed',
-      array: [1, 2, 3],
-    }));
-    enableTracing(traced.value);
-
-    traced.value.name = 'changed';
-    traced.value.array.push(4);
-
-    expect(traced.trace.length).toBe(0);
   });
 
   test('not record mutations for tracedValue after disabling', () => {
