@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.10.3
+
+### Patch Changes
+
+- f3c28b9: Minor improvments (code refactoring)
+
 ## 0.10.2
 
 ### Patch Changes
