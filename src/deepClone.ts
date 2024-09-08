@@ -34,5 +34,5 @@ export function deepClone<T>(value: T): T {
   const newValue = (Array.isArray(value) ? [] : {}) as typeof value;
   for (const i in value) newValue[i] = isStructure(value[i]) ? deepClone(value[i]) : value[i];
 
-  return newValue as T;
+  return newValue;
 }

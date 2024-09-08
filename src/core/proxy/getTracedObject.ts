@@ -1,4 +1,4 @@
-import type { JSONObject, JSONStructure } from '../../types/json';
+import type { JSONObject } from '../../types/json';
 import { EMutated, EObjectMutation, type TMutationCallback } from '../../types/mutation';
 import { deepClone } from '../../deepClone';
 import { isTracing } from '../../utils/withoutTracing';
@@ -7,12 +7,12 @@ import { removeNestedTracedSubscribers } from '../subscribers';
 import { isStructure } from '../../utils/isStructure';
 import { deepTrace } from './deepTrace';
 
+const mutated = EMutated.object;
+
 export function getTracedProxyObject<T extends JSONObject>(
   value: T,
   mutationCallback: TMutationCallback,
 ): T {
-  const mutated = EMutated.object;
-
   const proxy = new WeakRef(new Proxy(value, {
     set(target, key, value, receiver) {
       if (typeof key === 'symbol') return Reflect.set(target, key, value);
@@ -21,8 +21,7 @@ export function getTracedProxyObject<T extends JSONObject>(
 
       // if the value that is overridden and it is a tracedFabric,
       // we should remove the subscriber from the old value
-      if (isStructure(target[key]))
-        removeNestedTracedSubscribers(target[key] as JSONStructure, childMetadata);
+      if (isStructure(target[key])) removeNestedTracedSubscribers(target[key], childMetadata);
 
       if (isTracing()) {
         mutationCallback({
@@ -33,9 +32,7 @@ export function getTracedProxyObject<T extends JSONObject>(
         });
       }
 
-      const proxy = deepTrace(value, mutationCallback, childMetadata);
-
-      return Reflect.set(target, key, proxy);
+      return Reflect.set(target, key, deepTrace(value, mutationCallback, childMetadata));
     },
 
     deleteProperty(target, key) {
@@ -44,12 +41,7 @@ export function getTracedProxyObject<T extends JSONObject>(
       const ref = proxy.deref();
       if (!ref) return Reflect.deleteProperty(target, key);
 
-      if (isStructure(target[key])) {
-        removeNestedTracedSubscribers(target[key] as JSONStructure, {
-          parentRef: ref,
-          key,
-        });
-      }
+      if (isStructure(target[key])) removeNestedTracedSubscribers(target[key], { parentRef: ref, key });
 
       if (isTracing()) {
         mutationCallback({

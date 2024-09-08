@@ -1,4 +1,4 @@
-import type { JSONArray, JSONStructure, JSONValue } from '../../types/json';
+import type { JSONArray, JSONValue } from '../../types/json';
 import { EArrayMutation, EMutated, type TMutationCallback } from '../../types/mutation';
 import { removeNestedTracedSubscribers } from '../subscribers';
 import { deepClone } from '../../deepClone';
@@ -7,12 +7,12 @@ import { isStructure } from '../../utils/isStructure';
 import { isTracing } from '../../utils/withoutTracing';
 import { deepTrace } from './deepTrace';
 
+const mutated = EMutated.array;
+
 export function getTracedProxyArray<T extends JSONArray>(
   value: T,
   mutationCallback: TMutationCallback,
 ): T {
-  const mutated = EMutated.array;
-
   const proxy = new WeakRef(new Proxy(value, {
     get(target, key, receiver) {
       if (key === EArrayMutation.push) {
@@ -55,9 +55,10 @@ export function getTracedProxyArray<T extends JSONArray>(
         // so if in the future we will reference them, the reference chain will be correct
         return () => {
           for (let i = 0; i < target.length; i++) {
-            if (!isStructure(target[i])) continue;
+            const item = target[i];
+            if (!isStructure(item)) continue;
 
-            const metadata = getMetadata(target[i] as JSONStructure);
+            const metadata = getMetadata(item);
             if (metadata) metadata.key = target.length - i - 1;
           }
 
@@ -87,9 +88,10 @@ export function getTracedProxyArray<T extends JSONArray>(
           // before unshifting we should update the target chain of all items
           // that are already nested in the array
           for (let i = 0; i < target.length; i++) {
-            if (!isStructure(target[i])) continue;
+            const item = target[i];
+            if (!isStructure(item)) continue;
 
-            const metadata = getMetadata(target[i] as JSONStructure);
+            const metadata = getMetadata(item);
             if (metadata) metadata.key = initialLength + i;
           }
 
@@ -112,8 +114,7 @@ export function getTracedProxyArray<T extends JSONArray>(
 
       // if the value that is overridden and it is a tracedFabric,
       // we should remove the subscriber from the old value
-      if (isStructure(target[index]))
-        removeNestedTracedSubscribers(target[index] as JSONStructure, childMetadata);
+      if (isStructure(target[index])) removeNestedTracedSubscribers(target[index], childMetadata);
 
       if (isTracing()) {
         mutationCallback({
@@ -124,9 +125,7 @@ export function getTracedProxyArray<T extends JSONArray>(
         });
       }
 
-      const childProxy = deepTrace(value, mutationCallback, childMetadata);
-
-      return Reflect.set(target, key, childProxy);
+      return Reflect.set(target, key, deepTrace(value, mutationCallback, childMetadata));
     },
 
     deleteProperty(target, key) {
@@ -140,7 +139,7 @@ export function getTracedProxyArray<T extends JSONArray>(
       if (!ref) return Reflect.deleteProperty(target, key);
 
       if (isStructure(target[index])) {
-        removeNestedTracedSubscribers(target[index] as JSONStructure, {
+        removeNestedTracedSubscribers(target[index], {
           parentRef: ref,
           key: index,
         });

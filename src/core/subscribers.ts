@@ -1,4 +1,4 @@
-import type { JSONStructure } from '../types/json';
+import type { JSONStructure, JSONValue } from '../types/json';
 import type { TMutation } from '../types/mutation';
 import { isStructure } from '../utils/isStructure';
 import { isTracedFabric } from '../utils/isTraced';
@@ -91,13 +91,14 @@ export function removeNestedTracedSubscribers(
   changesSender: JSONStructure,
   metadata: TTracedValueMetadata,
 ): void {
-  const target = (metadata.parentRef as any)[metadata.key] as JSONStructure;
+  const target = (metadata.parentRef as any)[metadata.key] as JSONValue | undefined;
+  if (!isStructure(target)) return;
 
   if (isTracedFabric(target)) return removeTracedSubscriber(changesSender, metadata);
 
   for (const key in target) {
     const maybeIndex = Number.isNaN(+key) ? key : +key;
-    const child = (target as any)[maybeIndex] as JSONStructure;
+    const child = (target as any)[maybeIndex] as JSONValue;
 
     if (!isStructure(child)) continue;
 
