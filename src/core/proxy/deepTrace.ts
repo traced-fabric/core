@@ -1,4 +1,4 @@
-import type { JSONStructure, JSONValue } from '../../types/json';
+import type { JSONValue } from '../../types/json';
 import type { TMutationCallback } from '../../types/mutation';
 import { type TTracedValueMetadata, setMetadata } from '../metadata';
 import { addTracedSubscriber } from '../subscribers';
@@ -54,10 +54,8 @@ export function deepTrace<T extends JSONValue>(
   for (const key in value) {
     if (!isStructure(value[key])) continue;
 
-    (value[key] as JSONStructure) = deepTrace(value[key] as JSONStructure, mutationCallback, {
-      parentRef: proxy,
-      key: Number.isNaN(+key) ? key : +key,
-    });
+    const maybeNumber = Number.isNaN(+key) ? key : +key;
+    value[key] = deepTrace(value[key], mutationCallback, { parentRef: proxy, key: maybeNumber });
   }
 
   return proxy as T;
