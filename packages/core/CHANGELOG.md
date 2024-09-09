@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 2ee6f45: @traced-fabric/core now is a monorepo
+- @traced-fabric/core now is a monorepo
 
 ## 0.10.3
 
