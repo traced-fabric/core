@@ -1,48 +1,11 @@
 {
-  "name": "@traced-fabric/core",
   "type": "module",
-  "version": "0.10.3",
-  "description": "A TypeScript-compatible JavaScript library for tracking and synchronizing value states across different environments.",
-  "author": "Andrey Kovyarov <andrey.kovyarov@gmail.com>",
-  "license": "MIT",
-  "homepage": "https://github.com/traced-fabric/core/wiki",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/traced-fabric/core.git"
-  },
-  "bugs": {
-    "url": "https://github.com/traced-fabric/core/issues",
-    "email": "andrey.kovyarov@gmail.com"
-  },
-  "keywords": [
-    "javascript",
-    "typescript",
-    "traced-fabric-core",
-    "value-tracking",
-    "state-sync",
-    "data-proxy",
-    "trace-sync",
-    "websockets-data",
-    "traceable-objects",
-    "data-mirroring",
-    "complex-data-tracking",
-    "value-state-management"
-  ],
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist/**/*",
-    "index.ts",
-    "src/**/*"
-  ],
   "scripts": {
+    "build": "bun run --filter '*' build",
     "lint": "eslint --cache . && tsc --noEmit",
     "test": "bun test",
     "coverage": "bun test --coverage",
-    "build": "bunx --bun vite build",
-    "prepare": "husky",
-    "release": "bun run build && changeset publish"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.27.1",
@@ -61,5 +24,8 @@
     "*": [
       "eslint --cache --fix"
     ]
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
