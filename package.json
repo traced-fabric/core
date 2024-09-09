@@ -5,7 +5,8 @@
     "lint": "eslint --cache . && tsc --noEmit",
     "test": "bun test",
     "coverage": "bun test --coverage",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "bun run build && changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.27.3",
