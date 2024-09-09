@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.10.5
+
+### Patch Changes
+
+- 37a2c00: Updated Readme to include license
+
 ## 0.10.4
 
 ### Patch Changes
