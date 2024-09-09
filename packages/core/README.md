@@ -28,3 +28,7 @@ The trace serves as a log of changes for the tracked value. You can then apply t
 [🧰 Essentials | **Types**](https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Types) - see what types are exported by this package.
 
 [🧰 Essentials | **Package exports**](https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports) - see what package exports.
+
+## License
+
+[MIT License](https://github.com/traced-fabric/core/blob/main/LICENCE)
