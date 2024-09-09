@@ -36,7 +36,6 @@
     "src/**/*"
   ],
   "scripts": {
-    "build": "bunx --bun vite build --config ../../vite.config.ts",
-    "release": "bun run build && changeset publish"
+    "build": "bunx --bun vite build --config ../../vite.config.ts"
   }
 }
