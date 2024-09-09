@@ -1,21 +1,28 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
-export default defineConfig({
-  plugins: [
-    dts({
-      tsconfigPath: './tsconfig.build.json',
-    }),
-  ],
+export default function defineBuildConfig(options: {
+  packageExtension: string;
+}): ReturnType<typeof defineConfig> {
+  const packagePath = `/packages/${options.packageExtension}`;
 
-  build: {
-    lib: {
-      name: '@traced-fabric/core',
-      fileName: 'index',
-      entry: Bun.resolveSync(__dirname, 'index.ts'),
+  return defineConfig({
+    plugins: [
+      dts({
+        tsconfigPath: '../../tsconfig.base.json',
+        include: ['src', 'index.ts'],
+      }),
+    ],
+
+    build: {
+      lib: {
+        name: `@traced-fabric/${options.packageExtension}`,
+        fileName: 'index',
+        entry: Bun.resolveSync(__dirname.concat(packagePath), 'index.ts'),
+      },
+
+      minify: false,
+      sourcemap: true,
     },
-
-    minify: false,
-    sourcemap: true,
-  },
-});
+  });
+}
