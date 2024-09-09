@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
-export default function defineBuildConfig(options: {
-  packageExtension: string;
-}): ReturnType<typeof defineConfig> {
-  const packagePath = `/packages/${options.packageExtension}`;
+export default function defineBuildConfig(): ReturnType<typeof defineConfig> {
+  const packageExtension = __dirname.split('/').pop();
+
+  const packageName = `@traced-fabric/${packageExtension}`;
+  const packagePath = __dirname.concat(`/packages/${packageExtension}`);
 
   return defineConfig({
     plugins: [
@@ -16,9 +17,9 @@ export default function defineBuildConfig(options: {
 
     build: {
       lib: {
-        name: `@traced-fabric/${options.packageExtension}`,
+        name: packageName,
         fileName: 'index',
-        entry: Bun.resolveSync(__dirname.concat(packagePath), 'index.ts'),
+        entry: Bun.resolveSync(packagePath, 'index.ts'),
       },
 
       minify: false,
