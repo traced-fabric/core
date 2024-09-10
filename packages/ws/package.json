@@ -1,0 +1,42 @@
+{
+  "name": "@traced-fabric/ws",
+  "type": "module",
+  "version": "0.0.2",
+  "author": "Andrey Kovyarov",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/traced-fabric/ws.git"
+  },
+  "bugs": {
+    "url": "https://github.com/traced-fabric/core/issues"
+  },
+  "keywords": [
+    "javascript",
+    "typescript",
+    "traced-fabric-core",
+    "value-tracking",
+    "state-sync",
+    "data-proxy",
+    "trace-sync",
+    "websockets-data",
+    "traceable-objects",
+    "data-mirroring",
+    "complex-data-tracking",
+    "value-state-management"
+  ],
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "index.ts",
+    "src/**/*"
+  ],
+  "scripts": {
+    "build": "bunx --bun vite build --config ../../vite.config.ts"
+  },
+  "dependencies": {
+    "@traced-fabric/core": "^0.9.0"
+  }
+}
