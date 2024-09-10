@@ -1,15 +1,14 @@
-/* eslint-disable node/prefer-global/process */
+// eslint-disable-next-line ts/ban-ts-comment
+// @ts-ignore
+import process from 'node:process';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
 export default function defineBuildConfig(): ReturnType<typeof defineConfig> {
-  const packageExtension = process.cwd().split('/').pop();
-
-  // eslint-disable-next-line no-console
-  console.log(packageExtension);
+  const packagePath = process.cwd();
+  const packageExtension = packagePath.split('/').pop();
 
   const packageName = `@traced-fabric/${packageExtension}`;
-  const packagePath = __dirname.concat(`/packages/${packageExtension}`);
 
   return defineConfig({
     plugins: [
