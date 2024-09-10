@@ -4,9 +4,9 @@
 
 ### Minor Changes
 
-- 9219b33: #### ⚠️ Changes
+#### ⚠️ Changes
 
-  - To use `@traced-fabric/ws` you need to install `@traced-fabric/core` as well.
+- To use `@traced-fabric/ws` you need to install `@traced-fabric/core` as well.
 
 ## 0.1.0
 
