@@ -1,8 +1,9 @@
+/* eslint-disable node/prefer-global/process */
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
 export default function defineBuildConfig(): ReturnType<typeof defineConfig> {
-  const packageExtension = __dirname.split('/').pop();
+  const packageExtension = process.cwd().split('/').pop();
 
   const packageName = `@traced-fabric/${packageExtension}`;
   const packagePath = __dirname.concat(`/packages/${packageExtension}`);
