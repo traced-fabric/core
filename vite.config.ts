@@ -5,6 +5,9 @@ import dts from 'vite-plugin-dts';
 export default function defineBuildConfig(): ReturnType<typeof defineConfig> {
   const packageExtension = process.cwd().split('/').pop();
 
+  // eslint-disable-next-line no-console
+  console.log(packageExtension);
+
   const packageName = `@traced-fabric/${packageExtension}`;
   const packagePath = __dirname.concat(`/packages/${packageExtension}`);
 
