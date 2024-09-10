@@ -34,7 +34,7 @@
     "src/**/*"
   ],
   "scripts": {
-    "build": "bunx --bun vite build --config ../../vite.config.ts"
+    "build": "bunx --bun vite build --config ./vite.config.ts"
   },
   "devDependencies": {
     "@traced-fabric/core": "workspace:*"
