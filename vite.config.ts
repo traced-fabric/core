@@ -1,14 +1,16 @@
-// eslint-disable-next-line ts/ban-ts-comment
-// @ts-ignore
-import process from 'node:process';
+import type { UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
-export default function defineBuildConfig(): ReturnType<typeof defineConfig> {
+export default function defineBuildConfig(options: {
+  externals?: UserConfig['build']['rollupOptions']['external'];
+}): ReturnType<typeof defineConfig> {
+  // eslint-disable-next-line node/prefer-global/process
   const packagePath = process.cwd();
   const packageExtension = packagePath.split('/').pop();
 
   const packageName = `@traced-fabric/${packageExtension}`;
+  const packageEntry = Bun.resolveSync(packagePath, 'index.ts');
 
   return defineConfig({
     plugins: [
@@ -22,11 +24,15 @@ export default function defineBuildConfig(): ReturnType<typeof defineConfig> {
       lib: {
         name: packageName,
         fileName: 'index',
-        entry: Bun.resolveSync(packagePath, 'index.ts'),
+        entry: packageEntry,
       },
 
       minify: false,
       sourcemap: true,
+
+      rollupOptions: {
+        external: options.externals,
+      },
     },
   });
 }
