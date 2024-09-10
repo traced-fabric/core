@@ -2,7 +2,10 @@
   "$schema": "https://unpkg.com/@changesets/config@3.0.2/schema.json",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "fixed": [],
+  "fixed": [[
+    "@traced-fabric/core",
+    "@traced-fabric/ws"
+  ]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
