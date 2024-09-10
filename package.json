@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "build": "bun run --filter '*' build",
+    "build": "bun run --filter './packages/*' build",
     "lint": "eslint --cache . && tsc --noEmit",
     "test": "bun test",
     "coverage": "bun test --coverage",
