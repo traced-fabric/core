@@ -23,3 +23,7 @@ The following examples will show hot to build a simple chat application.
 
 * **Bun** - [doc/usage.bun.md](https://github.com/traced-fabric/core/blob/main/packages/ws/doc/usage.bun.md)
 * **Node.js** with **WS** package - [doc/usage.node.md](https://github.com/traced-fabric/core/blob/main/packages/ws/doc/usage.node.md)
+
+## License
+
+[MIT License](https://github.com/traced-fabric/core/blob/main/LICENCE)
