@@ -17,9 +17,9 @@ The following examples will show hot to build a simple chat application.
 
 ### Client
 
-* **Browser** - [doc/client.md](https://github.com/traced-fabric/ws/blob/main/doc/client.md)
+* **Browser** - [doc/client.md](https://github.com/traced-fabric/core/blob/main/packages/ws/doc/client.md)
 
 ### Server
 
-* **Bun** - [doc/usage.bun.md](https://github.com/traced-fabric/ws/blob/main/doc/usage.bun.md)
-* **Node.js** with **WS** package - [doc/usage.node.md](https://github.com/traced-fabric/ws/blob/main/doc/usage.node.md)
+* **Bun** - [doc/usage.bun.md](https://github.com/traced-fabric/core/blob/main/packages/ws/doc/usage.bun.md)
+* **Node.js** with **WS** package - [doc/usage.node.md](https://github.com/traced-fabric/core/blob/main/packages/ws/doc/usage.node.md)
