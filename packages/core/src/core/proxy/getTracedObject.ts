@@ -6,6 +6,7 @@ import { type TTracedValueMetadata, getTargetChain } from '../metadata';
 import { removeNestedTracedSubscribers } from '../subscribers';
 import { isStructure } from '../../utils/isStructure';
 import { deepTrace } from './deepTrace';
+import { reflect } from './reflect';
 
 const mutated = EMutated.object;
 
@@ -15,7 +16,7 @@ export function getTracedProxyObject<T extends JSONObject>(
 ): T {
   const proxy = new WeakRef(new Proxy(value, {
     set(target, key, value, receiver) {
-      if (typeof key === 'symbol') return Reflect.set(target, key, value);
+      if (typeof key === 'symbol') return reflect.set(target, key, value);
 
       const childMetadata: TTracedValueMetadata = { parentRef: receiver, key };
 
@@ -32,14 +33,14 @@ export function getTracedProxyObject<T extends JSONObject>(
         });
       }
 
-      return Reflect.set(target, key, deepTrace(value, mutationCallback, childMetadata));
+      return reflect.set(target, key, deepTrace(value, mutationCallback, childMetadata));
     },
 
     deleteProperty(target, key) {
-      if (typeof key === 'symbol') return Reflect.set(target, key, value);
+      if (typeof key === 'symbol') return reflect.set(target, key, value);
 
       const ref = proxy.deref();
-      if (!ref) return Reflect.deleteProperty(target, key);
+      if (!ref) return reflect.deleteProperty(target, key);
 
       if (isStructure(target[key])) removeNestedTracedSubscribers(target[key], { parentRef: ref, key });
 
@@ -51,7 +52,7 @@ export function getTracedProxyObject<T extends JSONObject>(
         });
       }
 
-      return Reflect.deleteProperty(target, key);
+      return reflect.deleteProperty(target, key);
     },
   }));
 
