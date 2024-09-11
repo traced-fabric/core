@@ -6,6 +6,7 @@ import { type TTracedValueMetadata, getMetadata, getTargetChain } from '../metad
 import { isStructure } from '../../utils/isStructure';
 import { isTracing } from '../../utils/withoutTracing';
 import { deepTrace } from './deepTrace';
+import { reflect } from './reflect';
 
 const mutated = EMutated.array;
 
@@ -42,7 +43,7 @@ export function getTracedProxyArray<T extends JSONArray>(
             }
           }
 
-          return Reflect.apply(target.push, target, tracedArgs);
+          return reflect.apply(target.push, target, tracedArgs);
         };
       }
 
@@ -64,7 +65,7 @@ export function getTracedProxyArray<T extends JSONArray>(
 
           if (isTracing()) mutationCallback({ mutated, targetChain: getTargetChain(receiver), type: key });
 
-          return Reflect.apply(target[key], target, []);
+          return reflect.apply(target[key], target, []);
         };
       }
 
@@ -95,20 +96,20 @@ export function getTracedProxyArray<T extends JSONArray>(
             if (metadata) metadata.key = initialLength + i;
           }
 
-          return Reflect.apply(target.unshift, target, tracedArgs);
+          return reflect.apply(target.unshift, target, tracedArgs);
         };
       }
 
-      return Reflect.get(target, key);
+      return reflect.get(target, key);
     },
 
     set(target, key, value, receiver) {
-      if (typeof key === 'symbol') return Reflect.set(target, key, value);
+      if (typeof key === 'symbol') return reflect.set(target, key, value);
 
       const index = +key;
 
       // ignoring non-integer keys (for example 'length')
-      if (Number.isNaN(index)) return Reflect.set(target, key, value);
+      if (Number.isNaN(index)) return reflect.set(target, key, value);
 
       const childMetadata: TTracedValueMetadata = { parentRef: receiver, key: index };
 
@@ -125,18 +126,18 @@ export function getTracedProxyArray<T extends JSONArray>(
         });
       }
 
-      return Reflect.set(target, key, deepTrace(value, mutationCallback, childMetadata));
+      return reflect.set(target, key, deepTrace(value, mutationCallback, childMetadata));
     },
 
     deleteProperty(target, key) {
-      if (typeof key === 'symbol') return Reflect.set(target, key, value);
+      if (typeof key === 'symbol') return reflect.set(target, key, value);
 
       const index = +key;
 
-      if (Number.isNaN(index)) return Reflect.deleteProperty(target, key);
+      if (Number.isNaN(index)) return reflect.deleteProperty(target, key);
 
       const ref = proxy.deref();
-      if (!ref) return Reflect.deleteProperty(target, key);
+      if (!ref) return reflect.deleteProperty(target, key);
 
       if (isStructure(target[index])) {
         removeNestedTracedSubscribers(target[index], {
@@ -153,7 +154,7 @@ export function getTracedProxyArray<T extends JSONArray>(
         });
       }
 
-      return Reflect.deleteProperty(target, key);
+      return reflect.deleteProperty(target, key);
     },
   }));
 
