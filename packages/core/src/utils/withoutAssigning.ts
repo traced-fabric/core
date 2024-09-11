@@ -1,6 +1,6 @@
 let allowAssigning = true;
 
-export function isTracing(): boolean {
+export function isAssigning(): boolean {
   return !!allowAssigning;
 }
 
