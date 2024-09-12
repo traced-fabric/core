@@ -65,7 +65,7 @@ describe('withoutTracing(...)', () => {
     expect(tracedArray.trace).toEqual([]);
   });
 
-  test('should not affect the traced values change', () => {
+  test('should not affect assignment', () => {
     const tracedObject = traceFabric({ objects: { a: 1, b: 2 } as any, arrays: [1, 2, 3] });
     const tracedArray = traceFabric([{ a: 1, b: 2 }, [1, 2, 3]] as any);
 
