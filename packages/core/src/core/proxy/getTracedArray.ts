@@ -100,7 +100,7 @@ export function getTracedProxyArray<T extends JSONArray>(
         };
       }
 
-      return reflect.get(target, key);
+      return Reflect.get(target, key);
     },
 
     set(target, key, value, receiver) {
