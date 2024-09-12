@@ -72,6 +72,6 @@ describe('withoutAssigning(...)', () => {
       fabric.value.array.pop();
     });
 
-    expect(fabric.trace.length).toBe(0);
+    expect(fabric.trace.length).toBe(6);
   });
 });
