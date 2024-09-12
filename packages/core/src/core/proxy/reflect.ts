@@ -7,7 +7,7 @@ export const reflect = new Proxy(Reflect, {
     if (typeof target[key] === 'function') {
       return (...args: any[]) => {
         if (isAssigning()) return (Reflect as any)[key](...args);
-        return false;
+        return true;
       };
     }
 
