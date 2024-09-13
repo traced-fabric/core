@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress';
 export default defineConfig({
   title: 'Traced Fabric',
   description: 'Traced Fabric description ?',
+  base: '/traced-fabric/core/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
