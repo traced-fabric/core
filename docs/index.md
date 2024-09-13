@@ -4,21 +4,9 @@ layout: home
 
 hero:
   name: "Traced Fabric"
-  text: "Traced Fabric description ?"
-  tagline: My great project tagline
+  tagline: JavaScript library for tracking and synchronizing value states across different environments in real time.
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+      text: Get Started
+      link: /gettingStarted/introduction
 ---
