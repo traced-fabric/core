@@ -13,10 +13,24 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Examples',
+        text: 'Getting Started',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' },
+          { text: '🔮 Introduction', link: '/gettingStarted/introduction' },
+          { text: '📦 Installation', link: '/gettingStarted/installation' },
+        ],
+      },
+      {
+        text: 'Core Functionality',
+        items: [
+          { text: '🔧 traceFabric(...)', link: '/coreFunctionality/traceFabric' },
+          { text: '🔧 applyTrace(...)', link: '/coreFunctionality/applyTrace' },
+          { text: '🔧 deepClone(...)', link: '/coreFunctionality/deepClone' },
+        ],
+      },
+      {
+        text: 'Examples & Quickstarts',
+        items: [
+          { text: '🚀 WebSockets + Bun', link: '/examples/webSocket&Bun' },
         ],
       },
     ],
