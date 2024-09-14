@@ -21,7 +21,7 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Core Functions',
+        text: '🧰 Core Functions',
         items: [
           { text: '🔧 traceFabric(...)', link: '/coreFunctions/traceFabric' },
           { text: '🔧 applyTrace(...)', link: '/coreFunctions/applyTrace' },
@@ -29,14 +29,14 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Utility Functions',
+        text: '🧰 Utility Functions',
         items: [
-          { text: 'disableTracing(...)', link: '/utils/disableTracing' },
-          { text: 'isStructure(...)', link: '/utils/isStructure' },
-          { text: 'isTraced(...)', link: '/utils/isTraced' },
-          { text: 'iterableWeakMap(...)', link: '/utils/iterableWeakMap' },
-          { text: 'withoutAssigning(...)', link: '/utils/withoutAssigning' },
-          { text: 'withoutTracing(...)', link: '/utils/withoutTracing' },
+          { text: '🔧 disableTracing(...)', link: '/utilityFunctions/disableTracing' },
+          { text: '🔧 isStructure(...)', link: '/utilityFunctions/isStructure' },
+          { text: '🔧 isTraced(...)', link: '/utilityFunctions/isTraced' },
+          { text: '🔧 iterableWeakMap(...)', link: '/utilityFunctions/iterableWeakMap' },
+          { text: '🔧 withoutAssigning(...)', link: '/utilityFunctions/withoutAssigning' },
+          { text: '🔧 withoutTracing(...)', link: '/utilityFunctions/withoutTracing' },
         ],
       },
       {
