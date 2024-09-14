@@ -18,6 +18,7 @@ export default defineConfig({
         items: [
           { text: '🔮 Introduction', link: '/gettingStarted/introduction' },
           { text: '📦 Installation', link: '/gettingStarted/installation' },
+          { text: '📜 Naming', link: '/gettingStarted/naming' },
         ],
       },
       {
@@ -31,11 +32,8 @@ export default defineConfig({
       {
         text: '🧰 Utility Functions',
         items: [
-          { text: '🔧 disableTracing(...)', link: '/utilityFunctions/disableTracing' },
           { text: '🔧 isStructure(...)', link: '/utilityFunctions/isStructure' },
           { text: '🔧 isTraced(...)', link: '/utilityFunctions/isTraced' },
-          { text: '🔧 iterableWeakMap(...)', link: '/utilityFunctions/iterableWeakMap' },
-          { text: '🔧 withoutAssigning(...)', link: '/utilityFunctions/withoutAssigning' },
           { text: '🔧 withoutTracing(...)', link: '/utilityFunctions/withoutTracing' },
         ],
       },
