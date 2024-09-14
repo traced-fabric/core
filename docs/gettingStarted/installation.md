@@ -4,19 +4,19 @@ outline: deep
 
 # 📦 Installation
 
-#### Npm
+## Npm
 
 ```bash
 npm install @traced-fabric/core
 ```
 
-#### Yarn
+## Yarn
 
 ```bash
 yarn add @traced-fabric/core
 ```
 
-#### Bun
+## Bun
 
 ```bash
 bun add @traced-fabric/core
