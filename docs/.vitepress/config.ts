@@ -29,6 +29,17 @@ export default defineConfig({
         ],
       },
       {
+        text: 'Utility Functions',
+        items: [
+          { text: 'disableTracing(...)', link: '/utils/disableTracing' },
+          { text: 'isStructure(...)', link: '/utils/isStructure' },
+          { text: 'isTraced(...)', link: '/utils/isTraced' },
+          { text: 'iterableWeakMap(...)', link: '/utils/iterableWeakMap' },
+          { text: 'withoutAssigning(...)', link: '/utils/withoutAssigning' },
+          { text: 'withoutTracing(...)', link: '/utils/withoutTracing' },
+        ],
+      },
+      {
         text: 'Examples & Quickstarts',
         items: [
           { text: '🚀 WebSockets + Bun', link: '/examples/webSocket&Bun' },
