@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # 🚀 WebSockets Client + Bun Server
 
 This example demonstrates how to create and synchronize data between a web client and a server built with Bun.

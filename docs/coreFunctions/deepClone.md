@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # 🔧 `deepClone(...)`
 
 Deep clone an object or array.
