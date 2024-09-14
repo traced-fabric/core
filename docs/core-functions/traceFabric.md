@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# 🔧 `traceFabric(...)`
+# traceFabric
 
 Track the mutation of a given JSON-like object or array. Other `tracedFabric` can be nested inside.
 

@@ -16,31 +16,38 @@ export default defineConfig({
       {
         text: 'Getting Started',
         items: [
-          { text: '🔮 Introduction', link: '/gettingStarted/introduction' },
-          { text: '📦 Installation', link: '/gettingStarted/installation' },
-          { text: '📜 Naming', link: '/gettingStarted/naming' },
+          { text: '🔮 Introduction', link: '/getting-started/introduction' },
+          { text: '📦 Installation', link: '/getting-started/installation' },
+          { text: '📜 Naming', link: '/getting-started/naming' },
         ],
       },
       {
         text: '🧰 Core Functions',
         items: [
-          { text: '🔧 traceFabric(...)', link: '/coreFunctions/traceFabric' },
-          { text: '🔧 applyTrace(...)', link: '/coreFunctions/applyTrace' },
-          { text: '🔧 deepClone(...)', link: '/coreFunctions/deepClone' },
+          { text: 'traceFabric', link: '/core-functions/traceFabric' },
+          { text: 'applyTrace', link: '/core-functions/applyTrace' },
+          { text: 'deepClone', link: '/core-functions/deepClone' },
         ],
       },
       {
-        text: '🧰 Utility Functions',
+        text: 'Check if value traced',
         items: [
-          { text: '🔧 isStructure(...)', link: '/utilityFunctions/isStructure' },
-          { text: '🔧 isTraced(...)', link: '/utilityFunctions/isTraced' },
-          { text: '🔧 withoutTracing(...)', link: '/utilityFunctions/withoutTracing' },
+          { text: 'isTraced', link: '/check-if-value-traced/isTraced' },
+          { text: 'isTracedFabric', link: '/check-if-value-traced/isTracedFabric' },
+          { text: 'isTracedValue', link: '/check-if-value-traced/isTracedValue' },
         ],
       },
       {
-        text: 'Examples & Quickstarts',
+        text: 'Ignore tracing',
         items: [
-          { text: '🚀 WebSockets + Bun', link: '/examples/webSocket&Bun' },
+          { text: 'isTracing', link: '/ignore-tracing/isTracing' },
+          { text: 'withoutTracing', link: '/ignore-tracing/withoutTracing' },
+        ],
+      },
+      {
+        text: '🚀 Examples & Quickstarts',
+        items: [
+          { text: 'WebSockets + Bun', link: '/examples/webSocket&Bun' },
         ],
       },
     ],
