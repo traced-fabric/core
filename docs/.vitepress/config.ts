@@ -21,11 +21,11 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Core Functionality',
+        text: 'Core Functions',
         items: [
-          { text: '🔧 traceFabric(...)', link: '/coreFunctionality/traceFabric' },
-          { text: '🔧 applyTrace(...)', link: '/coreFunctionality/applyTrace' },
-          { text: '🔧 deepClone(...)', link: '/coreFunctionality/deepClone' },
+          { text: '🔧 traceFabric(...)', link: '/coreFunctions/traceFabric' },
+          { text: '🔧 applyTrace(...)', link: '/coreFunctions/applyTrace' },
+          { text: '🔧 deepClone(...)', link: '/coreFunctions/deepClone' },
         ],
       },
       {
