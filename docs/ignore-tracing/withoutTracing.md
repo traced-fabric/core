@@ -2,9 +2,7 @@
 outline: deep
 ---
 
-# Set of: `withoutTracing(...)` `isTracing(...)`
-
-## 🪛 `withoutTracing(...)`
+# withoutTracing
 
 Ignores recording of all `mutations` to `trace` in the given function.
 The function should not be async, as it turns off the tracing globally.
@@ -37,23 +35,4 @@ console.log(fabric.trace);
 //   value: "spring",
 //   type: "set",
 // }]
-```
-
-## 🪛 `isTracing(...)`
-
-Check if tracing is enabled.
-If the tracing is enabled, the `mutations` are recorded in the `trace`.
-
-## Returns
-
-`Boolean`
-
-## Example
-
-```typescript
-console.log(isTracing()); // true
-
-withoutTracing(() => {
-  console.log(isTracing()); // false
-});
 ```

@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# 🔧 `applyTrace(...)`
+# applyTrace
 
 Applies `tracedFabric` `mutations` to the given value. The value should have the same state as the `traceFabric` value before allied mutations.
 

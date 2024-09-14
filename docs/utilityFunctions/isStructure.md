@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# 🪛 `isStructure(...)`
+# isStructure
 
 Checks if the value is a typeof `object` and not `null`.
 

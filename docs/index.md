@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /gettingStarted/introduction
+      link: /getting-started/introduction
 ---
 
 ```
