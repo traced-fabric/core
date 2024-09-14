@@ -10,3 +10,14 @@ hero:
       text: Get Started
       link: /gettingStarted/introduction
 ---
+
+```
+ -----
+< wTF? >
+ -----
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
