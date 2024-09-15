@@ -53,6 +53,13 @@ export default defineConfig({
             { text: 'isStructure', link: '/is-value-a-structure/isStructure' },
           ],
         }, {
+          text: 'Disable tracing',
+          items: [
+            { text: 'isTracingEnabled', link: '/disable-tracing/isTracingEnabled' },
+            { text: 'disableTracing', link: '/disable-tracing/disableTracing' },
+            { text: 'enableTracing', link: '/disable-tracing/enableTracing' },
+          ],
+        }, {
           text: 'Ignore tracing',
           items: [
             { text: 'isTracing', link: '/ignore-tracing/isTracing' },
