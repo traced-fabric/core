@@ -3,10 +3,10 @@ import type { JSONStructure } from '../types/json';
 const disabledTracingSymbol = Symbol('disabledTracing');
 
 /**
- * Check if the given value has `tracing` disabled.
+ * Check if the given value has `tracing` enabled.
  *
  * @param value - the value to check.
- * @returns `true` if the value is disabled for tracing, `false` otherwise.
+ * @returns `true` if the value is enabled for tracing, `false` otherwise.
  *
  * @example
  * ```typescript
@@ -62,10 +62,10 @@ export function disableTracing<T extends JSONStructure>(value: T): T {
  *
  * [!NOTE] This function will not enable `mutations` recording for the value that is
  * already part of the `tracedFabric`, because it was not processed to be a `tracedValue`.
- * To do so, please use this method:
+ * To do so, please use this approach:
  * ```typescript
  * withoutTracing(() => {
- *   fabric.value.untracedArray = enableTracing(fabric.value.untracedArray));
+ *   fabric.value.untracedArray = enableTracing(fabric.value.untracedArray);
  * });
  * ```
  *
@@ -83,7 +83,7 @@ export function disableTracing<T extends JSONStructure>(value: T): T {
  * console.log(isTracingEnabled(fabric.value.untracedArray)); // false;
  *
  * withoutTracing(() => {
- *   fabric.value.untracedArray = enableTracing(fabric.value.untracedArray));
+ *   fabric.value.untracedArray = enableTracing(fabric.value.untracedArray);
  * });
  *
  * console.log(isTracingEnabled(fabric.value.untracedArray)); // true;
