@@ -9,8 +9,12 @@ export default defineConfig({
 
   base: '/core/',
 
+  head: [
+    ['link', { rel: 'icon', href: '../TF_logo.svg' }],
+  ],
+
   themeConfig: {
-    logo: 'TF_logo.svg',
+    logo: '../TF_logo.svg',
 
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -53,6 +57,12 @@ export default defineConfig({
           items: [
             { text: 'isTracing', link: '/ignore-tracing/isTracing' },
             { text: 'withoutTracing', link: '/ignore-tracing/withoutTracing' },
+          ],
+        }, {
+          text: 'Ignore assigning',
+          items: [
+            { text: 'isAssigning', link: '/ignore-assigning/isAssigning' },
+            { text: 'withoutAssigning', link: '/ignore-assigning/withoutAssigning' },
           ],
         }],
       },
