@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.12.1
+
+### Patch Changes
+
+- 1032378: Updated JSDoc
+
 ## 0.12.0
 
 ### Minor Changes
