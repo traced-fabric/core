@@ -87,7 +87,6 @@ export default defineConfig({
 
     editLink: {
       pattern: ({ filePath }) => {
-        // https://github.com/traced-fabric/core/edit/main/docs/coreFunctionality/deepClone.md
         return `https://github.com/traced-fabric/core/edit/main/docs/${filePath}`;
       },
     },
