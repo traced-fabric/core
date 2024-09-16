@@ -1,9 +1,5 @@
 # @traced-fabric/ws
 
-## 0.12.2
-
-## 0.12.1
-
 ## 0.11.0
 
 ### Minor Changes
