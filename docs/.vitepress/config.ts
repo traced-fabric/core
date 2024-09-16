@@ -10,11 +10,14 @@ export default defineConfig({
   base: '/core/',
 
   head: [
-    ['link', { rel: 'icon', href: '../TF_logo.svg' }],
+    ['link', { rel: 'icon', href: '/core/TF_logo_dark.ico' }],
   ],
 
   themeConfig: {
-    logo: '../TF_logo.svg',
+    logo: {
+      dark: '/TF_logo_dark.svg',
+      light: '/TF_logo_light.svg',
+    },
 
     // https://vitepress.dev/reference/default-theme-config
     nav: [
