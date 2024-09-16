@@ -14,7 +14,7 @@ import { isTracingEnabled } from './utils/disableTracing';
  * The `trace` (array of `mutations`), that is produced by the `tracedFabric` on values mutation,
  * can be used to apply them to other objects or arrays, using the `applyTrace(...)` function.
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-tracefabric Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/core-functions/traceFabric.html Wiki page.}
  *
  * @param {JSONStructure} value an object or array that will be deeply tracked. Value is JSON.stringify safe. The type of the value should be the same as JSONStructure.
  * @param {TOnMutation} [onMutation] a function that is triggered when the `traced` value is mutated. The function receives the `mutation` as an argument and should return the `mutation` to be saved to the `trace`. If no modification is needed, return the original mutation; otherwise, return the modified mutation for storage.

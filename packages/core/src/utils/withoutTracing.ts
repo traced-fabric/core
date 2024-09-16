@@ -14,7 +14,7 @@ let allowTracing = true;
  * });
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-istracing Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/ignore-tracing/isTracing.html Wiki page.}
  *
  * @since 0.2.0
  */
@@ -48,6 +48,8 @@ export function isTracing(): boolean {
  * //   type: "set",
  * // }]
  * ```
+ *
+ * @see {@link https://traced-fabric.github.io/core/ignore-tracing/withoutTracing.html Wiki page.}
  *
  * @since 0.2.0
  */

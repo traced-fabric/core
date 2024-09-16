@@ -19,7 +19,7 @@ import type { JSONObject } from '../types/json';
  * console.log(isStructure(true)); // false
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-isstructure Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/is-value-a-structure/isStructure.html Wiki page.}
  *
  * @since 0.2.0
  */

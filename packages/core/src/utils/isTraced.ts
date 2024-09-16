@@ -4,8 +4,6 @@ import { tracedFabricsTrace } from '../core/traces';
 /**
  * Checks if the given value is a `tracedFabric`.
  *
- * To check the definition of `tracedFabric`, see [Wiki - 📜 Naming](https://github.com/traced-fabric/core/wiki/%F0%9F%93%9C-Naming)
- *
  * @example
  * ```typescript
  * const traced = traceFabric({ // --> tracedFabric value AND traced
@@ -16,7 +14,7 @@ import { tracedFabricsTrace } from '../core/traces';
  * isTracedFabric(traced.value.innerArray); // false
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-istracedfabric Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/check-if-value-traced/isTracedFabric.html Wiki page.}
  *
  * @since 0.2.0
  */
@@ -26,8 +24,6 @@ export function isTracedFabric(value: any): boolean {
 
 /**
  * Checks if the given value is a `tracedValue`.
- *
- * To check the definition of `tracedValue`, see [Wiki - 📜 Naming](https://github.com/traced-fabric/core/wiki/%F0%9F%93%9C-Naming)
  *
  * @example
  * ```typescript
@@ -39,7 +35,7 @@ export function isTracedFabric(value: any): boolean {
  * isTracedValue(traced.value.innerArray); // true
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-istracedvalue Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/check-if-value-traced/isTracedValue.html Wiki page.}
  *
  * @since 0.2.0
  */
@@ -49,8 +45,6 @@ export function isTracedValue(value: any): boolean {
 
 /**
  * Checks if the given value is a `traced`.
- *
- * To check the definition of `traced`, see [Wiki - 📜 Naming](https://github.com/traced-fabric/core/wiki/%F0%9F%93%9C-Naming)
  *
  * @example
  * ```typescript
@@ -62,7 +56,7 @@ export function isTracedValue(value: any): boolean {
  * isTraced(traced.value.innerArray); // true
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-istraced Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/check-if-value-traced/isTraced.html Wiki page.}
  *
  * @since 0.2.0
  */

@@ -11,7 +11,7 @@ import { isStructure } from './utils/isStructure';
  *
  * @note `deepClone(...)` will not copy symbols
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-deepclone Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/core-functions/deepClone.html Wiki page.}
  *
  * @param value - The value to clone
  * @returns The cloned value

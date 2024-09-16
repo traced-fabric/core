@@ -15,7 +15,7 @@ let allowAssigning = true;
  * });
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-isassigning Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/ignore-assigning/isAssigning.html Wiki page.}
  *
  * @since 0.12.0
  */
@@ -44,6 +44,8 @@ export function isAssigning(): boolean {
  * console.log(fabric.value);
  * // { season: 'spring' }
  * ```
+ *
+ * @see {@link https://traced-fabric.github.io/core/ignore-assigning/withoutAssigning.html Wiki page.}
  *
  * @since 0.12.0
  */
