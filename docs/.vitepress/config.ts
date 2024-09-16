@@ -86,9 +86,7 @@ export default defineConfig({
     ],
 
     editLink: {
-      pattern: ({ filePath }) => {
-        return `https://github.com/traced-fabric/core/edit/main/docs/${filePath}`;
-      },
+      pattern: 'https://github.com/traced-fabric/core/edit/main/docs/:path',
     },
   },
 });
