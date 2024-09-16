@@ -19,7 +19,7 @@ const disabledTracingSymbol = Symbol('disabledTracing');
  * console.log(isTracingEnabled(fabric.value.untracedArray)); // false;
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-itracingenabled Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/disable-tracing/isTracingEnabled.html Wiki page.}
  *
  * @since 0.10.0
  */
@@ -48,7 +48,7 @@ export function isTracingEnabled<T extends JSONStructure>(value: T): boolean {
  * console.log(isTracingEnabled(fabric.value.untracedArray)); // false;
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-disabletracing Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/disable-tracing/disableTracing.html Wiki page.}
  *
  * @since 0.10.0
  */
@@ -89,7 +89,7 @@ export function disableTracing<T extends JSONStructure>(value: T): T {
  * console.log(isTracingEnabled(fabric.value.untracedArray)); // true;
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-enableTracing Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/disable-tracing/enableTracing.html Wiki page.}
  *
  * @since 0.10.0
  */

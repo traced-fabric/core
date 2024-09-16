@@ -53,7 +53,7 @@ function getMutationTargetWithoutLastKey(
  *
  * @WARN This function mutates the value directly.
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-applytrace Wiki page.}
+ * @see {@link https://traced-fabric.github.io/core/core-functions/applyTrace.html Wiki page.}
  *
  * @param value - the object to which the **trace** will be directly applied.
  * @param trace - the `trace` (array of `mutations`) to apply to the given **value**.
