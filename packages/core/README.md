@@ -17,18 +17,6 @@ Traced Fabric adopts a comparable approach. By proxying values through the `trac
 
 The trace serves as a log of changes for the tracked value. You can then apply this trace to another value with the same initial state using the `applyTrace()` function, ensuring consistency across different instances.
 
-## 🌌 Examples
+## 📙 Documentation
 
-[🚀 Example | WebSockets (bun)](https://github.com/traced-fabric/core/wiki/%F0%9F%9A%80-Example-%7C-WebSockets-(bun))
-
-## ➡️ Next to discover
-
-[📜 Naming](https://github.com/traced-fabric/core/wiki/%F0%9F%93%9C-Naming) - to know how things are named, not get confused.
-
-[🧰 Essentials | **Types**](https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Types) - see what types are exported by this package.
-
-[🧰 Essentials | **Package exports**](https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports) - see what package exports.
-
-## License
-
-[MIT License](https://github.com/traced-fabric/core/blob/main/LICENCE)
+For more information, please refer to the [official documentation](https://traced-fabric.github.io/core/) or the [GitHub repository](https://github.com/traced-fabric/core).
