@@ -55,8 +55,6 @@ export function addTracedSubscriber(
  * }
  * ```
  *
- * @see {@link https://github.com/traced-fabric/core/wiki/%F0%9F%A7%B0-Essentials-%7C-Package-exports#-removetracesubscription Wiki page.}
- *
  * @since 0.4.0
  */
 export function removeTraceSubscription(
