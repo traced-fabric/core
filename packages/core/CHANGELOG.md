@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.12.2
+
+### Patch Changes
+
+- f579c3a: Updated JSDoc for all exported functions
+
 ## 0.12.1
 
 ### Patch Changes

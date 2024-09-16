@@ -1,7 +1,7 @@
 {
   "name": "@traced-fabric/core",
   "type": "module",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "A TypeScript-compatible JavaScript library for tracking and synchronizing value states across different environments.",
   "author": "Andrey Kovyarov",
   "license": "MIT",
