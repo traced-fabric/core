@@ -1,7 +1,7 @@
 {
   "name": "@traced-fabric/ws",
   "type": "module",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "author": "Andrey Kovyarov",
   "license": "MIT",
   "repository": {
