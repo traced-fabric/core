@@ -1,5 +1,5 @@
 import type { TMutation } from '@traced-fabric/core';
-import { ETFwsDataType, type TTFStateName, type TTFwsMessageUpdate } from './_types';
+import { ETFwsDataType, type TTFStateName, type TTFwsMessageUpdate } from './types';
 
 export function createTFwsMessageUpdate(
   trace: TMutation[],
