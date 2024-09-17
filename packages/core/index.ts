@@ -1,3 +1,4 @@
+/* eslint-disable perfectionist/sort-exports */
 export { removeTraceSubscription } from './src/core/subscribers';
 
 export * from './src/types/json';
