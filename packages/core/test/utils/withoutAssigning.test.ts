@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
-import { isAssigning, withoutAssigning } from '../../src/utils/withoutAssigning';
-import { traceFabric } from '../../src/traceFabric';
 import { deepClone } from '../../src/deepClone';
+import { traceFabric } from '../../src/traceFabric';
+import { isAssigning, withoutAssigning } from '../../src/utils/withoutAssigning';
 
 describe('isAssigning(...)', () => {
   test('should be true by default', () => {

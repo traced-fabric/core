@@ -1,11 +1,11 @@
-import { updateSubscribers } from './core/subscribers';
 import type { JSONStructure } from './types/json';
 import type { TMutation, TMutationCallback } from './types/mutation';
-import { deepTrace } from './core/proxy/deepTrace';
-import { withoutTracing } from './utils/withoutTracing';
 import type { TOnMutation, TTracedFabric } from './types/tracedFabric';
+import { deepTrace } from './core/proxy/deepTrace';
+import { updateSubscribers } from './core/subscribers';
 import { tracedFabricsTrace } from './core/traces';
 import { isTracingEnabled } from './utils/disableTracing';
+import { withoutTracing } from './utils/withoutTracing';
 
 /**
  * Track the mutation of a given JSON-like object or array.

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { traceFabric } from '../../src/traceFabric';
-import { disableTracing, enableTracing, isTracingEnabled } from '../../src/utils/disableTracing';
 import { EArrayMutation, EMutated, EObjectMutation } from '../../src/types/mutation';
+import { disableTracing, enableTracing, isTracingEnabled } from '../../src/utils/disableTracing';
 import { withoutTracing } from '../../src/utils/withoutTracing';
 
 describe('isTracingEnabled(...)', () => {

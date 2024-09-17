@@ -1,12 +1,12 @@
 import type { JSONValue } from '../../types/json';
 import type { TMutationCallback } from '../../types/mutation';
-import { type TTracedValueMetadata, setMetadata } from '../metadata';
-import { addTracedSubscriber } from '../subscribers';
+import { isTracingEnabled } from '../../utils/disableTracing';
 import { isStructure } from '../../utils/isStructure';
 import { isTracedFabric } from '../../utils/isTraced';
-import { isTracingEnabled } from '../../utils/disableTracing';
-import { tracedFabricsTrace } from '../traces';
+import { setMetadata, type TTracedValueMetadata } from '../metadata';
 import { mutationCallbacks } from '../mutationCallback';
+import { addTracedSubscriber } from '../subscribers';
+import { tracedFabricsTrace } from '../traces';
 import { getTracedProxyArray } from './getTracedArray';
 import { getTracedProxyObject } from './getTracedObject';
 

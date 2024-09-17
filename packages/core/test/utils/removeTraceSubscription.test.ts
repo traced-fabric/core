@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
-import { traceFabric } from '../../src/traceFabric';
 import { removeTraceSubscription } from '../../src/core/subscribers';
 import { deepClone } from '../../src/deepClone';
+import { traceFabric } from '../../src/traceFabric';
 import { EArrayMutation, EMutated } from '../../src/types/mutation';
 
 describe('removeTraceSubscription(...)', () => {
