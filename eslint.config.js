@@ -1,5 +1,4 @@
 import antfu from '@antfu/eslint-config';
-import unusedImports from 'eslint-plugin-unused-imports';
 
 export default antfu({
   type: 'lib',
@@ -9,10 +8,6 @@ export default antfu({
   },
 
   typescript: true,
-
-  plugins: {
-    'unused-imports': unusedImports,
-  },
 
   rules: {
     'antfu/if-newline': 'off',
