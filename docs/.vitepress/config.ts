@@ -2,6 +2,10 @@ import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  vite: {
+    clearScreen: false,
+  },
+
   lang: 'en-US',
 
   title: 'Traced Fabric',
