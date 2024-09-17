@@ -1,10 +1,10 @@
 import type { JSONArray, JSONValue } from '../../types/json';
-import { EArrayMutation, EMutated, type TMutationCallback } from '../../types/mutation';
-import { removeNestedTracedSubscribers } from '../subscribers';
 import { deepClone } from '../../deepClone';
-import { type TTracedValueMetadata, getMetadata, getTargetChain } from '../metadata';
+import { EArrayMutation, EMutated, type TMutationCallback } from '../../types/mutation';
 import { isStructure } from '../../utils/isStructure';
 import { isTracing } from '../../utils/withoutTracing';
+import { getMetadata, getTargetChain, type TTracedValueMetadata } from '../metadata';
+import { removeNestedTracedSubscribers } from '../subscribers';
 import { deepTrace } from './deepTrace';
 import { reflect } from './reflect';
 

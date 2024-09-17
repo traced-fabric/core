@@ -3,7 +3,7 @@ import type { TMutation } from '../types/mutation';
 import { isStructure } from '../utils/isStructure';
 import { isTracedFabric } from '../utils/isTraced';
 import { IterableWeakMap } from '../utils/iterableWeakMap';
-import { type TTracedValueMetadata, type TWeakTracedValueMetadata, getRootRef, getStrongMetadata, getTargetChain } from './metadata';
+import { getRootRef, getStrongMetadata, getTargetChain, type TTracedValueMetadata, type TWeakTracedValueMetadata } from './metadata';
 import { mutationCallbacks } from './mutationCallback';
 import { tracedFabricsTrace } from './traces';
 

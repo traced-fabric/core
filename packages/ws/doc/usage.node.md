@@ -1,7 +1,6 @@
 # Traced Fabric / ws / Server - node example
 
 ```javascript
-import { WebSocketServer } from 'ws';
 import {
   traceFabric
 } from '@traced-fabric/core';
@@ -9,6 +8,7 @@ import {
   createTFwsMessageSet,
   createTFwsMessageUpdate
 } from '@traced-fabric/ws';
+import { WebSocketServer } from 'ws';
 
 const wss = new WebSocketServer({ port: 8080 });
 

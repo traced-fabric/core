@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
+import { deepClone } from '../../src/deepClone';
 import { traceFabric } from '../../src/traceFabric';
 import { EArrayMutation, EMutated, EObjectMutation } from '../../src/types/mutation';
-import { deepClone } from '../../src/deepClone';
 
 describe('tracedFabric stores trace on changed', () => {
   test('string', () => {

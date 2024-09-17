@@ -1,10 +1,10 @@
 import type { JSONObject } from '../../types/json';
-import { EMutated, EObjectMutation, type TMutationCallback } from '../../types/mutation';
 import { deepClone } from '../../deepClone';
-import { isTracing } from '../../utils/withoutTracing';
-import { type TTracedValueMetadata, getTargetChain } from '../metadata';
-import { removeNestedTracedSubscribers } from '../subscribers';
+import { EMutated, EObjectMutation, type TMutationCallback } from '../../types/mutation';
 import { isStructure } from '../../utils/isStructure';
+import { isTracing } from '../../utils/withoutTracing';
+import { getTargetChain, type TTracedValueMetadata } from '../metadata';
+import { removeNestedTracedSubscribers } from '../subscribers';
 import { deepTrace } from './deepTrace';
 import { reflect } from './reflect';
 

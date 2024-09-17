@@ -1,6 +1,6 @@
+import type { TTFStateMap } from './_types';
 import { applyTrace } from '@traced-fabric/core';
 import { ETFwsDataType, type TTFwsMessage } from '../server/_types';
-import type { TTFStateMap } from './_types';
 
 export function applyTFwsMessage(
   data: TTFwsMessage,

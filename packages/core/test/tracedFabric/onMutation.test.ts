@@ -1,5 +1,5 @@
-import { describe, expect, mock, test } from 'bun:test';
 import type { TOnMutation } from '../../src/types/tracedFabric';
+import { describe, expect, mock, test } from 'bun:test';
 import { traceFabric } from '../../src/traceFabric';
 import { EArrayMutation, EMutated, EObjectMutation } from '../../src/types/mutation';
 

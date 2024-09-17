@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
-import { isTracing, withoutTracing } from '../../src/utils/withoutTracing';
-import { traceFabric } from '../../src/traceFabric';
 import { deepClone } from '../../src/deepClone';
+import { traceFabric } from '../../src/traceFabric';
+import { isTracing, withoutTracing } from '../../src/utils/withoutTracing';
 
 describe('isTracing(...)', () => {
   test('should be true by default', () => {
