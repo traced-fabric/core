@@ -18,6 +18,13 @@ export default defineConfig({
   ],
 
   themeConfig: {
+    search: {
+      provider: 'local',
+      options: {
+        detailedView: true,
+      },
+    },
+
     logo: {
       dark: '/TF_logo_dark.svg',
       light: '/TF_logo_light.svg',
