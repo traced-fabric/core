@@ -8,4 +8,6 @@ Originally developed to streamline the management of complex data structures in 
 
 This package operates similarly to modern frontend frameworks with reactive state management. For instance, in Vue.js, the ref and reactive functions track value changes, updating the DOM accordingly.
 
-As a starting point you can check the core package where all of the magic happens, visit the [core package README](./packages/core/README.md) to learn more.
+## 📙 Documentation
+
+For more information, please refer to the [official documentation](https://traced-fabric.github.io/core/)
