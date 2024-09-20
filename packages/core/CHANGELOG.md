@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 1b098fb: Updated home page link
+- Updated home page link
 
 ## 0.12.2
 
