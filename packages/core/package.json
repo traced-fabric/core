@@ -5,7 +5,7 @@
   "description": "A TypeScript-compatible JavaScript library for tracking and synchronizing value states across different environments.",
   "author": "Andrey Kovyarov",
   "license": "MIT",
-  "homepage": "https://github.com/traced-fabric/core/wiki",
+  "homepage": "https://traced-fabric.github.io/core/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/traced-fabric/core.git"
