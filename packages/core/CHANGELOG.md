@@ -1,5 +1,11 @@
 # @traced-fabric/core
 
+## 0.12.3
+
+### Patch Changes
+
+- 1b098fb: Updated home page link
+
 ## 0.12.2
 
 ### Patch Changes
