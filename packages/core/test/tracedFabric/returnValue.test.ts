@@ -65,4 +65,13 @@ describe('tracedFabric should return ', () => {
       value: 'new string 2',
     }]);
   });
+
+  test('function to set trace', () => {
+    const tracing = traceFabric({ string: 'string' });
+
+    tracing.value.string = 'new string';
+    tracing.trace = [] as typeof tracing.trace;
+
+    expect(tracing.trace).toEqual([]);
+  });
 });
