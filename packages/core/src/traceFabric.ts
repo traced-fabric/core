@@ -66,9 +66,10 @@ export function traceFabric<
   let proxyRef: T;
 
   const trace = (): _MUTATION[] => tracedFabricsTrace.get(proxyRef)!;
-  const clearTrace = (): void => {
-    tracedFabricsTrace.set(proxyRef, []);
+  const setTrace = (newTrace: _MUTATION[]): void => {
+    tracedFabricsTrace.set(proxyRef, newTrace);
   };
+  const clearTrace = (): void => setTrace([]);
 
   const mutationCallback: TMutationCallback = (mutation) => {
     trace()?.push(onMutation?.(mutation) ?? mutation as _MUTATION);
@@ -81,6 +82,8 @@ export function traceFabric<
     value: proxyRef,
 
     get trace() { return trace(); },
+    set trace(newTrace: _MUTATION[]) { setTrace(newTrace); },
+
     clearTrace,
   };
 }
