@@ -9,6 +9,11 @@ Applies `tracedFabric` `mutations` to the given value. The value should have the
 > [!WARNING]
 > This function mutates the value directly.
 
+## Demo
+
+<script setup lang="ts">import Demo from './demo.vue';</script>
+<Demo />
+
 ## Arguments
 
 * **value** - the object to which the **trace** will be directly applied.
