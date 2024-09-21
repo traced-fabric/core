@@ -1,6 +1,4 @@
 <template>
-  <h2>Demo</h2>
-
   <section class="demo">
     <slot />
   </section>
