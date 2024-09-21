@@ -8,6 +8,11 @@ Track the mutation of a given JSON-like object or array. Other `tracedFabric` ca
 
 The `trace` (array of `mutations`), that is produced by the `tracedFabric` on values mutation, can be used to apply them to other objects or arrays, using the `applyTrace(...)` function.
 
+## Demo
+
+<script setup lang="ts">import Demo from './demo.vue';</script>
+<Demo />
+
 ## Arguments
 
 * **value** - an object or array that will be deeply tracked. Value is JSON.stringify safe. The type of the value should be the same as JSONStructure.
