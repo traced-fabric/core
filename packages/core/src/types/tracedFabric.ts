@@ -16,7 +16,7 @@ export type TTracedFabric<
   value: T;
 
   get trace(): _MUTATION[];
-  set trace(newTrace: _MUTATION);
+  set trace(newTrace: _MUTATION[]);
 
   clearTrace: () => void;
 };
