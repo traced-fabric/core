@@ -1,0 +1,8 @@
+{
+  "name": "@traced-fabric/docs",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@traced-fabric/core": "workspace:*"
+  }
+}
