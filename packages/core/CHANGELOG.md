@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 615747d: `traceFabric(...)` now exposes setter for trace. This allows you to change the trace after the fact, or make trace with a proxy, if you want to use with Vue or other reactive frameworks.
+- `traceFabric(...)` now exposes the setter for trace. This allows you to change the trace after the fact, or make a trace with a proxy if you want to use with Vue or other reactive frameworks.
 
 ## 0.12.3
 
