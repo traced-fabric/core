@@ -12,6 +12,7 @@ const todoList = traceFabric<Todo[]>(reactive([{
   name: 'Try out Traced Fabric 🚀',
   done: false,
 }]));
+todoList.trace = reactive([]);
 
 let count = 0;
 function addItem(): void {
