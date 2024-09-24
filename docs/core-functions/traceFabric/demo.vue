@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { traceFabric } from '@traced-fabric/core';
 import { reactive } from 'vue';
+import { traceFabric } from '../../../packages/core/src/traceFabric';
 import DemoContainer from '../../.vitepress/components/DemoContainer.vue';
 
 type Todo = {
