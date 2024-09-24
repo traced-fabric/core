@@ -32,7 +32,6 @@
     ]
   },
   "workspaces": [
-    "packages/*",
-    "docs"
+    "packages/*"
   ]
 }
