@@ -1,14 +1,5 @@
 <template>
-  <section class="demo">
+  <section class="rounded p-2 border-2 border-[var(--vp-c-brand-1)]">
     <slot />
   </section>
 </template>
-
-<style lang="scss">
-.demo {
-  padding: var(--docsearch-spacing);
-  border: 2px solid var(--vp-c-default-1);
-  border-radius: 4px;
-  margin-bottom: 20px;
-}
-</style>
