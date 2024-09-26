@@ -49,7 +49,7 @@ export default defineConfig({
         items: [
           { text: 'traceFabric', link: '/core-functions/traceFabric/' },
           { text: 'applyTrace', link: '/core-functions/applyTrace/' },
-          { text: 'deepClone', link: '/core-functions/deepClone/' },
+          { text: 'deepClone', link: '/core-functions/deepClone' },
         ],
       },
       {
