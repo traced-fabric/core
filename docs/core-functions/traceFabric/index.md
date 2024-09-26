@@ -10,6 +10,8 @@ The `trace` (array of `mutations`), that is produced by the `tracedFabric` on va
 
 ## Demo
 
+Todo list implementation with `traceFabric` and `vue`.
+
 <script setup lang="ts">import Demo from './demo.vue';</script>
 <Demo />
 
