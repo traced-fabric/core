@@ -11,6 +11,8 @@ Applies `tracedFabric` `mutations` to the given value. The value should have the
 
 ## Demo
 
+Following the previous example from `traceFabric` demo, here is an extended one with `applyTrace` function in use.
+
 <script setup lang="ts">import Demo from './demo.vue';</script>
 <Demo />
 
