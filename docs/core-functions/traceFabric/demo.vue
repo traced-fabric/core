@@ -86,7 +86,7 @@ function reset(): void {
 
         <pre
           ref="todoListValueRef"
-          class="overflow-auto max-h-96"
+          class="overflow-auto text-sm max-h-96"
         >{{ todoList.value }}</pre>
       </div>
 
@@ -98,7 +98,7 @@ function reset(): void {
 
         <pre
           ref="todoListTraceRef"
-          class="overflow-auto max-h-96"
+          class="overflow-auto text-sm max-h-96"
         >{{ todoList.trace }}</pre>
       </div>
     </div>
