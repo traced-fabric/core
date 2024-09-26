@@ -3,9 +3,7 @@
   "include": [
     "packages/*/src",
     "packages/*/test",
-    "packages/*/index.ts",
-    "docs/**/*.ts",
-    "docs/**/*.vue"
+    "packages/*/index.ts"
   ],
   "exclude": [
     "packages/*/dist"
