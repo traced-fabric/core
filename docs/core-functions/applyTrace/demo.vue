@@ -89,7 +89,7 @@ function reset(): void {
 
         <pre
           ref="todoListValueRef"
-          class="overflow-auto max-h-96"
+          class="overflow-auto text-sm max-h-96"
         >{{ todoList.value }}</pre>
       </div>
 
@@ -101,7 +101,7 @@ function reset(): void {
 
         <pre
           ref="todoListTraceRef"
-          class="overflow-auto max-h-96"
+          class="overflow-auto text-sm max-h-96"
         >{{ todoList.trace }}</pre>
       </div>
     </div>
@@ -132,7 +132,7 @@ function reset(): void {
       <div class="flex flex-col gap-2">
         <span>Copy of the Todo List <span class="text-neutral-400">(non-traced)</span></span>
 
-        <pre class="overflow-auto max-h-96">{{ nonTracedTodoList }}</pre>
+        <pre class="overflow-auto text-sm max-h-96">{{ nonTracedTodoList }}</pre>
       </div>
     </div>
   </DemoContainer>
