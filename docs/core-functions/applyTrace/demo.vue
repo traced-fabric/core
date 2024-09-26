@@ -58,6 +58,12 @@ function reset(): void {
     done: false,
   });
 
+  nonTracedTodoList.splice(0);
+  nonTracedTodoList.push({
+    name: '📝 Add todo items',
+    done: false,
+  });
+
   todoList.trace.splice(0);
 }
 </script>
