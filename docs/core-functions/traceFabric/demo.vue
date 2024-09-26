@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { traceFabric } from '../../../packages/core/src/traceFabric';
+import Button from '../../.vitepress/components/Button.vue';
 import DemoContainer from '../../.vitepress/components/DemoContainer.vue';
 
 type Todo = {
@@ -8,11 +9,24 @@ type Todo = {
   done: boolean;
 };
 
+const todoListValueRef = ref<HTMLElement | undefined>();
+const todoListTraceRef = ref<HTMLElement | undefined>();
+
 const todoList = traceFabric<Todo[]>(reactive([{
-  name: 'Try out Traced Fabric 🚀',
+  name: '📝 Add todo items',
   done: false,
 }]));
 todoList.trace = reactive([]);
+
+watch(todoList.value, () => window.requestAnimationFrame(() => todoListValueRef.value?.scrollTo({
+  top: todoListValueRef.value.scrollHeight,
+  behavior: 'smooth',
+})));
+
+watch(todoList.trace, () => window.requestAnimationFrame(() => todoListTraceRef.value?.scrollTo({
+  top: todoListTraceRef.value.scrollHeight,
+  behavior: 'smooth',
+})));
 
 let count = 0;
 function addItem(): void {
@@ -26,31 +40,67 @@ function removeItem(): void {
   todoList.value.pop();
 }
 
+function clearTrace(): void {
+  todoList.trace.splice(0);
+}
+
 function reset(): void {
   todoList.value.splice(0);
+  todoList.value.push({
+    name: '📝 Add todo items',
+    done: false,
+  });
+
   todoList.trace.splice(0);
 }
 </script>
 
 <template>
-  <DemoContainer>
-    <div>
-      <p>Todo list:</p>
-
-      <button type="button" @click="addItem">
+  <DemoContainer class="grid gap-2">
+    <div class="flex gap-2">
+      <Button type="button" @click="addItem">
         Add Item
-      </button>
+      </Button>
 
-      <button type="button" @click="removeItem">
+      <Button type="button" @click="removeItem">
         Remove Item
-      </button>
+      </Button>
 
-      <button type="button" @click="reset">
+      <Button type="button" @click="clearTrace">
+        Clear trace
+      </Button>
+
+      <Button type="button" class="ml-auto" @click="reset">
         Reset
-      </button>
+      </Button>
     </div>
 
-    <pre>{{ todoList.value }}</pre>
-    <pre>{{ todoList.trace }}</pre>
+    <hr>
+
+    <div class="grid grid-cols-2">
+      <div class="flex flex-col gap-2">
+        <span>
+          Todo list
+          <span class="text-neutral-400">(as JS object)</span>
+        </span>
+
+        <pre
+          ref="todoListValueRef"
+          class="overflow-auto max-h-96"
+        >{{ todoList.value }}</pre>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <span>
+          Trace
+          <span class="text-neutral-400">(all mutations of the todoList)</span>
+        </span>
+
+        <pre
+          ref="todoListTraceRef"
+          class="overflow-auto max-h-96"
+        >{{ todoList.trace }}</pre>
+      </div>
+    </div>
   </DemoContainer>
 </template>
